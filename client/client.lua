@@ -1,4 +1,4 @@
-﻿local Cache = {
+local Cache = {
     ped = PlayerPedId(),
     points = {}
 }

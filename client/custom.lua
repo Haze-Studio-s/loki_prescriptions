@@ -1,4 +1,4 @@
-﻿local oxTarget = GetResourceState('ox_target') == 'started'
+local oxTarget = GetResourceState('ox_target') == 'started'
 local qbTarget = GetResourceState('qb-target') == 'started'
 
 ---@param entity number entity handle

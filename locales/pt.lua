@@ -1,4 +1,4 @@
-﻿Locale = Locale or {}
+Locale = Locale or {}
 Locale.pt = {
     nui_submit = "Emitir Receita",
     nui_cancel = "Cancelar",

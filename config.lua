@@ -1,4 +1,8 @@
-﻿Config = {}
+Config = {}
+
+if lib and lib.locale then
+    lib.locale()
+end
 
 --[[
   _____       ___   ___  ____   _____   ______     ______  _______     _____  _______   _________   ______          

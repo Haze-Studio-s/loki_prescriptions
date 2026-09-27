@@ -1,4 +1,4 @@
-﻿local ESX, QB, inv
+local ESX, QB, inv
 
 if GetResourceState('qbx_core') == 'started' then
     -- Qbox nativo com suporte a exports diretos ou fallback para QB

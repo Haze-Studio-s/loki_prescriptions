@@ -1,4 +1,4 @@
-﻿local isTakingPill = false
+local isTakingPill = false
 
 RegisterNetEvent('loki_prescriptions:client:applyMedicineEffects', function(medData, isOverdose)
     if not medData then return end
