@@ -170,10 +170,10 @@ end)
 ---@class Config.Insurance
 ---@field enabled boolean [enable insurance feature?]
 ---@field moneyIntoSociety boolean [should money from insurance go into society account?]
-Config.Insurance = {
-    enabled = true,
-    moneyIntoSociety = true,
-    options = {
+Config.Insurance = Config.Insurance or {}
+Config.Insurance.enabled = true
+Config.Insurance.moneyIntoSociety = true
+Config.Insurance.options = {
         -- list of insurance policies
         -- each policy must have unique name!
         ['basic'] = {
@@ -186,9 +186,8 @@ Config.Insurance = {
             price = 4000,
             duration = 30 * 24 * 60 * 60, -- 30 days
         }
-    },
-    points = {} -- will be filled in thread above
-}
+    }
+Config.Insurance.points = Config.Insurance.points or {}
 
 ---@class Config.MedicBag
 ---@field enabled boolean [enable medic bag feature?]
