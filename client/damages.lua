@@ -367,7 +367,7 @@ AddEventHandler("gameEventTriggered", function(eventName, eventArgs)
   if not IsPedAPlayer(victim) then return end
   if NetworkGetPlayerIndexFromPed(victim) ~= cache.playerId then return end
 
-  if Death.deathType == "death" then return end
+  if Death and Death.deathType == "death" then return end
 
   local boneHit, boneId = GetPedLastDamageBone(victim)
   if boneHit and boneId then

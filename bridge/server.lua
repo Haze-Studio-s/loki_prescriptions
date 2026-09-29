@@ -170,7 +170,11 @@ function Bridge.Society.addMoney(source, societyAccount, amount, reason)
     if amount <= 0 then return end
     societyAccount = societyAccount or (Config and Config.HospitalAccount) or 'ambulance'
 
-    if GetResourceState('Renewed-Banking') == 'started' then
+    if GetResourceState('aust_banking') == 'started' then
+        pcall(function()
+            exports['aust_banking']:addAccountMoney(societyAccount, amount)
+        end)
+    elseif GetResourceState('Renewed-Banking') == 'started' then
         pcall(function()
             exports['Renewed-Banking']:addAccountMoney(societyAccount, amount)
         end)

@@ -17,6 +17,28 @@ Bridge.Debug = function(...)
     end
 end
 
+-- Compatibilidade com referências legadas a `Death.deathType` e `Death.inVehicle`
+Death = Death or setmetatable({
+    inVehicle = false,
+}, {
+    __index = function(t, k)
+        if k == 'deathType' then
+            if LocalPlayer and LocalPlayer.state and LocalPlayer.state.isDead then
+                return 'death'
+            end
+            if GetResourceState('qbx_core') == 'started' then
+                local ok, pData = pcall(function() return exports.qbx_core:GetPlayerData() end)
+                if ok and pData and pData.metadata then
+                    if pData.metadata.isdead then return 'death' end
+                    if pData.metadata.inlaststand then return 'bleeding' end
+                end
+            end
+            return 'none'
+        end
+        return rawget(t, k)
+    end
+})
+
 -- ============================================================================
 -- Framework (Client)
 -- ============================================================================
