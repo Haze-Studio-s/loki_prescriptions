@@ -61,22 +61,47 @@ function Bridge.Framework.getPlayerName(source)
 end
 
 function Bridge.Framework.addMoney(source, moneyType, amount, reason)
+    local cleanAmount = tonumber(amount)
+    if not cleanAmount or cleanAmount <= 0 then return false end
+    moneyType = (moneyType == 'cash' or moneyType == 'money') and 'cash' or 'bank'
+    reason = reason or 'hospital_service'
+
+    if PrescriptionsBanking and PrescriptionsBanking.CreditWithOverflow then
+        local ok, _ = PrescriptionsBanking.CreditWithOverflow(source, cleanAmount, reason, moneyType)
+        return ok == true
+    end
+
     local player = Bridge.Framework.getPlayerById(source)
     if player and player.Functions and player.Functions.AddMoney then
-        return player.Functions.AddMoney(moneyType or 'bank', tonumber(amount) or 0, reason or 'hospital_service')
+        local ok = player.Functions.AddMoney(moneyType, cleanAmount, reason)
+        return ok == nil or ok == true
     end
     return false
 end
 
 function Bridge.Framework.removeMoney(source, moneyType, amount, reason)
+    local cleanAmount = tonumber(amount)
+    if not cleanAmount or cleanAmount <= 0 then return false end
+    moneyType = (moneyType == 'cash' or moneyType == 'money') and 'cash' or 'bank'
+    reason = reason or 'hospital_fee'
+
+    if PrescriptionsBanking and PrescriptionsBanking.Debit then
+        local ok, _ = PrescriptionsBanking.Debit(source, cleanAmount, reason, moneyType)
+        return ok == true
+    end
+
     local player = Bridge.Framework.getPlayerById(source)
     if player and player.Functions and player.Functions.RemoveMoney then
-        return player.Functions.RemoveMoney(moneyType or 'bank', tonumber(amount) or 0, reason or 'hospital_fee')
+        local ok = player.Functions.RemoveMoney(moneyType, cleanAmount, reason)
+        return ok == nil or ok == true
     end
     return false
 end
 
 function Bridge.Framework.getMoney(source, moneyType)
+    if PrescriptionsBanking and PrescriptionsBanking.GetBalance then
+        return PrescriptionsBanking.GetBalance(source, moneyType or 'bank')
+    end
     local player = Bridge.Framework.getPlayerById(source)
     if player and player.PlayerData and player.PlayerData.money then
         return player.PlayerData.money[moneyType or 'bank'] or 0
@@ -166,23 +191,32 @@ end
 -- Society / Hospital Account (Server)
 -- ============================================================================
 function Bridge.Society.addMoney(source, societyAccount, amount, reason)
-    amount = tonumber(amount) or 0
-    if amount <= 0 then return end
+    local cleanAmount = tonumber(amount)
+    if not cleanAmount or cleanAmount <= 0 then return false end
     societyAccount = societyAccount or (Config and Config.HospitalAccount) or 'ambulance'
+    reason = reason or 'Serviço Hospitalar'
+
+    if PrescriptionsBanking and PrescriptionsBanking.DepositSociety then
+        return PrescriptionsBanking.DepositSociety(societyAccount, cleanAmount, reason)
+    end
 
     if GetResourceState('aust_banking') == 'started' then
-        pcall(function()
-            exports['aust_banking']:addAccountMoney(societyAccount, amount)
+        local pcallOk, res = pcall(function()
+            return exports['aust_banking']:addAccountMoney(societyAccount, cleanAmount)
         end)
+        return pcallOk and (res == nil or res == true or (type(res) == 'table' and (res.ok == true or res.success == true)))
     elseif GetResourceState('Renewed-Banking') == 'started' then
-        pcall(function()
-            exports['Renewed-Banking']:addAccountMoney(societyAccount, amount)
+        local pcallOk, res = pcall(function()
+            return exports['Renewed-Banking']:addAccountMoney(societyAccount, cleanAmount)
         end)
+        return pcallOk and (res == nil or res == true or (type(res) == 'table' and (res.ok == true or res.success == true)))
     elseif GetResourceState('qb-banking') == 'started' then
-        pcall(function()
-            exports['qb-banking']:AddMoney(societyAccount, amount, reason or 'Serviço Hospitalar')
+        local pcallOk, res = pcall(function()
+            return exports['qb-banking']:AddMoney(societyAccount, cleanAmount, reason)
         end)
+        return pcallOk and (res == nil or res == true or (type(res) == 'table' and (res.ok == true or res.success == true)))
     end
+    return false
 end
 
 -- ============================================================================
