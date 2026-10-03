@@ -248,3 +248,29 @@ Config.Pharmacies = {
 
 ---------------------- Notificações ----------------------
 Config.Notification = 'lib' -- lib (ox_lib), okoknotify, esx, qb, wasabi_notify, custom
+
+---------------------- Leitos Hospitalares ----------------------
+--- Módulo de camas de hospital com cura gradual, cobrança e XP médico.
+Config.HospitalBeds = {
+    enabled = true,
+
+    --- Preço padrão caso o hospital não tenha CheckIn configurado
+    defaultPrice = 250,
+
+    --- Intervalo (ms) entre ticks de cura do cliente ao servidor
+    healInterval = 5000,
+
+    --- HP restaurado por tick (servidor autoriza, cliente aplica)
+    hpPerTick = 5,
+
+    --- Redução de bleed_level por tick (state bag)
+    bleedReductionPerTick = 1,
+
+    --- XP concedido ao socorrista pela desfibrilação bem-sucedida
+    xpDefibrilation = 25,
+
+    --- XP por outros procedimentos médicos (hemostasia, transfusão, etc.)
+    xpBleeding  = 10,
+    xpFracture  = 15,
+    xpSaline    = 8,
+}

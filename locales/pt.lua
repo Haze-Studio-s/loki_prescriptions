@@ -24,5 +24,16 @@ Locale.pt = {
     prescribeToPatient = "Emitir Receita para o Paciente",
     noPatientNearby = "Nenhum paciente próximo encontrado!",
     prescriptionGivenToPatient = "Receita médica entregue diretamente ao paciente %s.",
-    prescriptionReceived = "Você recebeu uma receita médica do Dr(a). %s."
+    prescriptionReceived = "Você recebeu uma receita médica do Dr(a). %s.",
+
+    -- Leitos Hospitalares
+    bed_interact          = "[E] Usar Leito Hospitalar",
+    bed_press_to_exit     = "[E] Sair do Leito",
+    bed_occupied          = "Este leito está ocupado. Aguarde outro ficar disponível.",
+    bed_already_in_use    = "Você já está em um leito!",
+    bed_reserved          = "Leito reservado. Taxa de internação: R$ %d",
+    bed_session_ended     = "Você foi alta do leito hospitalar.",
+
+    -- Desfibrilador
+    defibrilator_failed_check = "Choque não sincronizado! O ritmo cardíaco não foi restaurado.",
 }

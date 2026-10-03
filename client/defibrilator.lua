@@ -310,19 +310,20 @@ end
 Defibrilator.remove = Defibrilator.remove
 
 function Defibrilator:useOnPatient()
-    -- Require both a placed object and an attached patient
-    if not (self.cam or self.attachedPlayer) then return end
+    -- Requer objeto colocado E paciente anexado
+    if not self.attachedPlayer then return end
 
-    -- Play the medic animation
+    -- Guarda o ID do paciente antes de qualquer await (pode ser nil-ificado)
+    local targetId   = self.attachedPlayer
+    local patientPed = GetPlayerPed(GetPlayerFromServerId(targetId))
+
+    -- ── Câmera clínica focada no paciente ────────────────────────────────
     local animDict = lib.requestAnimDict("amb@medic@standing@tendtodead@base")
     TaskPlayAnim(cache.ped, animDict, "base", 8.0, -8.0, -1, 1, 0, false, false, false)
 
-    -- Create a cinematic camera focused on the patient
-    local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-    self.cam = cam
-
-    local patientPed    = GetPlayerPed(GetPlayerFromServerId(self.attachedPlayer))
-    local camOffset     = GetOffsetFromEntityInWorldCoords(patientPed, -1.25, 1.0, 0.25)
+    local cam       = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
+    self.cam        = cam
+    local camOffset = GetOffsetFromEntityInWorldCoords(patientPed, -1.25, 1.0, 0.25)
 
     SetCamCoord(cam, camOffset.x, camOffset.y, camOffset.z)
     SetCamFov(cam, 40.0)
@@ -330,21 +331,45 @@ function Defibrilator:useOnPatient()
     SetCamActive(cam, true)
     RenderScriptCams(true, true, 1000, true, true)
 
-    Citizen.Wait(2000)
+    Citizen.Wait(1500)
 
-    -- Run the config-defined onUse callback and report result to server
-    local result = Config.Defibrilator.onUse()
+    -- ── Minigame de ritmo: sequência de choques QRS ───────────────────────
+    -- Socorrista precisa acertar 4 janelas para sincronizar o ritmo cardíaco
+    local passed = lib.skillCheck(
+        { 'easy', 'easy', 'medium', 'hard' },
+        { 'w', 'a', 's', 'd' }
+    )
+
+    -- ── Falha no skillcheck ───────────────────────────────────────────────
+    if not passed then
+        StopAnimTask(cache.ped, "amb@medic@standing@tendtodead@base", "base", 3.0)
+        Citizen.Wait(500)
+        RenderScriptCams(false, true, 800, true, true)
+        SetCamActive(cam, false)
+        DestroyCam(cam, false)
+        self.cam            = nil
+        self.attachedPlayer = nil
+
+        Bridge.Notify.showNotify(locale("defibrilator_failed_check"), "error")
+        return
+    end
+
+    -- ── Sucesso: disparo sincronizado ──────────────────────────────────────
     TriggerServerEvent("p_ambulancejob/server/defibrilator/useOnPatient", {
-        targetId = self.attachedPlayer,
-        result   = result,
+        targetId = targetId,
+        result   = true,
     })
 
-    -- Stop animation
-    StopAnimTask(cache.ped, "amb@medic@standing@tendtodead@base", "base", 3.0)
+    -- Concede XP de medicina pelo procedimento bem-sucedido
+    TriggerServerEvent("loki_prescriptions:server:grantMedicineXP", {
+        amount = (Config.HospitalBeds and Config.HospitalBeds.xpDefibrilation) or 25,
+        reason = "defibrilation",
+    })
 
+    -- ── Cleanup de animação e câmera ──────────────────────────────────────
+    StopAnimTask(cache.ped, "amb@medic@standing@tendtodead@base", "base", 3.0)
     Citizen.Wait(1000)
 
-    -- Restore normal camera
     RenderScriptCams(false, true, 1000, true, true)
     SetCamActive(cam, false)
     DestroyCam(cam, false)

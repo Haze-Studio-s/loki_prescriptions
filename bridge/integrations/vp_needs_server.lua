@@ -155,6 +155,55 @@ lib.callback.register('loki_prescriptions:getPatientToxicology', function(source
     return VpNeedsBridge.GetToxicology(targetServerId)
 end)
 
+--- Concede XP da skill `medicine` ao socorrista por procedimento bem-sucedido.
+---@param src number Source do jogador socorrista
+---@param amount number Quantidade de XP a conceder
+---@param reason string Motivo/procedimento (para log)
+function VpNeedsBridge.GrantMedicineXP(src, amount, reason)
+    if not src or src <= 0 then return end
+    amount = math.max(1, math.min(amount or 10, 200)) -- clamp 1-200 por segurança
+
+    if VpNeedsBridge.IsActive() then
+        pcall(function()
+            if exports.vp_needs and exports.vp_needs.AddSkillXP then
+                exports.vp_needs:AddSkillXP(src, "medicine", amount)
+            elseif exports.vp_needs and exports.vp_needs.AddXP then
+                exports.vp_needs:AddXP(src, "medicine", amount)
+            end
+        end)
+    end
+
+    -- Log de auditoria para rastrear ganhos de XP médico
+    if Bridge and Bridge.Config and Bridge.Config.Debug then
+        print(("[loki_prescriptions] grantMedicineXP → src=%d | amount=%d | reason=%s"):format(src, amount, tostring(reason)))
+    end
+end
+
+-- Evento server-side para clientes solicitarem XP médico após procedimentos
+-- Rate-limit: máx 1 grant/5s por jogador (anti-spam)
+local xpCooldowns = {}
+
+RegisterNetEvent("loki_prescriptions:server:grantMedicineXP")
+AddEventHandler("loki_prescriptions:server:grantMedicineXP", function(data)
+    local src = source
+    if type(data) ~= "table" then return end
+
+    -- Rate limit por source
+    local now = GetGameTimer()
+    if xpCooldowns[src] and now - xpCooldowns[src] < 5000 then return end
+    xpCooldowns[src] = now
+
+    local amount = tonumber(data.amount) or 10
+    local reason = type(data.reason) == "string" and data.reason or "unknown"
+
+    VpNeedsBridge.GrantMedicineXP(src, amount, reason)
+end)
+
+-- Limpeza de cooldowns em desconexão
+AddEventHandler("playerDropped", function()
+    xpCooldowns[source] = nil
+end)
+
 exports('GetVpNeedsBridge', function()
     return VpNeedsBridge
 end)

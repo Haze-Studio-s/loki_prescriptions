@@ -29,7 +29,7 @@ AddEventHandler("p_ambulancejob/server/defibrilator/useOnPatient", function(data
 
     -- Only allow players with an authorised job
     if not (job and Editable.allJobs[job.name]) then
-        Bridge.Notify.showNotify(locale("no_access"), "error")
+        Bridge.Notify.showNotify(sourceSrv, locale("no_access"), "error")
         return
     end
 
@@ -51,7 +51,7 @@ AddEventHandler("p_ambulancejob/server/defibrilator/sync", function(targetId)
     -- Job authorisation check
     local job = Bridge.Framework.getPlayerJob(sourceSrv)
     if not (job and Editable.allJobs[job.name]) then
-        Bridge.Notify.showNotify(locale("no_access"), "error")
+        Bridge.Notify.showNotify(sourceSrv, locale("no_access"), "error")
         return
     end
 
@@ -81,7 +81,7 @@ AddEventHandler("p_ambulancejob/server/defibrilator/remove", function(netId, att
     -- Job authorisation check
     local job = Bridge.Framework.getPlayerJob(sourceSrv)
     if not (job and Editable.allJobs[job.name]) then
-        Bridge.Notify.showNotify(locale("no_access"), "error")
+        Bridge.Notify.showNotify(sourceSrv, locale("no_access"), "error")
         return
     end
 

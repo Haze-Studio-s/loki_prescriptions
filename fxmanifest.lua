@@ -50,6 +50,7 @@ server_scripts {
     'bridge/integrations/nexus_os_server.lua',
     'bridge/integrations/vp_phone_server.lua',
     'bridge/integrations/vp_tablet_server.lua',
+    'server/hospital_beds.lua',
 }
 
 client_scripts {
@@ -84,6 +85,7 @@ client_scripts {
     'client/radial.lua',
     'client/sedative.lua',
     'client/knockout.lua',
+    'client/hospital_beds.lua',
 }
 
 ui_page 'web/build/index.html'
