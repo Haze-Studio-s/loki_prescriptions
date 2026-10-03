@@ -3,6 +3,8 @@ game 'gta5'
 
 lua54 'yes'
 
+provide 'qbx_medical'
+
 author 'Loki Scripts & Vinicius'
 description 'Sistema Avançado de Medicina, Emergência, Prescrições e Farmacologia'
 version '2.5.0'
@@ -11,6 +13,7 @@ shared_scripts {
     '@ox_lib/init.lua',
     'config.lua',
     'config_medical.lua',
+    'bridge/compat_qbx_shared.lua',
     'hospitals/*.lua',
     'locales.lua',
     'locales/*.lua',
@@ -20,6 +23,7 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/banking.lua',
     'bridge/server.lua',
+    'bridge/compat_qbx_server.lua',
     'server/editable_functions.lua',
     'server/custom.lua',
     'server/database.lua',
@@ -50,6 +54,7 @@ server_scripts {
 
 client_scripts {
     'bridge/client.lua',
+    'bridge/compat_qbx_client.lua',
     'bridge/integrations/vp_needs_client.lua',
     'bridge/integrations/nexus_os_client.lua',
     'bridge/integrations/vp_tablet_client.lua',
