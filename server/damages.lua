@@ -30,26 +30,7 @@ local function validatePlayerId(id)
     and GetPlayerPed(id) > 0
 end
 
-local function healBoneCallback(source, targetId, data)
-  -- Rate Limit por source (mínimo 1.2s entre ações médicas de curativo)
-  local now = GetGameTimer()
-  if healCooldowns[source] and (now - healCooldowns[source]) < 1200 then
-    debugWarn(("[HealBone] Rate limit atingido para source: %s"):format(source))
-    return false
-  end
-  healCooldowns[source] = now
-
-  -- Concurrency Lock por targetId (evita curas simultâneas/race condition de inventário)
-  if healingLocks[targetId] then
-    debugWarn(("[HealBone] Target %s já está sendo tratado por outra rotina"):format(targetId))
-    return false
-  end
-  healingLocks[targetId] = source
-
-  local function releaseLock()
-    healingLocks[targetId] = nil
-  end
-
+local function _executeHealBone(source, targetId, data)
   -- Log incoming request
   debugInfo(("[HealBone] Source: %s, TargetId: %s, Data: %s"):format(source, targetId, json.encode(data)))
 
@@ -61,7 +42,6 @@ local function healBoneCallback(source, targetId, data)
       data and data.item or "nil",
       data and data.bone or "nil"
     ))
-    releaseLock()
     return false
   end
 
@@ -69,8 +49,7 @@ local function healBoneCallback(source, targetId, data)
   local plyJob = Bridge.Framework.getPlayerJob(source)
   if not (plyJob and Editable.allJobs[plyJob.name]) then
     debugWarn(("[HealBone] Player %s job check failed - plyJob: %s"):format(source, plyJob and plyJob.name or "nil"))
-    Bridge.Notify.showNotify(locale("no_access"), "error")
-    releaseLock()
+    Bridge.Notify.showNotify(source, locale("no_access"), "error")
     return false
   end
 
@@ -169,7 +148,6 @@ local function healBoneCallback(source, targetId, data)
 
       if bloodCount < 1 then
         Bridge.Notify.showNotify(source, locale("you_need_blood_bag", bloodType), "error")
-        releaseLock()
         return false
       end
 
@@ -234,9 +212,6 @@ local function healBoneCallback(source, targetId, data)
   end
   debugInfo(("[HealBone] Total remaining damages: %s"):format(remainingCount))
 
-  -- Libera o lock
-  releaseLock()
-
   -- If all damages are cleared, handle revive/full-heal flow
   if remainingCount < 1 then
     debugInfo(("[HealBone] All damages healed! isDead: %s"):format(Player(targetId).state.isDead))
@@ -276,10 +251,46 @@ local function healBoneCallback(source, targetId, data)
     return true
   end
 
-  return false
+  return true
 end
 
-registerCallback(callbackName, healBoneCallback)
+local function healBoneCallback(source, targetId, data)
+  -- Rate Limit por source (mínimo 1.2s entre ações médicas de curativo)
+  local now = GetGameTimer()
+  if healCooldowns[source] and (now - healCooldowns[source]) < 1200 then
+    debugWarn(("[HealBone] Rate limit atingido para source: %s"):format(source))
+    return false
+  end
+  healCooldowns[source] = now
+
+  -- Concurrency Lock por targetId com TTL de 10 segundos (evita deadlock permanente por timeout/crash)
+  if healingLocks[targetId] then
+    local lockData = healingLocks[targetId]
+    local lockTime = (type(lockData) == "table" and lockData.time) or 0
+    if (now - lockTime) < 10000 then
+      debugWarn(("[HealBone] Target %s já está sendo tratado por outra rotina"):format(targetId))
+      return false
+    else
+      debugWarn(("[HealBone] Lock expirado por TTL para target %s, liberando..."):format(targetId))
+      healingLocks[targetId] = nil
+    end
+  end
+  healingLocks[targetId] = { healer = source, time = now }
+
+  -- Execução protegida com liberação garantida de lock (fail-safe)
+  local ok, res = pcall(_executeHealBone, source, targetId, data)
+  healingLocks[targetId] = nil
+
+  if not ok then
+    debugWarn(("[HealBone] Erro inesperado na execução: %s"):format(tostring(res)))
+    return false
+  end
+
+  return res == true
+end
+
+registerCallback("p_ambulancejob/server/damages/healBone", healBoneCallback)
+registerCallback("loki_prescriptions:server:healBone", healBoneCallback)
 
 RegisterNetEvent("p_ambulancejob/server/damages/performCPR")
 AddEventHandler("p_ambulancejob/server/damages/performCPR", function(targetId)
@@ -320,13 +331,39 @@ AddEventHandler("p_ambulancejob/server/damages/treatedPlayer", function(data)
   TriggerClientEvent("p_ambulancejob/client/damages/setBeingHealed", data.player, data.state == true)
 end)
 
+local knockoutCooldowns = {}
+
+RegisterNetEvent("loki_prescriptions:server:recoverKnockout", function()
+  local src = source
+  if not validatePlayerId(src) then return end
+
+  local now = GetGameTimer()
+  if knockoutCooldowns[src] and (now - knockoutCooldowns[src]) < 15000 then
+    return
+  end
+  knockoutCooldowns[src] = now
+
+  local ped = GetPlayerPed(src)
+  if ped and ped > 0 then
+    local currentHp = GetEntityHealth(ped)
+    local maxHp = GetEntityMaxHealth(ped)
+    if currentHp > 100 and currentHp < 145 then
+      local targetHp = math.min(maxHp, currentHp + 15)
+      SetEntityHealth(ped, targetHp)
+      debugInfo(("[Knockout] Player %s recuperou consciencia. HP ajustado para %d"):format(src, targetHp))
+    end
+  end
+end)
+
 -- Limpeza de memória e locks quando o jogador desconecta
 AddEventHandler("playerDropped", function()
   local src = source
   healCooldowns[src] = nil
   healingLocks[src] = nil
-  for targetId, healerSrc in pairs(healingLocks) do
-    if healerSrc == src or targetId == src then
+  knockoutCooldowns[src] = nil
+  for targetId, lockInfo in pairs(healingLocks) do
+    local healer = type(lockInfo) == "table" and lockInfo.healer or lockInfo
+    if healer == src or targetId == src then
       healingLocks[targetId] = nil
     end
   end

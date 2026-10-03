@@ -452,8 +452,10 @@ function Damages.menu(self, targetServerId)
   for _ in pairs(targetDamages) do damageCount = damageCount + 1 end
 
   -- Auto-resolve any open alert for this player
-  if Config.Alerts.enabled and Config.Alerts.autoResolveAlert then
-    exports.p_ambulancejob:resolvePlayerAlert(targetServerId)
+  if Config.Alerts and Config.Alerts.enabled and Config.Alerts.autoResolveAlert then
+    if GetResourceState('p_ambulancejob') == 'started' then
+      pcall(function() exports.p_ambulancejob:resolvePlayerAlert(targetServerId) end)
+    end
   end
 
   if Bridge and Bridge.Config and Bridge.Config.Debug then
@@ -878,4 +880,17 @@ end
 -- Boot: apply weapon damage modifiers on resource start
 Citizen.CreateThread(function()
   Damages.applyModifiers(Damages)
+end)
+
+-- Handlers de evento para abertura do diagnóstico clínico
+RegisterNetEvent("p_ambulancejob/client/damages/openDamages", function(targetServerId)
+  Damages.menu(Damages, targetServerId)
+end)
+
+RegisterNetEvent("loki_prescriptions:client:openDamages", function(targetServerId)
+  Damages.menu(Damages, targetServerId)
+end)
+
+exports("openDamages", function(targetServerId)
+  Damages.menu(Damages, targetServerId)
 end)

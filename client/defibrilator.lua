@@ -13,16 +13,6 @@ if not Config.Defibrilator.enabled then
     return
 end
 
--- Unused test function retained from decompilation (queries DMV school state)
-local function test()
-    local schools = GlobalState["p_dmvschool/Schools"]
-    if schools then
-        local entry = schools[k]
-        if entry then
-            return entry.theoryQuestions
-        end
-    end
-end
 
 -- Main defibrillator table, holds state (object, attachedPlayer, cam, points, etc.)
 Defibrilator = {}

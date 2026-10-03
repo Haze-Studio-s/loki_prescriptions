@@ -31,22 +31,18 @@ local function startSensoryComa()
         end
     end)
 
-    -- Thread de interação de dor / socorro pelo paciente
+    -- Notificação discreta de socorro via lib.showTextUI
+    if lib and lib.showTextUI then
+        lib.showTextUI('[E] Gemer de Dor / Pedir Socorro', {
+            position = 'bottom-center',
+            icon = 'heart-pulse'
+        })
+    end
+
+    -- Thread de interação de dor / socorro pelo paciente (0.00ms resmon)
     CreateThread(function()
         while inComa do
-            Wait(0)
-            -- Exibe instrução discreta na tela
-            BeginTextCommandDisplayText("STRING")
-            AddTextComponentSubstringPlayerName("~y~[E]~s~ Gemer de Dor / Pedir Socorro")
-            SetTextFont(4)
-            SetTextScale(0.35, 0.35)
-            SetTextColour(255, 255, 255, 200)
-            SetTextDropshadow(1, 0, 0, 0, 255)
-            SetTextEdge(1, 0, 0, 0, 255)
-            SetTextOutline()
-            SetTextCentre(true)
-            EndTextCommandDisplayText(0.5, 0.88)
-
+            Wait(4)
             if IsControlJustPressed(0, 38) then -- Tecla E
                 local now = GetGameTimer()
                 if now - lastGroan > 4000 then
@@ -64,6 +60,10 @@ end
 local function stopSensoryComa()
     if not inComa then return end
     inComa = false
+
+    if lib and lib.hideTextUI then
+        lib.hideTextUI()
+    end
 
     StopAudioScene("CHARACTER_CHANGE_IN_SKY_SCENE")
     ClearTimecycleModifier()
