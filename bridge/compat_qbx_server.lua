@@ -144,27 +144,30 @@ exports('IsLaststand', function(source)
     return state[DEATH_STATE_STATE_BAG] == DeathStateEnum.LAST_STAND or state.inLastStand == true
 end)
 
--- Callbacks
-lib.callback.register('qbx_medical:server:respawn', function(source)
-    revivePlayer(source)
-    TriggerEvent('qbx_medical:server:playerRespawned', source)
-    return true
-end)
+-- Callbacks: só registrar se qbx_medical NÃO estiver rodando
+-- (evita sobrescrever callbacks próprios do qbx_medical)
+if GetResourceState('qbx_medical') ~= 'started' then
+    lib.callback.register('qbx_medical:server:respawn', function(source)
+        revivePlayer(source)
+        TriggerEvent('qbx_medical:server:playerRespawned', source)
+        return true
+    end)
 
-lib.callback.register('qbx_medical:server:resetHungerAndThirst', resetHungerAndThirst)
+    lib.callback.register('qbx_medical:server:resetHungerAndThirst', resetHungerAndThirst)
 
-lib.callback.register('qbx_medical:server:setArmor', function(source, amount)
-    local player = exports.qbx_core and exports.qbx_core:GetPlayer(source)
-    if player and player.Functions and player.Functions.SetMetaData then
-        player.Functions.SetMetaData('armor', amount)
-    end
-end)
+    lib.callback.register('qbx_medical:server:setArmor', function(source, amount)
+        local player = exports.qbx_core and exports.qbx_core:GetPlayer(source)
+        if player and player.Functions and player.Functions.SetMetaData then
+            player.Functions.SetMetaData('armor', amount)
+        end
+    end)
 
-lib.callback.register('qbx_medical:server:log', function(_, event, message)
-    if Bridge and Bridge.Debug then
-        Bridge.Debug(('LOG [qbx_medical:%s]: %s'):format(event, message))
-    end
-end)
+    lib.callback.register('qbx_medical:server:log', function(_, event, message)
+        if Bridge and Bridge.Debug then
+            Bridge.Debug(('LOG [qbx_medical:%s]: %s'):format(event, message))
+        end
+    end)
+end
 
 -- Compatibilidade txAdmin Menu
 AddEventHandler('txAdmin:events:healedPlayer', function(eventData)
