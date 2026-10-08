@@ -15,7 +15,7 @@ Data de Geração: 2026-09-25
 | **ak47_qb_ambulancejob** | F:\Nova pasta (6)\ak47_qb_ambulancejob | 132 | 73 | 1 | 0 | 0 | 58 |
 | **pluto** | F:\Nova pasta (6)\pluto | 284 | 84 | 24 | 1 | 0 | 175 |
 | **lation_ui** | F:\Nova pasta (6)\lation_ui | 135 | 25 | 2 | 0 | 13 | 95 |
-| **SDC_MedCalls** | E:\Users\Vinicius\Downloads\txData\Qbox_753251.base\resources\[standalone]\SDC_MedCalls-1.0.3 | 13 | 6 | 0 | 0 | 0 | 7 |
+| **SDC_MedCalls** | E:\Users\Vinicius\Downloads\txData\Qbox_753251.base\resources\[standalone]\SDC_MedCalls-1.0.3 *(absorvido pelo vp_aicalls — ver nota)* | 13 | 6 | 0 | 0 | 0 | 7 |
 
 ---
 
@@ -1504,7 +1504,13 @@ Data de Geração: 2026-09-25
 
 ## 📦 SDC_MedCalls
 
-* **Caminho:** E:\Users\Vinicius\Downloads\txData\Qbox_753251.base\resources\[standalone]\SDC_MedCalls-1.0.3
+> ⚠️ **Migrado:** o caminho original não existe mais em disco. O conteúdo foi absorvido pelo
+> `vp_aicalls` (resource em `resources/[standalone]/vp_aicalls`) — o módulo EMS de lá é
+> rotulado `CONFIGURAÇÃO DO MÓDULO EMS (SDC_MedCalls)` em `vp_aicalls/config/ems.lua:1`.
+> A leitura registrada no REFERENCE_READING_LEDGER permanece válida como registro histórico;
+> auditorias futuras devem usar o `vp_aicalls` como fonte viva.
+
+* **Caminho original (órfão):** E:\Users\Vinicius\Downloads\txData\Qbox_753251.base\resources\[standalone]\SDC_MedCalls-1.0.3
 * **Total de Arquivos:** 13
 
 | Arquivo Relativo | Extensão | Tamanho (Bytes) | Linhas Aprox. | Categoria |

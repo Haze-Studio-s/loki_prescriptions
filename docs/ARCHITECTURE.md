@@ -69,6 +69,10 @@ graph TD
 | **Atestados Médicos** | `client/medical_certificate.lua` | `server/medical_certificate.lua` | Emissão e registro persistente de licença médica e atestado de afastamento. |
 | **Sedação & Nocaute** | `client/sedative.lua`<br>`client/knockout.lua` | `server/sedative.lua` | Aplicação de sedativo com seringa clínica e sistema de nocaute não-letal em combate desarmado. |
 | **Auxiliares de Marcha** | `client/crutch.lua`<br>`client/wheelchair.lua` | `server/crutch.lua`<br>`server/wheelchair.lua` | Muletas ortopédicas com animação de mancar e cadeira de rodas articulada para pacientes em recuperação. |
+| **Triagem START** | `client/triage.lua` | `server/triage.lua` | Etiquetas GREEN/YELLOW/RED/BLACK com marcador 3D e state bag `triageTag` para desastres. |
+| **Medbox de Campo** | `client/medbox.lua` | `server/medbox.lua` | Caixa de suprimentos portátil (`prop_medbox`) com stash `ox_inventory`. |
+| **Terminal de TV** | `client/tv.lua` | `server/tv.lua` | Painel de "paciente a caminho" em TVs de hospital via DUI (`web/tv.html`) sincronizado por `GlobalState`. |
+| **Bridge vp_aicalls** | — | `bridge/integrations/vp_aicalls_server.lua` | Registro de atendimentos EMS de chamados IA no prontuário clínico (export `RegisterCallReport`). |
 
 ---
 

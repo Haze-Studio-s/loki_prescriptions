@@ -57,3 +57,7 @@ Config.Pharmacies = {
 - `Rooms`: Lista de posições 3D das salas de radiologia nos hospitais cadastrados.
 - `ScanDuration`: Duração do escaneamento do feixe CRT (em milissegundos).
 - `CostPerScan`: Taxa cobrada para emissão do laudo radiográfico.
+
+### Configuração de TVs de Hospital (`Config.TV`)
+- `enabled`: Liga/desliga o terminal de TV (painel de "paciente a caminho").
+- `points`: Preenchido automaticamente a partir de `hospitals/*.lua` (`TV = { [hospital] = { [nome] = { coords, rot } } }`). Cada ponto de TV deve ficar a pelo menos 20 unidades de distância de outro no mesmo hospital (limitação de textura do GTA).

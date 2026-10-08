@@ -19,6 +19,16 @@ local function loadModel(model)
 end
 
 RegisterNetEvent('loki_prescriptions:client:useLucas3', function(targetServerId)
+    if not targetServerId then
+        local closestPlayer, closestDist = lib.getClosestPlayer(GetEntityCoords(PlayerPedId()), 2.5, false)
+        if closestPlayer and closestDist <= 2.5 then
+            targetServerId = GetPlayerServerId(closestPlayer)
+        else
+            Bridge.Notify.showNotify('Nenhum paciente próximo para instalar o LUCAS 3.', 'error')
+            return
+        end
+    end
+
     local targetPed = GetPlayerPed(GetPlayerFromServerId(targetServerId))
     if not targetPed or targetPed == 0 then return end
 

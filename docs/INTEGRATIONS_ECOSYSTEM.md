@@ -134,6 +134,21 @@ O [`vp_tablet`](../vp_tablet) atua como a central tática de despacho e prontuá
 
 ---
 
+## 📟 5. Integração de Chamados EMS com `vp_aicalls`
+
+O [`vp_aicalls`](../vp_aicalls) gera chamados médicos com IA (pacientes NPC, transporte inter-hospitalar). A divisão de responsabilidades segue a decisão do spike (`docs/integrations/STRETCHER_OWNERSHIP_SPIKE.md`): **o `vp_aicalls` é dono do operacional do chamado; o Loki é dono do estado clínico**.
+
+### 5.1 Registro de Atendimento (`RegisterCallReport`)
+- Quando um chamado EMS termina no dropoff do hospital, o `vp_aicalls` chama `exports.loki_prescriptions:RegisterCallReport(...)`.
+- O Loki valida o job do socorrista, registra o atendimento (callId, tipo, prioridade, detalhes do paciente, tempos, tripulação) e notifica a equipe.
+- Consultas: `exports.loki_prescriptions:GetCallReports()` / `GetCallReport(callId)`.
+- **Fail-closed nos dois sentidos:** se o Loki estiver parado, o PCR do tablet segue sozinho; se o `vp_aicalls` estiver parado, o Loki não perde nada.
+
+### 5.2 Macas
+- As duas macas coexistem por domínio: a do Loki (`strykergurney`, server-authoritative) é para **jogadores reais**; a do `vp_aicalls` (`prop_stretcher`, local/cosmética) é para **NPCs de missão**. Elas não disputam o mesmo paciente.
+
+---
+
 ## 🔧 Como Testar e Validar as Integrações em Jogo
 
 1. **Teste de Farmacologia (`vp_needs`):**
@@ -151,4 +166,8 @@ O [`vp_tablet`](../vp_tablet) atua como a central tática de despacho e prontuá
 5. **Teste no MDT (`vp_tablet`):**
    - Abra o tablet policial/médico (`/tablet` ou item `tablet`).
    - Verifique o histórico de relatórios atualizado em tempo real e os chamados 10-47 de emergência médica.
+6. **Teste de Chamado EMS (`vp_aicalls`):**
+   - Complete um chamado médico (checkup → maca → entrega no hospital).
+   - Os socorristas envolvidos recebem a notificação "Atendimento registrado no prontuário clínico."
+   - Confirme com `exports.loki_prescriptions:GetCallReports()` no console do servidor.
 

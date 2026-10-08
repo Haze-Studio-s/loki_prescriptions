@@ -159,6 +159,7 @@
     "select_outfit": "Select outfit",
     "open_wardrobe": "Open Wardrobe",
     "no_access": "You don't have access to this action",
+    "call_report_registered": "Call report registered in the clinical record.",
     "use_elevator": "Use Elevator",
     "elevator_menu": "Elevator",
     "floor_desc": "Go to %s",

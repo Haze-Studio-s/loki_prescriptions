@@ -46,7 +46,9 @@ server_scripts {
     'server/saline.lua',
     'server/triage.lua',
     'server/medbox.lua',
+    'server/tv.lua',
     'bridge/integrations/vp_needs_server.lua',
+    'bridge/integrations/vp_aicalls_server.lua',
     'bridge/integrations/nexus_os_server.lua',
     'bridge/integrations/vp_phone_server.lua',
     'bridge/integrations/vp_tablet_server.lua',
@@ -86,6 +88,7 @@ client_scripts {
     'client/sedative.lua',
     'client/knockout.lua',
     'client/hospital_beds.lua',
+    'client/tv.lua',
 }
 
 ui_page 'web/build/index.html'

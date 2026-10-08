@@ -39,7 +39,7 @@ end)
 
 -- Registro do item utilizável
 Bridge.Framework.registerItem('lucas3', function(source)
-    TriggerClientEvent('loki_prescriptions:client:useLucas3Item', source)
+    TriggerClientEvent('loki_prescriptions:client:useLucas3', source)
 end)
 
 AddEventHandler('playerDropped', function()

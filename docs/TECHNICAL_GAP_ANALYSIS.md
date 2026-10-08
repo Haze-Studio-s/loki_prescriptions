@@ -9,9 +9,9 @@ Classificação por criticidade técnica de todos os subsistemas pendentes de re
 * **[RESOLVIDO] Autoridade Server-Side:** Remoção de eventos com client authority no consumo de remédios.
 
 ### P1 — Importante / Core Gameplay
-* **Módulo de Fraturas Ósseas Integrado:** Ligar a fratura de membros ao travamento de volante (`LockSteering`) e tropeço de perna (`CauseFractureStaggering`).
-* **MCI START Triage Tags:** Sistema de identificação visual rápida de prioridade de transporte.
-* **Caixa de Suprimentos Portátil (`prop_medbox`):** Stash temporário em campo para atendimento em massa.
+* **[RESOLVIDO] Módulo de Fraturas Ósseas Integrado:** Travamento de volante (`SetVehicleSteerBias` em `client/damages.lua:73-91`) e tropeço de perna (`CauseFractureStaggering`, mesmas linhas).
+* **[RESOLVIDO] MCI START Triage Tags:** `client/triage.lua` + `server/triage.lua` com tags GREEN/YELLOW/RED/BLACK, marcador 3D e state bag `triageTag`.
+* **[RESOLVIDO] Caixa de Suprimentos Portátil (`prop_medbox`):** `client/medbox.lua` + `server/medbox.lua` com stash `ox_inventory` (comando `/medbox`).
 
 ### P2 — Melhoria Relevante
 * **Conexão Dinâmica dos Minigames com State Bags:** Ajustar a frequência cardíaca audível no estetoscópio para bater no ritmo exato do `LocalPlayer.state.pulse`.

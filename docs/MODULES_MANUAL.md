@@ -13,6 +13,7 @@ Guia completo de procedimentos médicos, operação de equipamentos e comandos p
 6. [Sedação Clínica & Nocaute Não-Letal](#6-sedação-clínica--nocaute-não-letal)
 7. [Perícia Balística & Atestados Médicos](#7-perícia-balística--atestados-médicos)
 8. [Menu Radial de Emergência (`ox_lib`)](#8-menu-radial-de-emergência-ox_lib)
+9. [Terminal de TV & Medbox de Campo](#9-terminal-de-tv--medbox-de-campo)
 
 ---
 
@@ -135,3 +136,18 @@ Os socorristas contam com atalhos rápidos pelo menu radial do `ox_lib`:
   - 🚑 **Maca Fernocot**
   - 📜 **Bloco de Receitas**
   - 🩻 **Solicitar Raio-X**
+
+---
+
+## 9. Terminal de TV & Medbox de Campo
+
+### Terminal de TV Hospitalar ("Paciente a Caminho")
+- **Acesso:** Menu médico → **Definir Terminal**.
+- **Operação:** O socorrista seleciona a TV do hospital, informa nome, idade, gênero, condição (Estável/Crítico) e ETA em minutos. O painel em **todas as TVs daquele hospital** exibe "PACIENTE A CAMINHO!" com os dados, sincronizado em tempo real para toda a equipe.
+- **Limpar:** Mire na TV (`ox_target`) e selecione **Limpar Terminal** para voltar ao estado ocioso.
+- **Técnico:** Prop `ex_prop_ex_tv_flat_01` com DUI (`web/tv.html`) aplicado na textura da tela; estado replicado via `GlobalState['loki_prescriptions/tv']`. Os pontos de TV vêm de `hospitals/*.lua` (`Config.TV`).
+
+### Medbox de Campo
+- **Comando:** `/medbox`
+- **Operação:** Posiciona uma caixa de suprimentos (`prop_medbox`) no chão, com stash `ox_inventory` de 25 slots para atendimento em massa. Pode ser recolhida por interação (`ox_target`).
+- **Uso típico:** Incidentes remotos, desastres (com a Triagem START) e postos de atendimento improvisados.

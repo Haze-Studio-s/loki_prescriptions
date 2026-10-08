@@ -15,15 +15,16 @@ Classificação sistemática de todas as funcionalidades de alto valor identific
 * **Incapacitação Motora e Muletas Físicas:** Pacientes com tíbia fraturada precisam usar muleta física com o walking style Lester (`move_heist_lester`).
 
 ### 3. IMMERSION
-* **7 Minigames de Alta Fidelidade Anatômica (Pluto):**
-  * Esfigmomanômetro com insuflação da braçadeira e leitura de pressão sistólica/diastólica.
-  * Ausculta com estetoscópio posicionável em 5 pontos com áudio de estridor/sibilos.
-  * Reflexo patelar com martelo neurológico.
-  * Punção venosa com cateter e refluxo de sangue ("flashback").
-  * Sutura vascular de colchoeiro para hemostasia.
-  * Extração de projétil por pinça cirúrgica com colisão anatômica 2D.
-  * Tipagem sanguínea com lâmina de reação de aglutinação Anti-A/B/Rh.
-* **Monitor Cardíaco em Televisão de Quarto (DUI):** ECG dinâmico sincronizado em tempo real na tela do hospital.
+* **7 Minigames de Alta Fidelidade Anatômica (Pluto) — conceitos colhidos:**
+  * ✅ Esfigmomanômetro com insuflação da braçadeira e leitura de pressão sistólica/diastólica. (`bp`)
+  * ❌ Ausculta com estetoscópio posicionável em 5 pontos com áudio de estridor/sibilos. *(não implementado)*
+  * ❌ Reflexo patelar com martelo neurológico. *(não implementado)*
+  * ❌ Punção venosa com cateter e refluxo de sangue ("flashback"). *(não implementado)*
+  * ✅ Sutura vascular de colchoeiro para hemostasia. (`suture`)
+  * ✅ Extração de projétil por pinça cirúrgica com colisão anatômica 2D. (`bullet`)
+  * ❌ Tipagem sanguínea com lâmina de reação de aglutinação Anti-A/B/Rh. *(não implementado)*
+* **Conjunto efetivamente implementado em `Config.InteractiveMinigames` (`config_medical.lua:95-104`):** suture, clamp (hemostasia), bullet, bp, bandage (curativo em 3 etapas), breathalyzer (bafômetro) e swipeCard (leitor magnético). *(corrige a divergência anterior entre este catálogo e o código)*
+* **Monitor Cardíaco em Televisão de Quarto (DUI):** ECG dinâmico sincronizado em tempo real na tela do hospital. *(implementado: ECG do Lifepak via `web/ecg.html` e TV de paciente a caminho via `web/tv.html` + `client/tv.lua`)*
 
 ### 4. PROGRESSION
 * **Especialização Cirúrgica & Médica:** Registro de histórico de atendimentos bem-sucedidos no banco de dados, habilitando promoções no departamento hospitalar.

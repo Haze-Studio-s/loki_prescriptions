@@ -61,6 +61,9 @@ Todas as interfaces gráficas (NUI) foram reformuladas com o padrão de excelên
   - Pacientes podem deitar, receber oxigênio e medicação endovenosa em movimento.
 - **Cadeira de Rodas & Muletas:** Auxiliares de locomoção com animação física de mancar ao sofrer fraturas graves nos membros inferiores.
 - **Mochila Médica de Resgate (`medicbag`):** Acesso rápido a todos os insumos de primeiros socorros diretamente no local da ocorrência.
+- **Medbox de Campo (`/medbox`):** Caixa de suprimentos portátil (`prop_medbox`) com stash temporário via `ox_inventory` para atendimento em massa em incidentes remotos.
+- **Terminal de TV Hospitalar:** Painel de "paciente a caminho" (nome, idade, condição, ETA) em TVs de hospital via DUI, sincronizado para toda a equipe. Definido pelo menu médico ("Definir Terminal").
+- **Triagem START (`/triagem`):** Etiquetas de cor (Verde/Amarelo/Vermelho/Preto) com marcador 3D para triagem de vítimas em massa.
 
 ### 4. 🩻 Centro de Diagnóstico por Imagem (Raio-X)
 - **Máquina de Fluoroscopia / Raio-X (`/raiox`):**

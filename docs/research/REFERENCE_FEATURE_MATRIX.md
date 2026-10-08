@@ -10,7 +10,7 @@ Este documento estabelece a comparação analítica multidimensional entre o **l
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Prontuário e Prescrições** | ✅ Nativo Avançado | ❌ Inexistente | ❌ Inexistente | ⚠️ Básico | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **loki_prescriptions** |
 | **Farmacologia e Dosagens** | ✅ Sistema Multidose | ⚠️ Consumo Simples | ⚠️ Itens com Efeito | ⚠️ Supressão Temporal | ⚠️ Efeitos de Tela | ⚠️ Itens Básicos | ❌ Inexistente | ❌ Inexistente | **loki_prescriptions + OSP** |
-| **Minigames Cirúrgicos (7)** | ✅ 7 Procedimentos | ❌ Apenas Skillcheck | ❌ Skillcheck Ox | ❌ Básico | ⚠️ Batimento NUI | ✅ 7 Procedimentos | ⚠️ Primitivas UI | ❌ Inexistente | **Pluto Medical (Absorvido)** |
+| **Minigames Cirúrgicos (7)** | ✅ Sutura, Pinça, Projétil, Pressão, Bandagem, Bafômetro, Cartão | ❌ Apenas Skillcheck | ❌ Skillcheck Ox | ❌ Básico | ⚠️ Batimento NUI | ✅ 7 Procedimentos | ⚠️ Primitivas UI | ❌ Inexistente | **Pluto Medical (Absorvido)** |
 | **Soro IV Físico (Saline)** | ✅ Implementado | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | ✅ Prop Saline | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **AK47 Ambulance** |
 | **Compressor Lucas 3 (RCP)** | ✅ Implementado | ❌ Inexistente | ⚠️ Prop no Stream | ❌ Inexistente | ✅ Funcional | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **AK47 Ambulance** |
 | **Telemetria Pulso/Temp** | ✅ State Bags Vivos | ❌ Inexistente | ✅ State Bags | ❌ Inexistente | ❌ Inexistente | ⚠️ Estático | ❌ Inexistente | ❌ Inexistente | **P-Ambulancejob** |
@@ -19,7 +19,7 @@ Este documento estabelece a comparação analítica multidimensional entre o **l
 | **Gesso e Adornos no Ped**  | 🔄 Em Planejamento | ❌ Inexistente | ❌ Inexistente | ✅ Variação Roupas | ❌ Inexistente | ⚠️ Bandagem Ped | ❌ Inexistente | ❌ Inexistente | **OSP Ambulance** |
 | **Triagem START (MCI Tags)** | ✅ Verde/Amarelo/Vermelho/Preto | ❌ Inexistente | ❌ Inexistente | ✅ Tags Visuais | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **OSP Ambulance** |
 | **Saco Mortuário (Bodybag)** | ✅ Funcional | ❌ Inexistente | ✅ Anexo em Maca | ❌ Inexistente | ❌ Inexistente | ⚠️ Modelo 3D | ❌ Inexistente | ❌ Inexistente | **P-Ambulancejob** |
-| **Monitor TV / ECG em DUI**  | ✅ Telas Hospitalares | ❌ Inexistente | ✅ TV HTML/DUI | ✅ DUI Raio-X | ❌ Inexistente | ✅ Raio-X DUI | ❌ Inexistente | ❌ Inexistente | **P-Ambulancejob + Pluto** |
+| **Monitor TV / ECG em DUI**  | ✅ TV HTML/DUI + ECG (Lifepak) | ❌ Inexistente | ✅ TV HTML/DUI | ✅ DUI Raio-X | ❌ Inexistente | ✅ Raio-X DUI | ❌ Inexistente | ❌ Inexistente | **P-Ambulancejob + Pluto** |
 | **Caixa de Suprimentos Solo**| ✅ Medbox Portátil | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | ✅ Prop Medbox | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **AK47 Ambulance** |
 | **Maca com Raycast Físico**  | ✅ Raycast LosProbe | ✅ Raycast Nativo | ⚠️ Spawn Livre | ⚠️ Spawn Livre | ⚠️ Spawn Livre | ⚠️ Spawn Livre | ❌ Inexistente | ❌ Inexistente | **Wasabi Ambulance** |
 | **Nocaute Melee & Concussão**| ✅ Bloom Shader | ✅ Bloom Shader | ❌ Inexistente | ❌ Inexistente | ⚠️ Básico | ❌ Inexistente | ❌ Inexistente | ❌ Inexistente | **Wasabi Ambulance** |
