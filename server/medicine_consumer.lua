@@ -25,6 +25,16 @@ local function checkOverdose(src)
     return #recent >= (Config.Overdose.threshold or 3)
 end
 
+local function handleDstCure(src, med)
+    if not med or not med.cure_dst then return end
+    if GetResourceState('aurp_put') ~= 'started' then return end
+    pcall(function()
+        if exports['aurp_put'] and exports['aurp_put'].CurePlayer then
+            exports['aurp_put']:CurePlayer(src, med.cure_dst)
+        end
+    end)
+end
+
 -- Registro automático de todos os medicamentos configurados
 CreateThread(function()
     Wait(1000)
@@ -41,6 +51,8 @@ CreateThread(function()
                     local isOverdose = checkOverdose(src)
                     TriggerClientEvent('loki_prescriptions:client:applyMedicineEffects', src, med, isOverdose)
                     
+                    handleDstCure(src, med)
+
                     if VpNeedsBridge then
                         VpNeedsBridge.ApplyMedicineEffects(src, med)
                     elseif Config.EnableVpNeedsIntegration and med.vp_effects and med.vp_effects.stress and med.vp_effects.stress < 0 then
@@ -69,6 +81,8 @@ CreateThread(function()
                 if removed then
                     local isOverdose = checkOverdose(src)
                     TriggerClientEvent('loki_prescriptions:client:applyMedicineEffects', src, med, isOverdose)
+                    
+                    handleDstCure(src, med)
                     
                     if VpNeedsBridge then
                         VpNeedsBridge.ApplyMedicineEffects(src, med)

@@ -173,7 +173,8 @@ Config.Medicine = {
         label = "Cycurex",
         cost = 600,
         refills = 1,
-        description = "Terapia antimicrobiana intensiva para quadros de infecção severa.",
+        description = "Terapia antimicrobiana intensiva para quadros de infecção severa e sífilis.",
+        cure_dst = 'syphilis',
         vp_effects = { hp = 40, detox_boost = true }
     },
     {
@@ -189,7 +190,8 @@ Config.Medicine = {
         label = "ZithroMed",
         cost = 480,
         refills = 1,
-        description = "Azitromicina de alta pureza para infecções do trato respiratório e dérmico.",
+        description = "Azitromicina de alta pureza: antibiótico macrolídeo indicado para infecções e clamídia.",
+        cure_dst = 'chlamydia',
         vp_effects = { hp = 25, cure_choking = true }
     },
     {
@@ -197,7 +199,8 @@ Config.Medicine = {
         label = "Doxallin",
         cost = 420,
         refills = 1,
-        description = "Doxiciclina antibiótica para estabilização metabólica e bacteriana.",
+        description = "Doxiciclina antibiótica de amplo espectro para infecções bacterianas e gonorreia.",
+        cure_dst = 'gonorrhea',
         vp_effects = { hp = 25 }
     },
     {

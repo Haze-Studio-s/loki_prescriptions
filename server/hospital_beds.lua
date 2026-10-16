@@ -182,6 +182,13 @@ AddEventHandler("loki_prescriptions:server:exitHospitalBed", function(bedIndex)
     local src = source
     if type(bedIndex) ~= "string" then return end
     freeBed(bedIndex, src)
+
+    -- Internação hospitalar cura infecções bacterianas / DSTs
+    pcall(function()
+        if GetResourceState('aurp_put') == 'started' and exports['aurp_put'] and exports['aurp_put'].CurePlayer then
+            exports['aurp_put']:CurePlayer(src)
+        end
+    end)
 end)
 
 -- ── Cleanup em desconexão ────────────────────────────────────────────────

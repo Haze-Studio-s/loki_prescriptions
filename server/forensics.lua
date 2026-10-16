@@ -185,6 +185,20 @@ lib.callback.register('loki_prescriptions:server:performAutopsy', function(sourc
         end
     end)
 
+    -- Integração com aurp_put (Triagem Sorológica de DSTs)
+    pcall(function()
+        if GetResourceState('aurp_put') == 'started' and exports['aurp_put'] and exports['aurp_put'].GetPlayerDisease then
+            local identifier = GetPlayerIdentifierByType(target, 'license')
+            if identifier then
+                identifier = identifier:gsub('license:', '')
+                local diseaseData = exports['aurp_put']:GetPlayerDisease(identifier)
+                if diseaseData and diseaseData.disease then
+                    table.insert(toxicDetails, ('⚠️ Triagem Infecciosa Sorológica: Positivo para Patógeno Sexualmente Transmissível (%s).'):format(diseaseData.disease:upper()))
+                end
+            end
+        end
+    end)
+
     local toxicologyFormatted = #toxicDetails > 0 and table.concat(toxicDetails, '\n') or 'Nenhum metabólito tóxico ou substância química ilícita identificada no teste preliminar.'
 
     local reportData = {
