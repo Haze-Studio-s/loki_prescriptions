@@ -595,4 +595,36 @@ switchTab = function(tabId) {
   }
 };
 
+// ==========================================================================
+// THEME SWITCHER (MODO PADRÃO CLÍNICO vs MODO ESCURO OLED)
+// ==========================================================================
+window.toggleEhrTheme = function() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  window.setEhrTheme(newTheme);
+};
+
+window.setEhrTheme = function(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('lsmc_ehr_theme', theme);
+
+  const iconEl = document.getElementById('theme-icon');
+  const labelEl = document.getElementById('theme-label');
+
+  if (theme === 'light') {
+    if (iconEl) iconEl.className = 'fa-solid fa-sun';
+    if (labelEl) labelEl.textContent = 'Modo Clínico';
+  } else {
+    if (iconEl) iconEl.className = 'fa-solid fa-moon';
+    if (labelEl) labelEl.textContent = 'Modo Escuro';
+  }
+};
+
+// Restore saved theme on startup
+(function initTheme() {
+  const savedTheme = localStorage.getItem('lsmc_ehr_theme') || 'dark';
+  window.setEhrTheme(savedTheme);
+})();
+
+
 

@@ -4,6 +4,7 @@
    ========================================================================== */
 
 :root {
+  /* Default Dark Mode (OLED Clinical Dark) */
   --bg-primary: #070B12;
   --bg-secondary: #0D1424;
   --bg-card: #131D31;
@@ -27,6 +28,33 @@
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --app-gradient: radial-gradient(circle at 50% 0%, #111D35 0%, #070B12 100%);
+}
+
+/* Light Mode: Clinical Swiss Clean (#F8FAFC) */
+[data-theme="light"] {
+  --bg-primary: #F1F5F9;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --border-color: #CBD5E1;
+  --border-focus: #0284C7;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  
+  --teal-500: #0284C7;
+  --teal-600: #0369A1;
+  --emerald-500: #059669;
+  --emerald-600: #047857;
+  --rose-500: #E11D48;
+  --rose-600: #BE123C;
+  --amber-500: #D97706;
+  --blue-500: #2563EB;
+  --blue-600: #1D4ED8;
+  
+  --app-gradient: radial-gradient(circle at 50% 0%, #E2E8F0 0%, #F1F5F9 100%);
 }
 
 * {
@@ -53,8 +81,9 @@ html, body {
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at 50% 0%, #111D35 0%, #070B12 100%);
+  background: var(--app-gradient);
   overflow: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Header */
@@ -174,15 +203,195 @@ html, body {
   flex-direction: column;
 }
 
+.ehr-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: var(--teal-500);
+  color: var(--teal-500);
+  transform: scale(1.02);
+}
+
+.theme-toggle-btn i {
+  font-size: 13px;
+  color: var(--amber-500);
+}
+
+[data-theme="light"] .theme-toggle-btn {
+  background: #E2E8F0;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+[data-theme="light"] .theme-toggle-btn i {
+  color: #2563EB;
+}
+
 .user-name {
   font-size: 12px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .user-role {
   font-size: 10px;
   color: var(--text-muted);
+}
+
+/* Light Mode Overrides for High-Contrast Cards */
+[data-theme="light"] .ehr-header,
+[data-theme="light"] .ehr-nav {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #CBD5E1;
+}
+
+[data-theme="light"] .nav-tab {
+  color: #475569;
+}
+
+[data-theme="light"] .nav-tab:hover {
+  background: #F1F5F9;
+  color: #0F172A;
+}
+
+[data-theme="light"] .nav-tab.active {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.3);
+  color: #0284C7;
+  box-shadow: inset 3px 0 0 #0284C7;
+}
+
+[data-theme="light"] .patient-banner,
+[data-theme="light"] .clinical-card,
+[data-theme="light"] .ehr-card,
+[data-theme="light"] .pharmacy-card,
+[data-theme="light"] .pacs-toolbar,
+[data-theme="light"] .pacs-report-card,
+[data-theme="light"] .rx-form-card,
+[data-theme="light"] .pharmacy-header-bar {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .vital-metric,
+[data-theme="light"] .timeline-content,
+[data-theme="light"] .pharm-meds-list,
+[data-theme="light"] .rehab-progress-track,
+[data-theme="light"] .rehab-progressive-box,
+[data-theme="light"] .patient-pick-card,
+[data-theme="light"] .equip-card {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+[data-theme="light"] .patient-name-row h2,
+[data-theme="light"] .card-title,
+[data-theme="light"] .pharm-card-body h4,
+[data-theme="light"] .rehab-header-bar h2,
+[data-theme="light"] .pacs-report-card h3,
+[data-theme="light"] .active-card-name,
+[data-theme="light"] .patient-pick-name,
+[data-theme="light"] .equip-info h4,
+[data-theme="light"] .ehr-title,
+[data-theme="light"] .timeline-header strong,
+[data-theme="light"] .protocol-card h3,
+[data-theme="light"] .ehr-card-header h3,
+[data-theme="light"] .progressive-title span {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .ehr-subtitle,
+[data-theme="light"] .user-role,
+[data-theme="light"] .patient-meta-grid,
+[data-theme="light"] .timeline-content p,
+[data-theme="light"] .protocol-item p,
+[data-theme="light"] .progressive-info p,
+[data-theme="light"] .equip-info p,
+[data-theme="light"] .rehab-header-bar p,
+[data-theme="light"] .pharmacy-title p,
+[data-theme="light"] .metric-status {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .duration-pill {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+[data-theme="light"] .duration-pill.active {
+  background: #059669;
+  border-color: #059669;
+  color: #FFFFFF;
+}
+
+[data-theme="light"] .patient-photo-box {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #475569;
+}
+
+[data-theme="light"] .status-pill {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #334155;
+}
+
+[data-theme="light"] .btn-secondary {
+  background: #E2E8F0;
+  color: #1E293B;
+  border-color: #CBD5E1;
+}
+
+[data-theme="light"] .btn-outline {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+[data-theme="light"] .allergy-alert-bar {
+  background: #FFF1F2;
+  border-color: #FECDD3;
+}
+
+[data-theme="light"] .allergy-alert-bar strong {
+  color: #E11D48;
+}
+
+[data-theme="light"] .form-control {
+  background: #FFFFFF;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+[data-theme="light"] .form-control:focus {
+  border-color: #0284C7;
+  background: #FFFFFF;
+}
+
+[data-theme="light"] .pacs-canvas-wrapper {
+  background: #020408; /* Manter negatoscópio escuro para realismo radiológico */
 }
 
 /* Layout Body */

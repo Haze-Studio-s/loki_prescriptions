@@ -39,13 +39,20 @@
         </div>
       </div>
 
-      <div class="ehr-user-profile">
-        <div class="user-avatar">
-          <i class="fa-solid fa-user-doctor"></i>
-        </div>
-        <div class="user-meta">
-          <span class="user-name" id="ehr-doctor-name">Dr. Ricardo Novaes</span>
-          <span class="user-role">Médico Cirurgião / CTI</span>
+      <div class="ehr-actions-group">
+        <button class="theme-toggle-btn" id="btn-theme-toggle" onclick="window.toggleEhrTheme()">
+          <i class="fa-solid fa-moon" id="theme-icon"></i>
+          <span id="theme-label">Modo Escuro</span>
+        </button>
+
+        <div class="ehr-user-profile">
+          <div class="user-avatar">
+            <i class="fa-solid fa-user-doctor"></i>
+          </div>
+          <div class="user-meta">
+            <span class="user-name" id="ehr-doctor-name">Dr. Ricardo Novaes</span>
+            <span class="user-role">Médico Cirurgião / CTI</span>
+          </div>
         </div>
       </div>
     </header>
