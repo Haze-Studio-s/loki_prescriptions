@@ -429,10 +429,18 @@ function renderActiveRehabList() {
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); margin-top: 4px;">
           <span>${stageText}</span>
-          <span>Tempo Restante: <strong style="color: #fff;">${timeFormatted}</strong></span>
+          <span>Tempo Restante: <strong style="color: #fff; font-family: var(--font-mono); font-variant-numeric: tabular-nums;">${timeFormatted}</strong></span>
         </div>
         <div class="rehab-progress-track">
           <div class="rehab-progress-fill" style="width: 65%;"></div>
+        </div>
+        <div class="active-card-actions">
+          <button class="btn btn-xs btn-secondary" onclick="window.quickBandage(${p.id}, '${p.name}')" title="Acelerar cura em 60s">
+            <i class="fa-solid fa-bandage text-emerald"></i> Curativo (-60s)
+          </button>
+          <button class="btn btn-xs btn-outline" onclick="window.quickDischarge(${p.id}, '${p.name}')" title="Conceder alta médica imediata" style="color: var(--rose-500); border-color: rgba(244, 63, 94, 0.4);">
+            <i class="fa-solid fa-person-walking"></i> Alta
+          </button>
         </div>
       </div>
     `;
@@ -546,6 +554,38 @@ window.submitRehabBandage = function() {
   }
 };
 
+// Inline quick actions from active cards
+window.quickBandage = function(targetId, targetName) {
+  if (window.GetParentResourceName) {
+    fetch(`https://${GetParentResourceName()}/tabletBandageRehab`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({ target: targetId })
+    }).then(() => {
+      window.refreshRehabPatients();
+    });
+  } else {
+    alert(`[Simulação] Curativo aplicado em ${targetName} (-60s).`);
+  }
+};
+
+window.quickDischarge = function(targetId, targetName) {
+  if (confirm(`Confirmar alta médica imediata para ${targetName}?`)) {
+    if (window.GetParentResourceName) {
+      fetch(`https://${GetParentResourceName()}/tabletRemoveRehab`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+        body: JSON.stringify({ target: targetId })
+      }).then(() => {
+        window.refreshRehabPatients();
+      });
+    } else {
+      alert(`[Simulação] Alta concedida para ${targetName}.`);
+      window.refreshRehabPatients();
+    }
+  }
+};
+
 // Hook tab switch to auto-refresh rehab list
 const originalSwitchTab = switchTab;
 switchTab = function(tabId) {
@@ -554,4 +594,5 @@ switchTab = function(tabId) {
     window.refreshRehabPatients();
   }
 };
+
 

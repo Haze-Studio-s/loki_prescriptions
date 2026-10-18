@@ -553,6 +553,8 @@ html, body {
   font-size: 22px;
   font-weight: 800;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
   margin: 2px 0;
 }
 
@@ -562,10 +564,22 @@ html, body {
   color: var(--text-secondary);
 }
 
-.metric-value.green { color: var(--emerald-500); }
-.metric-value.blue { color: var(--blue-500); }
-.metric-value.teal { color: var(--teal-500); }
-.metric-value.amber { color: var(--amber-500); }
+.metric-value.green { 
+  color: var(--emerald-500); 
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+.metric-value.blue { 
+  color: var(--blue-500); 
+  text-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+.metric-value.teal { 
+  color: var(--teal-500); 
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+}
+.metric-value.amber { 
+  color: var(--amber-500); 
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
 
 .metric-status {
   font-size: 10px;
@@ -756,20 +770,33 @@ html, body {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
-  transition: all 0.3s ease;
-  filter: contrast(110%) brightness(95%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: grayscale(100%) invert(92%) contrast(185%) brightness(88%) drop-shadow(0 0 15px rgba(6, 182, 212, 0.25));
+}
+
+/* DICOM Graticule Grid Overlay */
+.pacs-canvas-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .pacs-canvas-wrapper.inverted #pacs-image {
-  filter: invert(100%) contrast(140%) brightness(105%);
+  filter: grayscale(100%) contrast(210%) brightness(115%) drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
 }
 
 .pacs-canvas-wrapper.high-contrast #pacs-image {
-  filter: contrast(180%) brightness(120%);
+  filter: grayscale(100%) invert(98%) contrast(280%) brightness(75%) drop-shadow(0 0 12px rgba(244, 63, 94, 0.25));
 }
 
 .pacs-canvas-wrapper.zoomed #pacs-image {
-  transform: scale(1.4);
+  transform: scale(1.45);
 }
 
 .pacs-hud-top-left, .pacs-hud-top-right, .pacs-hud-bottom-left, .pacs-hud-bottom-right {
@@ -973,6 +1000,52 @@ html, body {
   gap: 12px;
 }
 
+/* Clinical Pharmacovigilance Card (CDSS) */
+.rx-safety-card {
+  margin-top: 14px;
+  background: rgba(10, 16, 29, 0.65);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.safety-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--teal-500);
+}
+
+.safety-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.safety-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.safety-item i {
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+.safety-item strong {
+  color: #fff;
+}
+
 .card-footer {
   padding: 12px 16px;
   background: rgba(13, 20, 36, 0.8);
@@ -1077,10 +1150,42 @@ html, body {
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   color: var(--teal-500);
   background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
   padding: 2px 8px;
   border-radius: 4px;
+}
+
+.priority-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priority-badge.urgent {
+  background: rgba(244, 63, 94, 0.2);
+  color: #FDA4AF;
+  border: 1px solid rgba(244, 63, 94, 0.5);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.3);
+  animation: urgentGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes urgentGlow {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+.priority-badge.routine {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93C5FD;
+  border: 1px solid rgba(59, 130, 246, 0.35);
 }
 
 .status-ready {
@@ -1447,13 +1552,30 @@ input:checked + .slider.round:before {
   background: #0A101D;
   border-radius: 3px;
   overflow: hidden;
-  margin-top: 4px;
+  margin-top: 6px;
+  position: relative;
 }
 
 .rehab-progress-fill {
   height: 100%;
-  background: var(--emerald-500);
+  background: linear-gradient(90deg, #059669, #10B981, #34D399);
+  background-size: 200% 100%;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  animation: progressPulse 2.5s infinite linear;
   transition: width 0.4s ease;
+}
+
+@keyframes progressPulse {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.active-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .protocol-card {

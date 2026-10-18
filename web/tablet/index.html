@@ -399,6 +399,28 @@
                     <input type="text" id="rx-clinical-notes" class="form-control" value="Manter curativo limpo e seco. Em caso de febre ou dor intensa retornar ao CTI." placeholder="Recomendações ao paciente...">
                   </div>
                 </div>
+
+                <!-- Clinical Pharmacovigilance & Safety Advice Card -->
+                <div class="rx-safety-card">
+                  <div class="safety-card-header">
+                    <i class="fa-solid fa-shield-virus text-teal"></i>
+                    <span>SISTEMA DE SUPORTE À DECISÃO CLÍNICA (CDSS) • FARMACOVIGILÂNCIA LSMC</span>
+                  </div>
+                  <div class="safety-card-grid">
+                    <div class="safety-item">
+                      <i class="fa-solid fa-circle-check text-emerald"></i>
+                      <span><strong>Zero Interações Adversas:</strong> Nenhum choque medicamentoso detectado entre os fármacos prescritos.</span>
+                    </div>
+                    <div class="safety-item">
+                      <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                      <span><strong>Alerta Renal / Hepático:</strong> Paciente sem histórico de insuficiência crônica cadastrada.</span>
+                    </div>
+                    <div class="safety-item">
+                      <i class="fa-solid fa-temperature-arrow-down text-cyan"></i>
+                      <span><strong>Alergias Cruzadas:</strong> Sem sensibilidade cruzada a betalactâmicos ou AINEs na triagem ativa.</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <!-- Footer with Submit & Queue Dispatch Button -->
@@ -438,7 +460,10 @@
               <!-- Pharmacy Item 1 -->
               <div class="pharmacy-card">
                 <div class="pharm-card-header">
-                  <span class="token-badge">TOKEN #RX-8492</span>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="token-badge">TOKEN #RX-8492</span>
+                    <span class="priority-badge urgent"><i class="fa-solid fa-triangle-exclamation"></i> URGÊNCIA</span>
+                  </div>
                   <span class="status-pill status-ready">PRONTO PARA RETIRADA</span>
                 </div>
                 <div class="pharm-card-body">
@@ -461,7 +486,10 @@
               <!-- Pharmacy Item 2 -->
               <div class="pharmacy-card">
                 <div class="pharm-card-header">
-                  <span class="token-badge">TOKEN #RX-8491</span>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="token-badge">TOKEN #RX-8491</span>
+                    <span class="priority-badge urgent"><i class="fa-solid fa-fire-pulse"></i> ANALGESIA</span>
+                  </div>
                   <span class="status-pill status-prep">EM SEPARAÇÃO</span>
                 </div>
                 <div class="pharm-card-body">
@@ -484,7 +512,10 @@
               <!-- Pharmacy Item 3 -->
               <div class="pharmacy-card dispensed">
                 <div class="pharm-card-header">
-                  <span class="token-badge">TOKEN #RX-8488</span>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="token-badge">TOKEN #RX-8488</span>
+                    <span class="priority-badge routine"><i class="fa-solid fa-check"></i> ROTINA</span>
+                  </div>
                   <span class="status-pill status-done">DISPENSADO</span>
                 </div>
                 <div class="pharm-card-body">
