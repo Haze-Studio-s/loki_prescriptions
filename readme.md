@@ -85,6 +85,30 @@ Todas as interfaces gráficas (NUI) foram reformuladas com o padrão de excelên
   - Faturamento depositado diretamente no cofre institucional da sociedade médica (`society_ambulance`).
 - **Efeitos Farmacológicos Integrados:** Efeitos imediatos no metabolismo, alívio de estresse, proteção gástrica contra vômitos e neutralização de tosse/asfixia.
 
+### 7. 🦽 Reabilitação Física, Fisioterapia & Locomoção Assistida (Absorção Oxlyn)
+- **5º Módulo Oficial no Tablet LSMC (`vp_tablet`):**
+  - Detecção dinâmica de pacientes em raio de 6 metros com identificação de aptidão e tempo restante.
+  - Seleção de equipamento: Cadeira de Rodas (`iak_wheelchair` ou prop) e Muletas Ortopédicas (`prop_mads_crutch01`).
+  - Prescrição de tempo com botões rápidos (5, 10, 15, 30 min) e modo de **Recuperação Progressiva em 2 Fases** ($60\%$ Cadeira &rarr; $40\%$ Muletas &rarr; Alta Automática).
+- **Pill HUD Flutuante no Paciente:**
+  - Widget minimalista no canto da tela com anel de progresso circular SVG animado (`stroke-dasharray: 97.39`), contagem regressiva `MM:SS` e ícones dinâmicos.
+  - **Detecção de Fuga & Efeitos de Náusea:** Se o paciente se levantar da cadeira de rodas antes da conclusão, o cronômetro pausa automaticamente (`PAUSED` em iluminação âmbar) e uma rampa de náusea progressiva é ativada (`DrugsMichaelAliensFight`, câmera `DRUNK_SHAKE` e andar embriagado `move_m@drunk@verydrunk`).
+- **Acelerador de Cura por Bandagem:**
+  - Paramédicos podem aplicar bandagens para deduzir 60 segundos do tempo total de recuperação (com cooldown de 30s por paciente).
+- **Persistência Hospitalar no Banco de Dados (`loki_rehab_recoveries`):**
+  - Tabela dedicada no `oxmysql` salvando data de início, fim, estágios e responsável, com recuperação automática ao reconectar.
+
+### 8. 🎮 Minigames Cirúrgicos & Procedimentos Médicos Interativos (1:1 Pluto)
+- **100% Livre de Molduras Artificiais:** Layout minimalista flutuante diretamente sobre a visão de jogo.
+- **7 Procedimentos Médicos Avançados:**
+  1. *Esfigmomanômetro & Aferição de Pressão:* Braço realista, monitor digital Omron e tubo Bézier cúbico SVG dinâmico.
+  2. *Hemostasia Vascular:* Controle de hemorragia e união de vasos arteriais pulsantes com pinça cirúrgica.
+  3. *Extração Balística de Projétil:* Cirurgia de extração em canal tecidual sinuoso com detecção de colisão por pixel.
+  4. *Sutura Cirúrgica Contínua:* Fechamento anatômico de incisões em 8 pontos com cicatrização progressiva.
+  5. *Curativo de Trauma em 3 Fases:* Procedimento completo de assepsia (algodão), gaze estéril e esparadrapo cirúrgico.
+  6. *Bafômetro Digital:* Teste de alcoolemia com sensor interativo e barra de pressão expiratória.
+  7. *Swipe de Cartão Magnético:* Validação biométrica e autorização de acesso hospitalar por velocidade controlada.
+
 ---
 
 ## 🛡️ Blindagem de Segurança & Anti-Exploit (OmniRoute Quality Gate)
@@ -94,8 +118,8 @@ Auditado com **Codex** e **Claude Sonnet 4.6**, o script possui as seguintes cam
 | Camada | Mecanismo | Proteção |
 | :--- | :--- | :--- |
 | **Trava Atômica de Concorrência** | `healingLocks[target]`, `activeRedeems[src]` | Impossibilita duplicação de itens ou tratamentos múltiplos por pacotes de rede simultâneos. |
-| **Rate Limit / Cooldown Proporcional** | Cooldown de 1.2s entre curas; 5s entre manobras de RCP | Bloqueia spam de eventos via executores de scripts. |
-| **Validação 3D + Altura Z** | `dist <= maxDist and zDiff <= 3.5` | Evita explorações de proxymity bypass em andares superiores ou subterrâneos. |
+| **Rate Limit / Cooldown Proporcional** | Cooldown de 1.2s entre curas; 5s entre manobras de RCP; 30s entre bandagens | Bloqueia spam de eventos via executores de scripts. |
+| **Validação 3D + Altura Z** | `dist <= maxDist and zDiff <= 3.5` | Evita explorações de proximity bypass em andares superiores ou subterrâneos. |
 | **Fail-Closed de Inventário** | Remoção do insumo/dinheiro **antes** da concessão de saúde/cura | Se a remoção falhar, o processo é abortado imediatamente sem side effects. |
 | **Sanitização de Quantidades** | Capped com `math.min(amount, Config.MaxMedsPerPrescription)` | Bloqueia injeção de inteiros gigantes ou negativos (`math.floor` + limites). |
 | **Ciclo de Vida em `playerDropped`** | Limpeza de todas as tabelas de sessão no disconnect | Elimina vazamentos de memória no Garbage Collector do runtime Lua. |
@@ -109,6 +133,8 @@ Auditado com **Codex** e **Claude Sonnet 4.6**, o script possui as seguintes cam
 | `/receita` | Abre o bloco de receituário médico digital | Médicos / Paramédicos |
 | `/raiox [id]` | Inicia exame de Raio-X do paciente | Médicos / Paramédicos |
 | `/atestado` | Abre emissor de atestado médico oficial | Médicos / Paramédicos |
+| `/lsmc_ehr` | Abre o portal clínico hospitalar completo no Tablet (`vp_tablet`) | Médicos / Paramédicos |
+| `/rehab` ou `/crutch` | Menu de campo rápido para prescrição de Cadeira de Rodas / Muletas | Médicos / Paramédicos |
 | `/maca` ou `/stretcher` | Spawna a maca de ambulância articulada | Médicos / Paramédicos |
 | `/cpr` | Inicia manobras de massagem cardíaca | Todos / Paramédicos |
 | `/checkpulse` | Mede o pulso do paciente próximo | Todos / Paramédicos |

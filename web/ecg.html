@@ -1,511 +1,667 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECG</title>
+    <title>LSMC - Monitor Multiparamétrico de CTI / Lifepak</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
-        body {
-            background: #0a0a0a;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
+        :root {
+            --bg-monitor: #020617;
+            --bg-card: rgba(15, 23, 42, 0.75);
+            --border-monitor: rgba(255, 255, 255, 0.08);
+
+            --accent-green: #10B981;
+            --accent-cyan: #06B6D4;
+            --accent-amber: #F59E0B;
+            --accent-red: #F43F5E;
+
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html, body {
+            width: 100vw;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .ecg-wrapper {
-            position: absolute;
-            left: -1.5rem;
-            width: 100%; border: 1px solid red;
-            top: 1.25rem; transform: scale(0.225) scaleY(1.2) scaleX(1.3);
-        }
-
-        .ecg-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(45deg, #001100, #000800);
-            position: relative;
-            border-radius: 1rem;
+            background: var(--bg-monitor);
+            font-family: var(--font-sans);
+            color: #F8FAFC;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header {
-            background: #001a00;
-            padding: 10px 20px;
-            border-bottom: 2px solid #00ff00;
+        /* Top Header */
+        .monitor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 18px;
-            font-weight: bold;
+            height: 48px;
+            padding: 0 24px;
+            background: rgba(13, 20, 36, 0.95);
+            border-bottom: 1px solid var(--border-monitor);
         }
 
-        .status-indicator {
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #00ff00;
-            animation: pulse 1s infinite;
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #059669, #10B981);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
         }
 
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
+        .header-title {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #FFFFFF;
         }
 
-        .main-display {
+        .header-subtitle {
+            font-size: 10px;
+            font-family: var(--font-mono);
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .header-patient-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .patient-tag {
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .patient-tag i {
+            color: var(--accent-cyan);
+        }
+
+        .bed-tag {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--border-monitor);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: #94A3B8;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alarm-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+        }
+
+        .alarm-status-pill.normal {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: var(--accent-green);
+        }
+
+        .alarm-status-pill.arrest {
+            background: rgba(244, 63, 94, 0.25);
+            border: 1px solid rgba(244, 63, 94, 0.6);
+            color: var(--accent-red);
+            animation: pulseAlert 1s infinite;
+        }
+
+        @keyframes pulseAlert {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.98); }
+        }
+
+        .live-clock {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        /* Monitor Body */
+        .monitor-body {
             flex: 1;
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .ecg-display {
-            background: #000;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            position: relative;
+            grid-template-columns: 280px 1fr;
+            gap: 14px;
+            padding: 16px 20px;
             overflow: hidden;
         }
 
-        .ecg-canvas {
-            width: 100%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(90deg,
-                    transparent,
-                    transparent 18px,
-                    rgba(0, 255, 0, 0.1) 19px,
-                    rgba(0, 255, 0, 0.1) 20px),
-                repeating-linear-gradient(0deg,
-                    transparent,
-                    transparent 18px,
-                    rgba(0, 255, 0, 0.1) 19px,
-                    rgba(0, 255, 0, 0.1) 20px);
+        /* Left Side: Vitals Metrics */
+        .metrics-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .ecg-line {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(0, 255, 0, 0.3);
-            transform: translateY(-50%);
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-monitor);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
         }
 
-        .heartbeat-line {
+        .metric-card.hr { border-left: 4px solid var(--accent-green); }
+        .metric-card.spo2 { border-left: 4px solid var(--accent-cyan); }
+        .metric-card.bp { border-left: 4px solid var(--accent-amber); }
+        .metric-card.extra { border-left: 4px solid #818CF8; }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .metric-name {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .metric-card.hr .metric-name { color: var(--accent-green); }
+        .metric-card.spo2 .metric-name { color: var(--accent-cyan); }
+        .metric-card.bp .metric-name { color: var(--accent-amber); }
+        .metric-card.extra .metric-name { color: #818CF8; }
+
+        .metric-value-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .metric-num {
+            font-family: var(--font-mono);
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            color: #FFFFFF;
+        }
+
+        .metric-card.hr .metric-num { color: var(--accent-green); }
+        .metric-card.spo2 .metric-num { color: var(--accent-cyan); }
+        .metric-card.bp .metric-num { color: var(--accent-amber); }
+        .metric-card.extra .metric-num { color: #818CF8; font-size: 32px; }
+
+        .metric-unit {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94A3B8;
+        }
+
+        .metric-footer-note {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: #94A3B8;
+        }
+
+        /* Right Side: Continuous Waveform Stack */
+        .waves-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow: hidden;
+        }
+
+        .wave-box {
+            flex: 1;
+            background: #010409;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .wave-tag-top {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 8px;
+            left: 14px;
+            right: 14px;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 2;
             pointer-events: none;
         }
 
-        .vital-signs {
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
+        .wave-tag-top.green { color: var(--accent-green); }
+        .wave-tag-top.cyan { color: var(--accent-cyan); }
+        .wave-tag-top.amber { color: var(--accent-amber); }
+
+        .wave-subtext {
+            color: #64748B;
+            font-size: 10px;
         }
 
-        .vital-card {
-            background: rgba(0, 50, 0, 0.3);
-            border: 4px solid #00ff00;
-            border-radius: 16px;
-            padding: 60px 40px;
-            text-align: center;
-        }
-
-        .vital-label {
-            font-size: 50px;
-            color: #00cc00;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .vital-value {
-            font-size: 180px;
-            font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00;
-            line-height: 1;
-        }
-
-        .vital-unit {
-            font-size: 28px;
-            color: #008800;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .alert-high {
-            color: #ff4444 !important;
-            text-shadow: 0 0 10px #ff4444 !important;
-            animation: alert-blink 1s infinite;
-        }
-
-        .alert-low {
-            color: #ffaa00 !important;
-            text-shadow: 0 0 10px #ffaa00 !important;
-            animation: alert-blink 1.5s infinite;
-        }
-
-        @keyframes alert-blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .footer {
-            background: #001a00;
-            padding: 10px 20px;
-            border-top: 2px solid #00ff00;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .timestamp {
-            color: #00cc00;
-        }
-
-        .controls {
-            display: none;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 12px;
-        }
-
-        .controls input {
-            background: #000;
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            padding: 5px;
-            margin: 2px;
-            width: 80px;
-        }
-
-        .ecg-image {
+        canvas.telemetry-wave {
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
+            display: block;
+        }
+
+        /* Bottom Footer */
+        .monitor-footer {
+            height: 38px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(13, 20, 36, 0.85);
+            border-top: 1px solid var(--border-monitor);
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: #64748B;
+        }
+
+        .footer-telemetry-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-green);
         }
     </style>
 </head>
-
 <body>
-    <div>
-        <img class="ecg-image" src="./assets/lifepak.png">
-        <div class="ecg-wrapper">
-            <div class="ecg-container">
-                <div class="header">
-                    <div>
-                        <span>ECG MONITOR</span>
-                        <span id="patient-name">PATIENT: UNKNOWN</span>
-                    </div>
-                    <div class="status-indicator">
-                        <span id="monitor-status">MONITORING</span>
-                        <div class="status-dot"></div>
-                    </div>
-                </div>
-
-                <div class="main-display">
-                    <div class="ecg-display">
-                        <div class="ecg-canvas">
-                            <div class="ecg-line"></div>
-                            <canvas class="heartbeat-line" id="ecgCanvas"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="vital-signs">
-                        <div class="vital-card">
-                            <div class="vital-label">HEART RATE</div>
-                            <div class="vital-value" id="heart-rate">85</div>
-                            <div class="vital-unit">BPM</div>
-                        </div>
-
-                        <div class="vital-card">
-                            <div class="vital-label">TEMPERATURE</div>
-                            <div class="vital-value" id="temperature">36.5</div>
-                            <div class="vital-unit">°C</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer">
-                    <div class="timestamp" id="timestamp"></div>
-                    <div>AMBULANCE MEDICAL SYSTEM</div>
-                </div>
+    <!-- Top Bar -->
+    <header class="monitor-header">
+        <div class="header-brand">
+            <div class="header-logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div>
+                <div class="header-title">LOS SANTOS MEDICAL CENTER</div>
+                <div class="header-subtitle">CTI TRAUMA MULTIPARAMETER MONITOR • v4.2</div>
             </div>
         </div>
-    </div>
 
+        <div class="header-patient-info">
+            <div class="patient-tag">
+                <i class="fa-solid fa-hospital-user"></i>
+                <span id="patient-name">PACIENTE: VINICIUS ALBUQUERQUE</span>
+            </div>
+            <span class="bed-tag">LEITO: CTI #02</span>
+        </div>
+
+        <div class="header-status">
+            <span class="alarm-status-pill normal" id="alarm-pill">
+                <i class="fa-solid fa-circle-check"></i> MONITOR ATIVO (NORMAL)
+            </span>
+            <span class="live-clock" id="timestamp">12:00:00</span>
+        </div>
+    </header>
+
+    <!-- Main Vitals Workspace -->
+    <main class="monitor-body">
+        <!-- Left: Digital Metrics -->
+        <div class="metrics-column">
+            <!-- Heart Rate -->
+            <div class="metric-card hr">
+                <div class="card-header-row">
+                    <span class="metric-name">FREQ. CARDÍACA (FC)</span>
+                    <i class="fa-solid fa-heart-pulse" style="color: var(--accent-green);"></i>
+                </div>
+                <div class="metric-value-wrap">
+                    <span class="metric-num" id="heart-rate">78</span>
+                    <span class="metric-unit">BPM</span>
+                </div>
+                <div class="metric-footer-note" id="hr-status">Ritmo Sinusal Regular</div>
+            </div>
+
+            <!-- SpO2 -->
+            <div class="metric-card spo2">
+                <div class="card-header-row">
+                    <span class="metric-name">OXIMETRIA (SpO2)</span>
+                    <i class="fa-solid fa-lungs" style="color: var(--accent-cyan);"></i>
+                </div>
+                <div class="metric-value-wrap">
+                    <span class="metric-num" id="oxygen-sat">98</span>
+                    <span class="metric-unit">%</span>
+                </div>
+                <div class="metric-footer-note">PI: 4.8 • Perfusão Ótima</div>
+            </div>
+
+            <!-- Blood Pressure -->
+            <div class="metric-card bp">
+                <div class="card-header-row">
+                    <span class="metric-name">PRESSÃO (NIBP)</span>
+                    <i class="fa-solid fa-droplet" style="color: var(--accent-amber);"></i>
+                </div>
+                <div class="metric-value-wrap">
+                    <span class="metric-num" id="blood-pressure">120/80</span>
+                    <span class="metric-unit">mmHg</span>
+                </div>
+                <div class="metric-footer-note" id="bp-status">Média (MAP): 93 mmHg</div>
+            </div>
+
+            <!-- Temperature & Respiratory -->
+            <div class="metric-card extra">
+                <div class="card-header-row">
+                    <span class="metric-name">TEMP / FR</span>
+                    <i class="fa-solid fa-temperature-half" style="color: #818CF8;"></i>
+                </div>
+                <div class="metric-value-wrap">
+                    <span class="metric-num" id="temperature">36.6</span>
+                    <span class="metric-unit">°C</span>
+                    <span style="margin-left: 12px; font-size: 13px; font-weight:700; color: #94A3B8;">FR: <span id="respiratory" style="color:#FFFFFF;">16</span> rpm</span>
+                </div>
+                <div class="metric-footer-note">Normotermia • Eupneico</div>
+            </div>
+        </div>
+
+        <!-- Right: Continuous Waveforms -->
+        <div class="waves-column">
+            <!-- ECG Lead II -->
+            <div class="wave-box">
+                <div class="wave-tag-top green">
+                    <span>ECG DERIVAÇÃO II • 25 mm/s • 10 mm/mV</span>
+                    <span class="wave-subtext">FILTRO MONITOR 0.5-40Hz</span>
+                </div>
+                <canvas id="canvas-ecg" class="telemetry-wave"></canvas>
+            </div>
+
+            <!-- SpO2 Plethysmograph -->
+            <div class="wave-box">
+                <div class="wave-tag-top cyan">
+                    <span>PLEFISMO SpO2 • 25 mm/s</span>
+                    <span class="wave-subtext">GANHO x1.0</span>
+                </div>
+                <canvas id="canvas-spo2" class="telemetry-wave"></canvas>
+            </div>
+
+            <!-- Arterial Pressure Wave -->
+            <div class="wave-box">
+                <div class="wave-tag-top amber">
+                    <span>PRESSÃO ARTERIAL (ART) • 25 mm/s</span>
+                    <span class="wave-subtext">ESCALA 0-160 mmHg</span>
+                </div>
+                <canvas id="canvas-bp" class="telemetry-wave"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="monitor-footer">
+        <div class="footer-telemetry-status">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>TELEMETRIA DIGITAL ATIVA — PROTOCOLO HL7 CONECTADO</span>
+        </div>
+        <div>
+            <span>SALA: CTI EMERGÊNCIA • ESTAÇÃO #02</span>
+        </div>
+    </footer>
+
+    <!-- Continuous 60fps Telemetry Engine -->
     <script>
-        class ECGMonitor {
+        'use strict';
+
+        class HospitalMonitor {
             constructor() {
-                this.canvas = document.getElementById('ecgCanvas');
-                this.ctx = this.canvas.getContext('2d');
                 this.data = {
-                    heartRate: 85,
+                    heartRate: 78,
+                    temperature: 36.6,
+                    patientName: 'VINICIUS ALBUQUERQUE',
                     bloodPressure: { systolic: 120, diastolic: 80 },
                     oxygenSat: 98,
-                    temperature: 36.5,
-                    respiratory: 16,
-                    patientName: 'UNKNOWN'
+                    respiratory: 16
                 };
 
-                this.ecgPoints = [];
-                this.animationId = null;
-                this.startTime = Date.now();
-                this.currentX = 0;
+                this.canvases = {
+                    ecg: document.getElementById('canvas-ecg'),
+                    spo2: document.getElementById('canvas-spo2'),
+                    bp: document.getElementById('canvas-bp')
+                };
 
-                this.init();
-            }
+                this.ctxs = {
+                    ecg: this.canvases.ecg.getContext('2d'),
+                    spo2: this.canvases.spo2.getContext('2d'),
+                    bp: this.canvases.bp.getContext('2d')
+                };
 
-            init() {
-                this.resizeCanvas();
-                this.generateECGPattern();
-                this.startAnimation();
-                this.updateTimestamp();
+                this.waveX = 0;
+                this.lastX = 0;
+                this.ecgPhase = 0;
+                this.spo2Phase = 0;
+                this.bpPhase = 0;
+
+                this.prevY = { ecg: 0, spo2: 0, bp: 0 };
+                this.lastFrameTs = 0;
+
+                this.initCanvases();
                 this.setupEventListeners();
-                setInterval(() => this.updateTimestamp(), 1000);
+                this.startRenderLoop();
             }
 
-            resizeCanvas() {
-                const rect = this.canvas.getBoundingClientRect();
-                this.canvas.width = rect.width;
-                this.canvas.height = rect.height;
-            }
-
-            generateECGPattern() {
-                const beatsPerMinute = this.data.heartRate;
-                const beatInterval = (60 / beatsPerMinute) * 1000;
-                const samplesPerBeat = 100;
-                const amplitude = this.canvas.height * 0.3;
-                const baseline = this.canvas.height / 2;
-
-                this.ecgPoints = [];
-
-                for (let i = 0; i < samplesPerBeat; i++) {
-                    const t = i / samplesPerBeat;
-                    let y = baseline;
-
-                    if (t < 0.1) {
-                        y = baseline - amplitude * 0.2 * Math.sin(t * Math.PI * 10);
-                    } else if (t >= 0.2 && t < 0.4) {
-                        const qrsT = (t - 0.2) / 0.2;
-                        if (qrsT < 0.3) {
-                            y = baseline + amplitude * 0.3 * Math.sin(qrsT * Math.PI * 3.33);
-                        } else if (qrsT < 0.7) {
-                            y = baseline - amplitude * Math.sin((qrsT - 0.3) * Math.PI * 2.5);
-                        } else {
-                            y = baseline + amplitude * 0.4 * Math.sin((qrsT - 0.7) * Math.PI * 3.33);
-                        }
-                    } else if (t >= 0.6 && t < 0.9) {
-                        const tT = (t - 0.6) / 0.3;
-                        y = baseline - amplitude * 0.3 * Math.sin(tT * Math.PI);
-                    }
-
-                    this.ecgPoints.push({ x: i * 3, y: y });
-                }
-
-                this.beatWidth = samplesPerBeat * 3;
-                this.beatDuration = beatInterval;
-            }
-
-            startAnimation() {
-                this.drawECG();
-                this.animationId = requestAnimationFrame(this.startAnimation.bind(this));
-            }
-
-            drawECG() {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-                // these are colors of vital lines
-                this.ctx.strokeStyle = '#00ff00';
-                this.ctx.lineWidth = 2;
-                this.ctx.shadowColor = '#00ff00';
-                this.ctx.shadowBlur = 5;
-
-                const currentTime = Date.now() - this.startTime;
-                const speed = this.canvas.width / 5000;
-                this.currentX = (currentTime * speed) % this.canvas.width;
-                const beatsOnScreen = Math.ceil(this.canvas.width / this.beatWidth) + 3;
-
-                this.ctx.beginPath();
-                let isFirstPoint = true;
-                for (let beat = 0; beat < beatsOnScreen; beat++) {
-                    const beatStartX = this.currentX + (beat * this.beatWidth) - this.canvas.width;
-
-                    for (let point of this.ecgPoints) {
-                        const x = beatStartX + point.x;
-
-                        if (x >= -100 && x <= this.canvas.width + 100) {
-                            if (isFirstPoint) {
-                                this.ctx.moveTo(x, point.y);
-                                isFirstPoint = false;
-                            } else {
-                                this.ctx.lineTo(x, point.y);
-                            }
-                        }
-                    }
-                }
-
-                this.ctx.stroke();
+            initCanvases() {
+                const resize = () => {
+                    Object.keys(this.canvases).forEach(k => {
+                        const c = this.canvases[k];
+                        c.width = c.offsetWidth || 800;
+                        c.height = c.offsetHeight || 140;
+                        this.prevY[k] = c.height / 2;
+                    });
+                };
+                window.addEventListener('resize', resize);
+                setTimeout(resize, 100);
             }
 
             updateVitals(newData) {
-                if (newData.heartRate !== undefined) {
-                    this.data.heartRate = newData.heartRate;
-                    this.generateECGPattern();
-                    this.updateHeartRateDisplay();
-                }
-                if (newData.temperature !== undefined) {
-                    this.data.temperature = newData.temperature;
-                    this.updateTemperatureDisplay();
-                }
-                if (newData.patientName !== undefined) {
-                    this.data.patientName = newData.patientName;
-                    this.updatePatientName();
-                }
+                if (!newData) return;
+                if (newData.heartRate !== undefined) this.data.heartRate = parseInt(newData.heartRate, 10) || 0;
+                if (newData.temperature !== undefined) this.data.temperature = parseFloat(newData.temperature) || 36.5;
+                if (newData.patientName) this.data.patientName = String(newData.patientName).toUpperCase();
+                if (newData.bloodPressure) this.data.bloodPressure = newData.bloodPressure;
+                if (newData.oxygenSat !== undefined) this.data.oxygenSat = parseInt(newData.oxygenSat, 10) || 98;
+                if (newData.respiratory !== undefined) this.data.respiratory = parseInt(newData.respiratory, 10) || 16;
+
+                this.refreshNumericUI();
             }
 
-            updateHeartRateDisplay() {
-                const element = document.getElementById('heart-rate');
-                element.textContent = this.data.heartRate;
+            refreshNumericUI() {
+                const hrEl = document.getElementById('heart-rate');
+                const tempEl = document.getElementById('temperature');
+                const nameEl = document.getElementById('patient-name');
+                const bpEl = document.getElementById('blood-pressure');
+                const o2El = document.getElementById('oxygen-sat');
+                const respEl = document.getElementById('respiratory');
+                const alarmPill = document.getElementById('alarm-pill');
 
-                element.classList.remove('alert-high', 'alert-low');
-                if (this.data.heartRate > 100 || this.data.heartRate < 60) {
-                    element.classList.add(this.data.heartRate > 100 ? 'alert-high' : 'alert-low');
+                if (hrEl) hrEl.textContent = this.data.heartRate;
+                if (tempEl) tempEl.textContent = this.data.temperature.toFixed(1);
+                if (nameEl) nameEl.textContent = `PACIENTE: ${this.data.patientName}`;
+                if (bpEl) bpEl.textContent = `${this.data.bloodPressure.systolic}/${this.data.bloodPressure.diastolic}`;
+                if (o2El) o2El.textContent = this.data.oxygenSat;
+                if (respEl) respEl.textContent = this.data.respiratory;
+
+                if (alarmPill) {
+                    if (this.data.heartRate <= 0) {
+                        alarmPill.className = 'alarm-status-pill arrest';
+                        alarmPill.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> PARADA CARDIORRESPIRATÓRIA (ASSISTOLIA)';
+                    } else if (this.data.heartRate < 50 || this.data.heartRate > 120) {
+                        alarmPill.className = 'alarm-status-pill arrest';
+                        alarmPill.innerHTML = '<i class="fa-solid fa-bell"></i> ALERTA: FREQUÊNCIA INSTÁVEL';
+                    } else {
+                        alarmPill.className = 'alarm-status-pill normal';
+                        alarmPill.innerHTML = '<i class="fa-solid fa-circle-check"></i> MONITOR ATIVO (NORMAL)';
+                    }
                 }
-            }
-
-            updateBloodPressureDisplay() {
-                const element = document.getElementById('blood-pressure');
-                const { systolic, diastolic } = this.data.bloodPressure;
-                element.textContent = `${systolic}/${diastolic}`;
-
-                element.classList.remove('alert-high', 'alert-low');
-                if (systolic > 140 || diastolic > 90) {
-                    element.classList.add('alert-high');
-                } else if (systolic < 90 || diastolic < 60) {
-                    element.classList.add('alert-low');
-                }
-            }
-
-            updateOxygenSatDisplay() {
-                const element = document.getElementById('oxygen-sat');
-                element.textContent = this.data.oxygenSat;
-
-                element.classList.remove('alert-high', 'alert-low');
-                if (this.data.oxygenSat < 95) {
-                    element.classList.add('alert-low');
-                }
-            }
-
-            updateTemperatureDisplay() {
-                const element = document.getElementById('temperature');
-                element.textContent = this.data.temperature.toFixed(1);
-
-                element.classList.remove('alert-high', 'alert-low');
-                if (this.data.temperature > 38.0) {
-                    element.classList.add('alert-high');
-                } else if (this.data.temperature < 36.0) {
-                    element.classList.add('alert-low');
-                }
-            }
-
-            updateRespiratoryDisplay() {
-                const element = document.getElementById('respiratory');
-                element.textContent = this.data.respiratory;
-
-                element.classList.remove('alert-high', 'alert-low');
-                if (this.data.respiratory > 20 || this.data.respiratory < 12) {
-                    element.classList.add(this.data.respiratory > 20 ? 'alert-high' : 'alert-low');
-                }
-            }
-
-            updatePatientName() {
-                document.getElementById('patient-name').textContent = `PATIENT: ${this.data.patientName}`;
-            }
-
-            updateTimestamp() {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString();
-                const dateString = now.toLocaleDateString();
-                document.getElementById('timestamp').textContent = `${dateString} ${timeString}`;
             }
 
             setupEventListeners() {
-                window.addEventListener('resize', () => {
-                    this.resizeCanvas();
-                });
-
                 window.addEventListener('message', (event) => {
                     const data = event.data;
-                    switch (data.action) {
-                        case 'updateECG':
-                            this.updateVitals(data.value);
-                            break;
-                        case 'toggleECG':
-                            document.body.style.display = data.state ? 'flex' : 'none';
-                            break;
+                    if (!data) return;
+                    if (data.action === 'updateECG' && data.value) {
+                        this.updateVitals(data.value);
+                    } else if (data.action === 'toggleECG') {
+                        document.body.style.display = data.state ? 'flex' : 'none';
                     }
                 });
+
+                setInterval(() => {
+                    const now = new Date();
+                    const el = document.getElementById('timestamp');
+                    if (el) el.textContent = now.toLocaleTimeString('pt-BR');
+                }, 1000);
+            }
+
+            startRenderLoop() {
+                const draw = (now) => {
+                    const dt = this.lastFrameTs > 0 ? Math.min(50, now - this.lastFrameTs) : 16.67;
+                    this.lastFrameTs = now;
+
+                    const w = this.canvases.ecg.width;
+                    if (w > 0) {
+                        this.drawStep(dt, w);
+                    }
+                    requestAnimationFrame(draw);
+                };
+                requestAnimationFrame(draw);
+            }
+
+            drawStep(dt, width) {
+                const step = 2.5;
+                const nextX = this.waveX + step;
+
+                // Clear ahead scan line
+                Object.keys(this.canvases).forEach(k => {
+                    const c = this.canvases[k];
+                    const ctx = this.ctxs[k];
+                    ctx.clearRect(nextX, 0, 24, c.height);
+                });
+
+                // Calculate Heights
+                const hrH = this.canvases.ecg.height;
+                const hrMid = hrH / 2;
+                let curYHr = hrMid;
+
+                if (this.data.heartRate > 0) {
+                    const beatMs = Math.max(300, Math.floor(60000 / this.data.heartRate));
+                    this.ecgPhase = (this.ecgPhase + dt / beatMs) % 1;
+
+                    // P-Q-R-S-T Gaussian Waveform
+                    const g = (x, mu, s) => Math.exp(-0.5 * ((x - mu) / s) ** 2);
+                    const ecg = 0.015 * Math.sin(2 * Math.PI * this.ecgPhase)
+                        + 0.12 * g(this.ecgPhase, 0.18, 0.030)   // P
+                        - 0.16 * g(this.ecgPhase, 0.39, 0.012)   // Q
+                        + 1.05 * g(this.ecgPhase, 0.42, 0.010)   // R Spike
+                        - 0.28 * g(this.ecgPhase, 0.45, 0.013)   // S
+                        + 0.30 * g(this.ecgPhase, 0.70, 0.060);  // T
+                    curYHr = hrMid - ecg * (hrH * 0.42) + (Math.random() * 0.8 - 0.4);
+                } else {
+                    curYHr = hrMid + (Math.random() * 1.5 - 0.75); // Asystole baseline
+                }
+
+                this.renderLine(this.ctxs.ecg, '#10B981', this.waveX, nextX, this.prevY.ecg, curYHr);
+                this.prevY.ecg = curYHr;
+
+                // SpO2 Pleth
+                const o2H = this.canvases.spo2.height;
+                const o2Mid = o2H / 2;
+                let curYO2 = o2Mid;
+
+                if (this.data.heartRate > 0) {
+                    const beatMs = Math.max(300, Math.floor(60000 / this.data.heartRate));
+                    this.spo2Phase = (this.spo2Phase + dt / beatMs) % 1;
+                    const rise = Math.sin(Math.PI * Math.min(1, this.spo2Phase * 1.2));
+                    const notch = this.spo2Phase > 0.45 && this.spo2Phase < 0.55 ? 4 : 0;
+                    curYO2 = o2Mid + 6 - rise * (o2H * 0.28) + notch;
+                } else {
+                    curYO2 = o2Mid;
+                }
+                this.renderLine(this.ctxs.spo2, '#06B6D4', this.waveX, nextX, this.prevY.spo2, curYO2);
+                this.prevY.spo2 = curYO2;
+
+                // Arterial BP Wave
+                const bpH = this.canvases.bp.height;
+                const bpMid = bpH / 2;
+                let curYBp = bpMid;
+
+                if (this.data.heartRate > 0) {
+                    this.bpPhase = (this.bpPhase + dt / Math.max(300, Math.floor(60000 / this.data.heartRate))) % 1;
+                    const bpWave = Math.sin(Math.PI * Math.min(1, this.bpPhase * 1.1));
+                    const dicrotic = this.bpPhase > 0.42 && this.bpPhase < 0.58 ? 5 : 0;
+                    curYBp = bpMid + 8 - bpWave * (bpH * 0.32) + dicrotic;
+                } else {
+                    curYBp = bpMid;
+                }
+                this.renderLine(this.ctxs.bp, '#F59E0B', this.waveX, nextX, this.prevY.bp, curYBp);
+                this.prevY.bp = curYBp;
+
+                this.waveX = nextX;
+                if (this.waveX > width) {
+                    this.waveX = 0;
+                    Object.keys(this.canvases).forEach(k => {
+                        const c = this.canvases[k];
+                        this.ctxs[k].clearRect(0, 0, c.width, c.height);
+                        this.prevY[k] = c.height / 2;
+                    });
+                }
+            }
+
+            renderLine(ctx, color, x1, x2, y1, y2) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.2;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 4;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
             }
         }
 
-        const ecgMonitor = new ECGMonitor();
-        // setTimeout(() => {
-        //     ecgMonitor.updateVitals({
-        //         heartRate: 120,
-        //         bloodPressure: { systolic: 130, diastolic: 85 },
-        //         oxygenSat: 96,
-        //         temperature: 37.2,
-        //         respiratory: 18,
-        //         patientName: 'JOHN DOE'
-        //     });
-        // }, 3000);
+        window.monitorInstance = new HospitalMonitor();
     </script>
 </body>
-
 </html>

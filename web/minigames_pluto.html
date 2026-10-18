@@ -1,0 +1,131 @@
+<!-- Minigames (Moved outside diagnosis-container to stay visible when dots hide) -->
+    <!-- Suture Minigame (Ultra Realistic Treatment) -->
+    <div id="suture-minigame-container" class="minigame-overlay">
+        <div class="minigame-window suture-window">
+            <div class="minigame-header">
+                <i class="fas fa-hand-holding-medical"></i>
+                <span>SURGICAL SUTURING</span>
+                <div class="minigame-hint">CLOSE THE WOUND BY CONNECTING THE POINTS</div>
+            </div>
+            <div id="suture-canvas-area">
+                <canvas id="suture-canvas"></canvas>
+                <div id="suture-needle"></div>
+            </div>
+            <div class="suture-progress-bar">
+                <div id="suture-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Bleeding Clamp Minigame -->
+    <div id="clamp-minigame-container" class="minigame-overlay">
+        <div class="minigame-window clamp-window">
+            <div class="minigame-header">
+                <i class="fas fa-hand-holding-medical"></i>
+                <span>HEMOSTASIS CONTROL</span>
+                <div id="clamp-hint" class="minigame-hint">GRAB SEVERED VESSEL ENDS AND JOIN THEM</div>
+            </div>
+            <div id="clamp-canvas-area">
+                <canvas id="clamp-canvas"></canvas>
+                <div id="vessel-suture-needle" class="suture-needle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Bullet Extraction Minigame (Path Dragging) -->
+    <div id="bullet-minigame-container" class="minigame-overlay">
+        <div class="extraction-game">
+            <div class="minigame-header">
+                <i class="fas fa-microscope"></i>
+                <span>ARTERIAL EXTRACTION</span>
+                <div class="minigame-hint">GUIDE THE PROJECTILE THROUGH THE ARTERY</div>
+            </div>
+            <div id="extraction-canvas-area">
+                <canvas id="extraction-canvas"></canvas>
+                <div id="extraction-bullet" class="minigame-bullet-item">
+                    <img src="img/bullet.png" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div id="extraction-target" class="minigame-target-zone">EXIT</div>
+            </div>
+            <div class="minigame-footer-hint">Press [ESC] to abort surgery</div>
+        </div>
+    </div>
+
+    <!-- NEW: Blood Pressure Minigame -->
+    <div id="bp-minigame-container" class="minigame-overlay">
+        <div class="bp-game">
+            <img id="bp-arm-image" src="img/arm.png">
+            <div id="bp-game-area">
+                <!-- SVG Tube Layer -->
+                <svg id="bp-tube-svg">
+                    <path id="bp-tube-base" d="" fill="none" />
+                    <path id="bp-tube-main" d="" fill="none" />
+                    <path id="bp-tube-highlight" d="" fill="none" />
+                </svg>
+
+                <div id="bp-target-zone">PLACE CUFF HERE</div>
+
+                <div id="bp-cuff-item">
+                    <img src="img/bp-cuff.png" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+
+                <div id="bp-machine-display">
+                    <img id="bp-machine-img" src="img/bp.png">
+                    <div id="bp-values">
+                        <div id="systolic">--</div>
+                        <div id="diastolic">--</div>
+                        <div id="pulse-rate">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Realistic Medical Dressing Minigame -->
+    <div id="bandage-minigame-container" class="minigame-overlay">
+        <div class="dressing-window">
+            <div class="dressing-header">
+                <div class="dressing-title">
+                    <i class="fas fa-kit-medical"></i>
+                    <span>TRAUMA DRESSING PROCEDURE</span>
+                </div>
+                <div class="dressing-steps">
+                    <div class="step-indicator active" id="step-clean">1. CLEAN</div>
+                    <div class="step-indicator" id="step-apply">2. APPLY</div>
+                    <div class="step-indicator" id="step-secure">3. SECURE</div>
+                </div>
+            </div>
+
+            <div class="dressing-body">
+                <div class="tool-tray">
+                    <div class="tool-item" id="tool-swab" data-step="1">
+                        <img src="img/cotton.png" style="width: 40px; height: 40px; object-fit: contain;">
+                        <span>ANTISEPTIC</span>
+                    </div>
+                    <div class="tool-item disabled" id="tool-gauze" data-step="2">
+                        <i class="fas fa-layer-group"></i>
+                        <span>GAUZE PAD</span>
+                    </div>
+                    <div class="tool-item disabled" id="tool-tape" data-step="3">
+                        <i class="fas fa-tape"></i>
+                        <span>SURGICAL TAPE</span>
+                    </div>
+                </div>
+
+                <div id="dressing-canvas-area">
+                    <div id="limb-visual-container">
+                        <canvas id="dressing-base-canvas"></canvas>
+                        <div id="gauze-target" class="target-zone hidden">PLACE HERE</div>
+                        <div id="placed-gauze" class="hidden"></div>
+                        <div id="tape-container"></div>
+                    </div>
+                    <div id="active-tool-cursor" class="hidden"></div>
+                </div>
+            </div>
+
+            <div class="dressing-footer">
+                <div class="dressing-instruction" id="dressing-instruction">Select the ANTISEPTIC to clean the wound area.</div>
+                <button id="bandage-finish-btn" class="hidden" onclick="finishDressingProcedure()">COMPLETE DRESSING</button>
+            </div>
+        </div>
+    </div>

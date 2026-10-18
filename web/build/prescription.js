@@ -28,153 +28,258 @@
   // Initialize Container in DOM
   const container = document.getElementById('prescription-app') || document.body;
 
-  // Build Creation Modal HTML
+  // Build Creation Modal HTML - Physical Clipboard & Perforated Paper Pad
   const creationModal = document.createElement('div');
   creationModal.id = 'lation-rx-create-modal';
   creationModal.className = 'lation-rx-backdrop';
   creationModal.innerHTML = `
-    <div class="lation-rx-card">
-      <div class="lation-rx-header">
-        <div class="lation-rx-brand">
-          <div class="lation-rx-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2v20M2 12h20M7 7l10 10M17 7L7 17"/>
-            </svg>
-          </div>
-          <div class="lation-rx-title-group">
-            <h2>Receituário Médico <span class="lation-badge lation-badge-emerald">Oficial</span></h2>
-            <p>Los Santos Emergency Medical Services • Registro Clínico</p>
-          </div>
-        </div>
-        <div class="lation-badge lation-badge-cyan">EMS LSMC</div>
+    <div class="physical-clipboard">
+      <div class="clipboard-metal-clip">
+        <div class="clip-fastener left"></div>
+        <div class="clip-lever"></div>
+        <div class="clip-fastener right"></div>
       </div>
 
-      <div class="lation-rx-body">
-        <div class="lation-form-grid">
-          <div class="lation-field">
-            <label class="lation-label">Nome Completo do Paciente</label>
-            <input type="text" id="rx-patient-name" class="lation-input" placeholder="Ex: John Doe" autocomplete="off" />
+      <div class="rx-paper-sheet">
+        <div class="rx-paper-watermark">LSMC</div>
+
+        <!-- Canhoto de Retenção da Farmácia (Picote Esquerdo) -->
+        <div class="rx-paper-stub">
+          <div class="stub-header">
+            <span class="stub-kicker">VIA FARMÁCIA</span>
+            <div class="stub-serial">Nº <b id="rx-stub-serial">008492</b></div>
           </div>
-          <div class="lation-field">
-            <label class="lation-label">Passaporte / Cidadania (ID)</label>
-            <input type="text" id="rx-patient-id" class="lation-input" placeholder="Ex: 1042 / LS-8821" autocomplete="off" />
+          <div class="stub-divider-line"></div>
+          <div class="stub-body">
+            <div class="stub-field">
+              <label>PACIENTE:</label>
+              <span id="stub-patient-name">---</span>
+            </div>
+            <div class="stub-field">
+              <label>CID-10:</label>
+              <span>J06.9 - AGUDO</span>
+            </div>
+            <div class="stub-field">
+              <label>DATA:</label>
+              <span id="stub-date">--/--/----</span>
+            </div>
+            <div class="stub-field">
+              <label>MEDICAMENTOS:</label>
+              <div id="stub-med-list" class="stub-meds">1. Item(s)</div>
+            </div>
           </div>
-          <div class="lation-field full">
-            <label class="lation-label">Endereço Residencial</label>
-            <input type="text" id="rx-patient-address" class="lation-input" placeholder="Ex: Spanish Ave, Apt 4B" autocomplete="off" />
+          <div class="stub-footer">
+            <div class="stub-stamp">RETENÇÃO OBRIGATÓRIA</div>
+            <div class="perforation-label">✂ PICOTE DE RETENÇÃO</div>
           </div>
         </div>
 
-        <div class="lation-med-section">
-          <div class="lation-med-header">
-            <label class="lation-label">Medicamentos Prescritos & Dosagem</label>
-            <span class="lation-badge lation-badge-emerald" id="rx-med-count">1 Item</span>
-          </div>
-          <div class="lation-med-list" id="rx-med-list">
-            <!-- Dynamic Medication Rows -->
-          </div>
-          <button type="button" class="lation-add-med-btn" id="rx-btn-add-med">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-            Adicionar Medicamento
-          </button>
-        </div>
+        <!-- Linha de Picote Serrilhado -->
+        <div class="rx-paper-perforation"></div>
 
-        <div class="lation-field">
-          <label class="lation-label">Instruções Clínicas & Posologia</label>
-          <textarea id="rx-notes" class="lation-textarea" placeholder="Ex: Ingerir 1 comprimido a cada 8 horas após as refeições. Retorno em 7 dias..."></textarea>
-        </div>
-
-        <div class="lation-form-grid">
-          <div class="lation-field">
-            <label class="lation-label">Data de Emissão</label>
-            <input type="text" id="rx-date" class="lation-input" readonly />
+        <!-- Corpo Principal da Receita Médica (Via do Paciente) -->
+        <div class="rx-paper-main">
+          <div class="rx-doc-header">
+            <div class="rx-hospital-emblem">
+              <i class="fas fa-hospital"></i>
+            </div>
+            <div class="rx-header-text">
+              <h1>LOS SANTOS MEDICAL CENTER</h1>
+              <p>DEPARTAMENTO DE SAÚDE PÚBLICA & CLÍNICA MÉDICA</p>
+              <span class="rx-header-sub">RECEITUÁRIO OFICIAL • CONTROLE ESPECIAL</span>
+            </div>
+            <div class="rx-serial-badge">
+              <span>TALONÁRIO</span>
+              <b>№ 008492</b>
+            </div>
           </div>
-          <div class="lation-field">
-            <label class="lation-label">Assinatura Digital do Médico</label>
-            <div class="lation-signature-box">
-              <div class="lation-signature-preview" id="rx-sig-preview">Dr. Médico Responsável</div>
-              <input type="text" id="rx-signature-input" class="lation-input" style="margin-top:6px;font-size:0.8rem;" placeholder="Digite seu nome para assinar" />
+
+          <div class="rx-patient-box">
+            <div class="rx-field-row">
+              <div class="rx-input-group flex-2">
+                <label>NOME DO PACIENTE:</label>
+                <input type="text" id="rx-patient-name" class="rx-pen-input" placeholder="Nome completo do paciente" autocomplete="off" />
+              </div>
+              <div class="rx-input-group flex-1">
+                <label>PASSAPORTE / ID:</label>
+                <input type="text" id="rx-patient-id" class="rx-pen-input" placeholder="ID / Citizen ID" autocomplete="off" />
+              </div>
+            </div>
+            <div class="rx-field-row">
+              <div class="rx-input-group full">
+                <label>ENDEREÇO RESIDENCIAL:</label>
+                <input type="text" id="rx-patient-address" class="rx-pen-input" placeholder="Logradouro / Bairro" autocomplete="off" />
+              </div>
+            </div>
+          </div>
+
+          <div class="rx-body-section">
+            <div class="rx-section-title">
+              <span class="rx-symbol">℞</span>
+              <label>PRESCRIÇÃO TERAPÊUTICA & POSOLOGIA</label>
+            </div>
+
+            <div class="rx-medication-rows" id="rx-med-list">
+              <!-- Dynamic Medication Rows styled as paper entries -->
+            </div>
+
+            <button type="button" class="rx-add-item-btn" id="rx-btn-add-med">
+              <i class="fas fa-plus"></i> Adicionar Medicamento à Receita
+            </button>
+
+            <div class="rx-field-row" style="margin-bottom: 8px;">
+              <div class="rx-input-group full">
+                <label>CICLOS / DIAS DE TRATAMENTO AUTORIZADOS (REPETIÇÕES NA FARMÁCIA):</label>
+                <select id="rx-refills-count" class="rx-pen-input" style="background: rgba(255,255,255,0.7); cursor: pointer; font-weight: 700;">
+                  <option value="1">1 Retirada (Dose Única / Retenção da Receita na 1ª Entrega)</option>
+                  <option value="2">2 Retiradas (Paciente retém a receita para 2º ciclo de uso)</option>
+                  <option value="3" selected>3 Retiradas (Paciente retém a receita para 3 retiradas autorizadas)</option>
+                  <option value="5">5 Retiradas (Tratamento Contínuo - 5 retiradas autorizadas)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="rx-notes-container">
+              <label>INSTRUÇÕES CLÍNICAS & RECOMENDAÇÕES:</label>
+              <textarea id="rx-notes" class="rx-pen-textarea" placeholder="Ex: Ingerir 1 comprimido de 8 em 8 horas após as refeições. Manter repouso domiciliar por 3 dias. Retorno para reavaliação."></textarea>
+            </div>
+          </div>
+
+          <div class="rx-doc-footer">
+            <div class="rx-date-stamp-box">
+              <div class="rx-date-row">
+                <label>DATA DE EMISSÃO:</label>
+                <span id="rx-date" class="rx-pen-date">18/10/2026</span>
+              </div>
+              <div class="rx-barcode-wrap">
+                <div class="rx-thermal-barcode">|||| ||||| |||||| |||| ||| |||||||</div>
+                <span>AUTENTICAÇÃO: LSMC-SEC-7532-RX</span>
+              </div>
+            </div>
+
+            <div class="rx-stamp-signature-area">
+              <!-- Carimbo Físico de Borracha Rotacionado com CRM -->
+              <div class="rx-rubber-stamp" id="rx-rubber-stamp">
+                <div class="stamp-border">
+                  <div class="stamp-hospital">LOS SANTOS MEDICAL CENTER</div>
+                  <div class="stamp-doctor" id="rx-stamp-doctor">DR(A). MÉDICO RESPONSÁVEL</div>
+                  <div class="stamp-specialty">CLÍNICA MÉDICA & TRAUMA</div>
+                  <div class="stamp-crm" id="rx-stamp-crm">CRM-LS 9942</div>
+                </div>
+              </div>
+
+              <!-- Assinatura Manuscrita com Caneta Esferográfica Azul -->
+              <div class="rx-handwritten-signature" id="rx-sig-preview">Dr. Médico Responsável</div>
+              <input type="text" id="rx-signature-input" class="rx-signature-edit-input" placeholder="Digite o nome do médico para carimbar" />
+              <div class="rx-signature-underline">Assinatura & Carimbo do Médico Assistente</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="lation-rx-footer">
-        <button type="button" class="lation-btn lation-btn-ghost" id="rx-btn-cancel">Cancelar</button>
-        <button type="button" class="lation-btn lation-btn-primary" id="rx-btn-submit">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          Emitir Receituário
+      <div class="clipboard-actions">
+        <button type="button" class="clipboard-btn cancel" id="rx-btn-cancel">
+          <i class="fas fa-times"></i> Cancelar / Descartar
+        </button>
+        <button type="button" class="clipboard-btn sign-detach" id="rx-btn-submit">
+          <i class="fas fa-file-signature"></i> Carimbar, Assinar & Destacar Via
         </button>
       </div>
     </div>
   `;
   container.appendChild(creationModal);
 
-  // Build Viewer Modal HTML (Read-only prescription inspection)
+  // Build Viewer Modal HTML - Realistic Patient Paper Sheet (Torn from Pad)
   const viewerModal = document.createElement('div');
   viewerModal.id = 'lation-rx-view-modal';
   viewerModal.className = 'lation-rx-backdrop';
   viewerModal.innerHTML = `
-    <div class="lation-rx-card lation-view-card">
-      <div class="lation-watermark">AUTÊNTICO</div>
-      <div class="lation-rx-header">
-        <div class="lation-rx-brand">
-          <div class="lation-rx-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+    <div class="physical-clipboard view-pad">
+      <div class="rx-paper-sheet patient-single-sheet">
+        <div class="rx-paper-watermark">LSMC</div>
+        <div class="torn-edge-top"></div>
+
+        <div class="rx-paper-main view-mode">
+          <div class="rx-doc-header">
+            <div class="rx-hospital-emblem">
+              <i class="fas fa-hospital"></i>
+            </div>
+            <div class="rx-header-text">
+              <h1>LOS SANTOS MEDICAL CENTER</h1>
+              <p>DEPARTAMENTO DE SAÚDE PÚBLICA & CLÍNICA MÉDICA</p>
+              <span class="rx-header-sub">VIA DO PACIENTE • DISPENSAÇÃO FARMACÊUTICA</span>
+            </div>
+            <div class="rx-serial-badge">
+              <span>CONTROLE</span>
+              <b id="view-rx-id">RX-#0000</b>
+            </div>
           </div>
-          <div class="lation-rx-title-group">
-            <h2>Receituário Médico Dispensável</h2>
-            <p>Los Santos Emergency Medical Services • Farmacologia</p>
+
+          <div class="rx-patient-box">
+            <div class="rx-field-row">
+              <div class="rx-input-group flex-2">
+                <label>PACIENTE:</label>
+                <div class="rx-pen-val" id="view-patient-name">---</div>
+              </div>
+              <div class="rx-input-group flex-1">
+                <label>DOCUMENTO / ID:</label>
+                <div class="rx-pen-val" id="view-patient-dob">---</div>
+              </div>
+            </div>
+            <div class="rx-field-row">
+              <div class="rx-input-group full">
+                <label>ENDEREÇO REGISTRADO:</label>
+                <div class="rx-pen-val" id="view-patient-address">---</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="lation-view-badge-bar">
-          <span class="lation-badge lation-badge-emerald">Verificado</span>
-          <span class="lation-badge lation-badge-cyan" id="view-rx-id">RX-#0000</span>
+
+          <div class="rx-body-section">
+            <div class="rx-section-title">
+              <span class="rx-symbol">℞</span>
+              <label>MEDICAMENTOS PRESCRITOS & REGISTRO DE DISPENSAÇÃO</label>
+            </div>
+
+            <div class="rx-view-paper-meds" id="view-med-list"></div>
+
+            <div class="rx-notes-container">
+              <label>POSOLOGIA & ORIENTAÇÕES CLÍNICAS:</label>
+              <div class="rx-pen-val multiline" id="view-rx-notes">Sem instruções adicionais registradas.</div>
+            </div>
+          </div>
+
+          <div class="rx-doc-footer">
+            <div class="rx-date-stamp-box">
+              <div class="rx-date-row">
+                <label>DATA DE ATENDIMENTO:</label>
+                <span id="view-rx-date" class="rx-pen-date">--/--/----</span>
+              </div>
+              <div class="rx-barcode-wrap">
+                <div class="rx-thermal-barcode">|||| ||||| |||||| |||| ||| |||||||</div>
+                <span>DISPENSAÇÃO AUTORIZADA FARMÁCIA CENTRAL</span>
+              </div>
+            </div>
+
+            <div class="rx-stamp-signature-area">
+              <div class="rx-rubber-stamp verified">
+                <div class="stamp-border">
+                  <div class="stamp-hospital">LOS SANTOS MEDICAL CENTER</div>
+                  <div class="stamp-doctor" id="view-doctor-signature">DR(A). MÉDICO RESPONSÁVEL</div>
+                  <div class="stamp-specialty">CLÍNICA MÉDICA & TRAUMA</div>
+                  <div class="stamp-crm">CRM-LS OFICIAL</div>
+                </div>
+              </div>
+              <div class="rx-handwritten-signature" id="view-doctor-signature-hand">Dr. Médico</div>
+              <div class="rx-signature-underline">Médico Assistente / Prescritor</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="lation-rx-body">
-        <div class="lation-view-meta">
-          <div class="lation-meta-item">
-            <span class="lation-meta-label">Paciente</span>
-            <span class="lation-meta-val" id="view-patient-name">---</span>
-          </div>
-          <div class="lation-meta-item">
-            <span class="lation-meta-label">Documento / ID</span>
-            <span class="lation-meta-val" id="view-patient-dob">---</span>
-          </div>
-          <div class="lation-meta-item">
-            <span class="lation-meta-label">Emissão</span>
-            <span class="lation-meta-val" id="view-rx-date">---</span>
-          </div>
-        </div>
-
-        <div class="lation-field full">
-          <label class="lation-label">Endereço Registrado</label>
-          <div style="font-size:0.85rem;color:var(--lation-text-muted);" id="view-patient-address">---</div>
-        </div>
-
-        <div class="lation-field">
-          <label class="lation-label">Medicamentos Autorizados</label>
-          <div class="lation-view-meds" id="view-med-list"></div>
-        </div>
-
-        <div class="lation-view-notes">
-          <h5>Posologia & Orientações Médicas</h5>
-          <p id="view-rx-notes">Sem instruções adicionais registradas.</p>
-        </div>
-
-        <div class="lation-security-seal">
-          <div class="lation-barcode">||| ||||| |||| ||| |||||||</div>
-          <div class="lation-doctor-sign">
-            <span>Médico Emitente</span>
-            <h3 id="view-doctor-signature">Dr. Médico</h3>
-          </div>
-        </div>
-      </div>
-
-      <div class="lation-rx-footer">
-        <button type="button" class="lation-btn lation-btn-ghost" id="view-btn-close">Fechar</button>
+      <div class="clipboard-actions">
+        <button type="button" class="clipboard-btn close-view" id="view-btn-close">
+          <i class="fas fa-check"></i> Fechar Receita
+        </button>
       </div>
     </div>
   `;
@@ -268,6 +373,26 @@
     });
   }
 
+  // Synchronize inputs with paper elements & stub
+  const nameInput = document.getElementById('rx-patient-name');
+  if (nameInput) {
+    nameInput.addEventListener('input', (e) => {
+      const stubName = document.getElementById('stub-patient-name');
+      if (stubName) stubName.innerText = e.target.value.trim() || '---';
+    });
+  }
+
+  const sigInput = document.getElementById('rx-signature-input');
+  if (sigInput) {
+    sigInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim() || 'Dr(a). Médico';
+      const sigPrev = document.getElementById('rx-sig-preview');
+      const stampDoc = document.getElementById('rx-stamp-doctor');
+      if (sigPrev) sigPrev.innerText = val;
+      if (stampDoc) stampDoc.innerText = val.toUpperCase();
+    });
+  }
+
   // Open Creation UI
   function openCreationUI() {
     isCreationOpen = true;
@@ -275,19 +400,30 @@
     viewerModal.classList.remove('active');
 
     // Reset fields
-    document.getElementById('rx-patient-name').value = '';
-    document.getElementById('rx-patient-id').value = '';
-    document.getElementById('rx-patient-address').value = '';
-    document.getElementById('rx-notes').value = '';
+    const pName = document.getElementById('rx-patient-name');
+    if (pName) pName.value = '';
+    const pId = document.getElementById('rx-patient-id');
+    if (pId) pId.value = '';
+    const pAddr = document.getElementById('rx-patient-address');
+    if (pAddr) pAddr.value = '';
+    const pNotes = document.getElementById('rx-notes');
+    if (pNotes) pNotes.value = '';
     
     const now = new Date();
-    document.getElementById('rx-date').value = now.toLocaleDateString(Config.locale || 'pt-BR');
+    const dateFormatted = now.toLocaleDateString(Config.locale || 'pt-BR');
+    const dateEl = document.getElementById('rx-date');
+    if (dateEl) dateEl.innerText = dateFormatted;
+    const stubDate = document.getElementById('stub-date');
+    if (stubDate) stubDate.innerText = dateFormatted;
     
-    const defaultDoctor = 'Dr. Responsável';
-    const sigInput = document.getElementById('rx-signature-input');
+    const defaultDoctor = 'Dr. Ricardo Novaes';
+    if (sigInput) sigInput.value = defaultDoctor;
     const sigPreview = document.getElementById('rx-sig-preview');
-    sigInput.value = defaultDoctor;
-    sigPreview.innerText = defaultDoctor;
+    if (sigPreview) sigPreview.innerText = defaultDoctor;
+    const stampDoctor = document.getElementById('rx-stamp-doctor');
+    if (stampDoctor) stampDoctor.innerText = defaultDoctor.toUpperCase();
+    const stampCrm = document.getElementById('rx-stamp-crm');
+    if (stampCrm) stampCrm.innerText = 'CRM-LS ' + Math.floor(1000 + Math.random() * 9000);
 
     activeMedications = [{
       label: Config.medicines[0] ? Config.medicines[0].label : 'Paracetamol',
@@ -306,38 +442,56 @@
 
     if (!data) return;
 
-    document.getElementById('view-patient-name').innerText = data.name || 'Paciente Não Identificado';
-    document.getElementById('view-patient-dob').innerText = data.dob || data.identifier || 'LS-DESCONHECIDO';
-    document.getElementById('view-patient-address').innerText = data.adress || data.address || 'Sem endereço cadastrado';
-    document.getElementById('view-rx-date').innerText = dateStr || (data.date ? new Date(data.date).toLocaleDateString(Config.locale || 'pt-BR') : new Date().toLocaleDateString(Config.locale || 'pt-BR'));
-    document.getElementById('view-rx-notes').innerText = data.notes && data.notes.trim() ? data.notes : 'Nenhuma restrição ou dosagem extra informada.';
-    document.getElementById('view-doctor-signature').innerText = data.signature || 'Dr(a). Médico';
+    const rxToken = data.token || ('RX-' + Math.floor(1000 + Math.random() * 9000));
+    const rxRefills = data.refills_remaining !== undefined ? data.refills_remaining : (data.refills_total || 1);
+    const viewIdEl = document.getElementById('view-rx-id');
+    if (viewIdEl) viewIdEl.innerText = rxToken;
+
+    const patientName = data.name || data.patient || 'Paciente Não Identificado';
+    const patientDob = data.dob || data.identifier || 'LS-DESCONHECIDO';
+    const patientAddress = data.adress || data.address || 'Sem endereço cadastrado';
+    const rxDate = dateStr || (data.date ? new Date(data.date).toLocaleDateString(Config.locale || 'pt-BR') : new Date().toLocaleDateString(Config.locale || 'pt-BR'));
+    const rxNotes = data.notes && data.notes.trim() ? data.notes : 'Nenhuma restrição ou dosagem extra informada.';
+    const doctorSig = data.signature || 'Dr(a). Médico Responsável';
+
+    const vName = document.getElementById('view-patient-name');
+    if (vName) vName.innerText = patientName;
+    const vDob = document.getElementById('view-patient-dob');
+    if (vDob) vDob.innerText = patientDob;
+    const vAddr = document.getElementById('view-patient-address');
+    if (vAddr) vAddr.innerText = patientAddress;
+    const vDate = document.getElementById('view-rx-date');
+    if (vDate) vDate.innerText = rxDate;
+    const vNotes = document.getElementById('view-rx-notes');
+    if (vNotes) vNotes.innerText = rxNotes;
+    const vDoc = document.getElementById('view-doctor-signature');
+    if (vDoc) vDoc.innerText = doctorSig.toUpperCase();
+    const vDocHand = document.getElementById('view-doctor-signature-hand');
+    if (vDocHand) vDocHand.innerText = doctorSig;
 
     const medsList = document.getElementById('view-med-list');
-    medsList.innerHTML = '';
+    if (medsList) {
+      medsList.innerHTML = '';
+      const meds = data.medications || [];
+      if (meds.length === 0 && data.medication) {
+        meds.push({ label: data.medication, amount: data.amount || 1, refills_remaining: 1 });
+      }
 
-    const meds = data.medications || [];
-    if (meds.length === 0 && data.medication) {
-      meds.push({ label: data.medication, amount: data.amount || 1, refills_remaining: 1 });
-    }
-
-    meds.forEach(m => {
-      const itemEl = document.createElement('div');
-      itemEl.className = 'lation-view-med-item';
-      itemEl.innerHTML = `
-        <div class="lation-view-med-left">
-          <div class="lation-view-med-pill">Rx</div>
-          <div class="lation-view-med-info">
-            <h4>${m.amount}x ${m.label || m.item || 'Medicamento'}</h4>
-            <p>Uso Terapêutico Controlado</p>
+      meds.forEach(m => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'rx-view-paper-item';
+        itemEl.innerHTML = `
+          <div class="rx-paper-item-left">
+            <span class="rx-bullet">▪</span>
+            <b>${m.amount}x ${m.label || m.item || 'Medicamento'}</b>
           </div>
-        </div>
-        <div class="lation-view-refills">
-          ${m.refills_remaining !== undefined ? `${m.refills_remaining} Retirada(s)` : 'Autorizado'}
-        </div>
-      `;
-      medsList.appendChild(itemEl);
-    });
+          <div class="rx-paper-item-status">
+            ${m.refills_remaining !== undefined ? `${m.refills_remaining} Retirada(s)` : 'DISPENSAÇÃO AUTORIZADA'}
+          </div>
+        `;
+        medsList.appendChild(itemEl);
+      });
+    }
 
     viewerModal.classList.add('active');
   }
@@ -377,10 +531,12 @@
 
     const payload = {
       name: pName,
+      patient: pName,
       adress: document.getElementById('rx-patient-address').value.trim() || 'Los Santos',
       dob: document.getElementById('rx-patient-id').value.trim() || 'N/A',
       notes: document.getElementById('rx-notes').value.trim(),
       signature: document.getElementById('rx-signature-input').value.trim() || 'Dr. Médico',
+      refills: parseInt(document.getElementById('rx-refills-count')?.value || '1', 10),
       medications: activeMedications
     };
 
@@ -1891,8 +2047,84 @@
       finishBreathalyzer(true, data.result);
     } else if (action === 'startSwipeMinigame' || action === 'loki:startSwipe') {
       startSwipeMinigame();
+    } else if (action === 'openTimer') {
+      openTimerHUD(data);
+    } else if (action === 'tickTimer') {
+      tickTimerHUD(data);
+    } else if (action === 'timerPaused') {
+      setTimerPausedHUD(data.paused);
+    } else if (action === 'closeTimer') {
+      closeTimerHUD();
     }
   });
+
+  // Physical Rehabilitation Pill HUD Controller
+  const RING_CIRC = 97.39;
+
+  function fmtTime(totalSeconds) {
+    totalSeconds = Math.max(0, Math.floor(totalSeconds || 0));
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+  }
+
+  function openTimerHUD(payload) {
+    const root = document.getElementById('timer-root');
+    if (!root) return;
+    root.classList.remove('timer-right', 'timer-left', 'hidden');
+    root.classList.add(payload.position === 'left' ? 'timer-left' : 'timer-right');
+
+    const label = document.getElementById('timer-label');
+    if (label) label.textContent = (payload.label || 'REABILITAÇÃO').toUpperCase();
+
+    const icon = document.getElementById('timer-icon');
+    if (icon) {
+      icon.className = payload.mode === 'wheelchair'
+        ? 'fa-solid fa-wheelchair'
+        : 'fa-solid fa-crutch';
+    }
+
+    const ringFill = document.getElementById('timer-ring-fill');
+    if (ringFill) ringFill.style.strokeDashoffset = RING_CIRC;
+  }
+
+  function tickTimerHUD(payload) {
+    const valueEl = document.getElementById('timer-value');
+    if (valueEl) valueEl.textContent = fmtTime(payload.remaining);
+
+    const progress = Math.max(0, Math.min(1, payload.progress || 0));
+    const ringFill = document.getElementById('timer-ring-fill');
+    if (ringFill) {
+      ringFill.style.strokeDashoffset = (RING_CIRC * (1 - progress)).toFixed(2);
+    }
+
+    const pill = document.querySelector('.timer-pill');
+    if (pill) {
+      if (payload.paused) {
+        pill.classList.remove('urgent');
+        pill.classList.add('paused');
+      } else {
+        pill.classList.remove('paused');
+        if (payload.remaining > 0 && payload.remaining <= 30) {
+          pill.classList.add('urgent');
+        } else {
+          pill.classList.remove('urgent');
+        }
+      }
+    }
+  }
+
+  function setTimerPausedHUD(paused) {
+    const pill = document.querySelector('.timer-pill');
+    if (pill) {
+      pill.classList.toggle('paused', !!paused);
+    }
+  }
+
+  function closeTimerHUD() {
+    const root = document.getElementById('timer-root');
+    if (root) root.classList.add('hidden');
+  }
 
   // Request config from server on startup
   postNUI('load_config');

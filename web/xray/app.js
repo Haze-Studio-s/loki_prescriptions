@@ -35,16 +35,6 @@ let currentBone = 'head';
 let lastResults  = null;
 let currentPatientData = null;
 
-// Exibição inicial
-if (IS_DUI) {
-    if (IS_MONITOR) {
-        vitalsApp.style.display = 'flex';
-        initECG();
-    } else {
-        app.style.display = 'flex';
-    }
-}
-
 // Relógio do Sistema
 function updateClock() {
     const now     = new Date();
@@ -165,15 +155,15 @@ function showResults(injuries) {
     let html = '<div style="margin-top:4px;">';
     parts.forEach(part => {
         const injury = lastResults.find(i => i.part === part.key);
-        let cls  = 'color-ok';
+        let statusCls = injury ? 'broken' : 'ok';
         let text = 'ESTRUTURA ÍNTEGRA';
         if (injury) {
-            if (injury.type === 'fracture') { cls = 'color-fracture'; text = 'FRATURA IDENTIFICADA'; }
-            else if (injury.type === 'bullet') { cls = 'color-bullet'; text = 'CORPO ESTRANHO (PROJÉTIL)'; }
+            if (injury.type === 'fracture') { text = 'FRATURA IDENTIFICADA'; }
+            else if (injury.type === 'bullet') { text = 'CORPO ESTRANHO (PROJÉTIL)'; }
         }
-        html += `<div class="data-row">
-            <span class="data-label" style="font-size:11px;">${part.label} :</span>
-            <span class="${cls}" style="font-size:11px; font-weight:bold;">${text}</span>
+        html += `<div class="injury-row">
+            <span class="injury-label">${part.label}</span>
+            <span class="injury-status ${statusCls}">${text}</span>
         </div>`;
     });
     html += '</div>';
@@ -448,4 +438,14 @@ function drawECG() {
     lastYBp = smoothBpY;
 
     requestAnimationFrame(drawECG);
+}
+
+// Exibição inicial (DUI / Monitores)
+if (IS_DUI) {
+    if (IS_MONITOR) {
+        vitalsApp.style.display = 'flex';
+        initECG();
+    } else {
+        app.style.display = 'flex';
+    }
 }

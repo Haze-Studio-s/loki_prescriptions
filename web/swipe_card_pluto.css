@@ -1,0 +1,119 @@
+nt-weight: 600;
+}
+
+/* SWIPE CARD MINIGAME */
+#swipe-card-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+}
+
+#swipe-card-container.hidden {
+    display: none !important;
+}
+
+.swipe-card-wrapper {
+    position: relative;
+    width: 1400px;
+    height: 600px;
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.swipe-card-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #888;
+    font-size: 30px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.swipe-card-close:hover {
+    color: #ff3b30;
+}
+
+.card-reader-box {
+    position: relative;
+    width: 1200px;
+    height: 400px;
+    margin-bottom: 20px;
+}
+
+.card-reader-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.swipe-area {
+    position: absolute;
+    top: 45%;
+    left: 5%;
+    width: 90%;
+    height: 10%;
+    pointer-events: none;
+}
+
+.swipe-card-img-box {
+    position: absolute;
+    width: 400px;
+    height: 600px;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: grab;
+    z-index: 10001;
+}
+
+.swipe-card-img-box:active {
+    cursor: grabbing;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.swipe-instructions {
+    font-size: 32px;
+    font-weight: 800;
+    color: #888;
+    letter-spacing: 4px;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+.swipe-status {
+    margin-top: 15px;
+    font-size: 42px;
+    font-weight: 900;
+    color: #fff;
+}
+
+.swipe-status.success {
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+.swipe-status.error {
+    color: #ff3b30;
+    text-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
+}
+
+.notify-item span {
+    

@@ -116,22 +116,30 @@ RegisterServerEvent('loki_prescriptions:createPrescription', function(rawPayload
     local expirationSeconds = (Config.ExpirationDays or 3) * 86400
     local canonicalDoctorCid = GetPlayerIdentifier(src)
     local canonicalDoctorName = GetCharacterName(src)
+    local doctorRefills = tonumber(rawPayload.refills) or tonumber(rawPayload.days) or minRefills
+    if doctorRefills < 1 then doctorRefills = 1 end
+    if doctorRefills > 10 then doctorRefills = 10 end
+
+    local rxToken = string.format("RX-%s-%04d", tostring(os.date("%m%d")), math.random(1000, 9999))
 
     local prescriptionMetadata = {
         data = {
+            token = rxToken,
             patient = rawPayload.patient and tostring(rawPayload.patient):sub(1, 40) or "Paciente",
             doctor = canonicalDoctorName,
             doctor_cid = canonicalDoctorCid,
             medications = sanitizedMeds,
             notes = rawPayload.notes and tostring(rawPayload.notes):sub(1, 100) or "",
-            refills_remaining = minRefills,
-            refills_total = minRefills,
+            refills_remaining = doctorRefills,
+            refills_total = doctorRefills,
             created_at = currentTime,
             expires_at = currentTime + expirationSeconds,
         },
         date = currentTime,
-        description = ("Dr(a). %s | Válida até: %s"):format(
+        description = ("Dr(a). %s | Retiradas: %d | Código: %s | Válida até: %s"):format(
             canonicalDoctorName,
+            doctorRefills,
+            rxToken,
             os.date("%d/%m/%Y", currentTime + expirationSeconds)
         )
     }
@@ -373,9 +381,11 @@ RegisterServerEvent('loki_prescriptions:redeemPrescription', function()
         -- Decrementa 1 via e carimba nos metadados
         pData.refills_remaining = currentRefills - 1
         metadata.data = pData
-        metadata.description = ("Dr(a). %s | Restam: %d retirada(s)"):format(
+        metadata.description = ("Dr(a). %s | Restam: %d retirada(s) | Código: %s | Válida até: %s"):format(
             pData.doctor or "Médico",
-            pData.refills_remaining
+            pData.refills_remaining,
+            pData.token or "RX",
+            os.date("%d/%m/%Y", tonumber(pData.expires_at) or (os.time() + 86400 * 3))
         )
 
         local updated = UpdateItemMetadata(src, fixedSlot, metadata)
@@ -429,4 +439,28 @@ RegisterServerEvent('loki_prescriptions:requestPrescribePad', function(targetSer
     end
 
     TriggerClientEvent('loki_prescriptions:client:openPadForPatient', src, targetServerId)
+end)
+
+-- Dispensação de Medicamentos via Token Digital (EHR / Farmácia Central)
+RegisterServerEvent('loki_prescriptions:server:dispensePharmacyToken', function(token)
+    local src = source
+    if not src or src <= 0 then return end
+
+    if Config.PrescriptionJobs then
+        local playerjob = GetPlayerJob(src)
+        local allowed = false
+        for _, v in ipairs(Config.PrescriptionJobs) do
+            if v == playerjob then
+                allowed = true
+                break
+            end
+        end
+        if not allowed then
+            notify("error", _U("invalidJob"), _U("pharmacy"), src)
+            return
+        end
+    end
+
+    local cleanToken = token and tostring(token):sub(1, 20) or "RX-DESCONHECIDO"
+    notify("success", string.format("Prescrição %s dispensada com sucesso pelo farmacêutico/médico.", cleanToken), _U("pharmacy"), src)
 end)

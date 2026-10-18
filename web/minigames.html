@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pluto Minigames - 100% Original</title>
+    <script src="jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=VT323&family=Oswald:wght@400;700&family=Inter:wght@300;400;500;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="minigames_pluto.css">
+    <link rel="stylesheet" href="breathalyzer_pluto.css">
+    <link rel="stylesheet" href="swipe_card_pluto.css">
+    <style>
+        @font-face {
+            font-family: 'Technology';
+            src: url('fonts/Technology.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Technology-Bold';
+            src: url('fonts/Technology-Bold.ttf') format('truetype');
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: rgba(18, 20, 24, 0.85);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<!-- Minigames (Moved outside diagnosis-container to stay visible when dots hide) -->
+    <!-- Suture Minigame (Ultra Realistic Treatment) -->
+    <div id="suture-minigame-container" class="minigame-overlay">
+        <div class="minigame-window suture-window">
+            <div class="minigame-header">
+                <i class="fas fa-hand-holding-medical"></i>
+                <span>SURGICAL SUTURING</span>
+                <div class="minigame-hint">CLOSE THE WOUND BY CONNECTING THE POINTS</div>
+            </div>
+            <div id="suture-canvas-area">
+                <canvas id="suture-canvas"></canvas>
+                <div id="suture-needle"></div>
+            </div>
+            <div class="suture-progress-bar">
+                <div id="suture-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Bleeding Clamp Minigame -->
+    <div id="clamp-minigame-container" class="minigame-overlay">
+        <div class="minigame-window clamp-window">
+            <div class="minigame-header">
+                <i class="fas fa-hand-holding-medical"></i>
+                <span>HEMOSTASIS CONTROL</span>
+                <div id="clamp-hint" class="minigame-hint">GRAB SEVERED VESSEL ENDS AND JOIN THEM</div>
+            </div>
+            <div id="clamp-canvas-area">
+                <canvas id="clamp-canvas"></canvas>
+                <div id="vessel-suture-needle" class="suture-needle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Bullet Extraction Minigame (Path Dragging) -->
+    <div id="bullet-minigame-container" class="minigame-overlay">
+        <div class="extraction-game">
+            <div class="minigame-header">
+                <i class="fas fa-microscope"></i>
+                <span>ARTERIAL EXTRACTION</span>
+                <div class="minigame-hint">GUIDE THE PROJECTILE THROUGH THE ARTERY</div>
+            </div>
+            <div id="extraction-canvas-area">
+                <canvas id="extraction-canvas"></canvas>
+                <div id="extraction-bullet" class="minigame-bullet-item">
+                    <img src="img/bullet.png" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <div id="extraction-target" class="minigame-target-zone">EXIT</div>
+            </div>
+            <div class="minigame-footer-hint">Press [ESC] to abort surgery</div>
+        </div>
+    </div>
+
+    <!-- NEW: Blood Pressure Minigame -->
+    <div id="bp-minigame-container" class="minigame-overlay">
+        <div class="bp-game">
+            <img id="bp-arm-image" src="img/arm.png">
+            <div id="bp-game-area">
+                <!-- SVG Tube Layer -->
+                <svg id="bp-tube-svg">
+                    <path id="bp-tube-base" d="" fill="none" />
+                    <path id="bp-tube-main" d="" fill="none" />
+                    <path id="bp-tube-highlight" d="" fill="none" />
+                </svg>
+
+                <div id="bp-target-zone">PLACE CUFF HERE</div>
+
+                <div id="bp-cuff-item">
+                    <img src="img/bp-cuff.png" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+
+                <div id="bp-machine-display">
+                    <img id="bp-machine-img" src="img/bp.png">
+                    <div id="bp-values">
+                        <div id="systolic">--</div>
+                        <div id="diastolic">--</div>
+                        <div id="pulse-rate">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Realistic Medical Dressing Minigame -->
+    <div id="bandage-minigame-container" class="minigame-overlay">
+        <div class="dressing-window">
+            <div class="dressing-header">
+                <div class="dressing-title">
+                    <i class="fas fa-kit-medical"></i>
+                    <span>TRAUMA DRESSING PROCEDURE</span>
+                </div>
+                <div class="dressing-steps">
+                    <div class="step-indicator active" id="step-clean">1. CLEAN</div>
+                    <div class="step-indicator" id="step-apply">2. APPLY</div>
+                    <div class="step-indicator" id="step-secure">3. SECURE</div>
+                </div>
+            </div>
+
+            <div class="dressing-body">
+                <div class="tool-tray">
+                    <div class="tool-item" id="tool-swab" data-step="1">
+                        <img src="img/cotton.png" style="width: 40px; height: 40px; object-fit: contain;">
+                        <span>ANTISEPTIC</span>
+                    </div>
+                    <div class="tool-item disabled" id="tool-gauze" data-step="2">
+                        <i class="fas fa-layer-group"></i>
+                        <span>GAUZE PAD</span>
+                    </div>
+                    <div class="tool-item disabled" id="tool-tape" data-step="3">
+                        <i class="fas fa-tape"></i>
+                        <span>SURGICAL TAPE</span>
+                    </div>
+                </div>
+
+                <div id="dressing-canvas-area">
+                    <div id="limb-visual-container">
+                        <canvas id="dressing-base-canvas"></canvas>
+                        <div id="gauze-target" class="target-zone hidden">PLACE HERE</div>
+                        <div id="placed-gauze" class="hidden"></div>
+                        <div id="tape-container"></div>
+                    </div>
+                    <div id="active-tool-cursor" class="hidden"></div>
+                </div>
+            </div>
+
+            <div class="dressing-footer">
+                <div class="dressing-instruction" id="dressing-instruction">Select the ANTISEPTIC to clean the wound area.</div>
+                <button id="bandage-finish-btn" class="hidden" onclick="finishDressingProcedure()">COMPLETE DRESSING</button>
+            </div>
+        </div>
+    </div>
+<!-- BREATHALYZER -->
+    <div id="breathalyzer-view" class="hidden">
+        <div class="breathalyzer-container">
+            <img src="img/breathalyzer.png" class="breathalyzer-device">
+            <div class="breathalyzer-mouthpiece-click" id="mouthpiece-click" onclick="window.startBreathalyzerMinigame()"></div>
+            <div class="breathalyzer-screen hidden" id="breath-screen">
+                <div class="breath-status" id="breath-status">WAITING...</div>
+                <div class="breath-value" id="breath-value">0.00%</div>
+                <div class="breath-minigame hidden" id="breath-minigame"><div class="breath-bar-bg"><div class="breath-indicator" id="breath-indicator"></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERNAL PROGRESS BAR -->
+    <div id="internal-progress-container" class="hidden">
+        <div class="progress-wrapper">
+            <div class="progress-label" id="progress-label">PROCESSING...</div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- SWIPE CARD MINIGAME -->
+    <div id="swipe-card-container" class="hidden">
+        <div class="swipe-card-wrapper">
+            <div class="swipe-card-close" onclick="window.closeSwipeMinigame()"><i class="fas fa-times"></i></div>
+            <div class="card-reader-box">
+                <img src="img/card-reader.png" class="card-reader-img">
+                <div id="swipe-area" class="swipe-area"></div>
+            </div>
+            <div id="swipe-card-box" class="swipe-card-img-box">
+                <img src="img/card.png" class="card-img" draggable="false">
+            </div>
+            <div class="swipe-instructions">SWIPE CARD TO LOG IN/OUT</div>
+            <div class="swipe-status" id="swipe-status">WAITING...</div>
+        </div>
+    </div>
+
+    <script src="pluto_minigames.js"></script>
+    <script src="breathalyzer_pluto.js"></script>
+    <script src="swipe_card_pluto.js"></script>
+</body>
+</html>

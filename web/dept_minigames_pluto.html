@@ -1,0 +1,36 @@
+<!-- BREATHALYZER -->
+    <div id="breathalyzer-view" class="hidden">
+        <div class="breathalyzer-container">
+            <img src="img/breathalyzer.png" class="breathalyzer-device">
+            <div class="breathalyzer-mouthpiece-click" id="mouthpiece-click" onclick="window.startBreathalyzerMinigame()"></div>
+            <div class="breathalyzer-screen hidden" id="breath-screen">
+                <div class="breath-status" id="breath-status">WAITING...</div>
+                <div class="breath-value" id="breath-value">0.00%</div>
+                <div class="breath-minigame hidden" id="breath-minigame"><div class="breath-bar-bg"><div class="breath-indicator" id="breath-indicator"></div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INTERNAL PROGRESS BAR -->
+    <div id="internal-progress-container" class="hidden">
+        <div class="progress-wrapper">
+            <div class="progress-label" id="progress-label">PROCESSING...</div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar-fill"></div></div>
+        </div>
+    </div>
+
+    <!-- SWIPE CARD MINIGAME -->
+    <div id="swipe-card-container" class="hidden">
+        <div class="swipe-card-wrapper">
+            <div class="swipe-card-close" onclick="window.closeSwipeMinigame()"><i class="fas fa-times"></i></div>
+            <div class="card-reader-box">
+                <img src="img/card-reader.png" class="card-reader-img">
+                <div id="swipe-area" class="swipe-area"></div>
+            </div>
+            <div id="swipe-card-box" class="swipe-card-img-box">
+                <img src="img/card.png" class="card-img" draggable="false">
+            </div>
+            <div class="swipe-instructions">SWIPE CARD TO LOG IN/OUT</div>
+            <div class="swipe-status" id="swipe-status">WAITING...</div>
+        </div>
+    </div>

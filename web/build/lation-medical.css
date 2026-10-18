@@ -97,196 +97,379 @@
   pointer-events: auto;
 }
 
-/* Prescription Window Card */
-.lation-rx-card {
+/* =========================================================================
+   PHYSICAL CLIPBOARD & REALISTIC PERFORATED RX PAPER PAD
+   Diegetic medical object: aluminum clipboard, off-white offset paper,
+   perforated stub, ballpoint pen typography & rotated rubber stamp.
+   ========================================================================= */
+
+.physical-clipboard {
+  position: relative;
   width: 95%;
-  max-width: 620px;
-  background: var(--lation-bg);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-xl);
-  box-shadow: var(--lation-shadow-card), 0 0 50px -10px rgba(16, 185, 129, 0.12);
-  overflow: hidden;
-  transform: scale(0.96) translateY(12px);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 860px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 14px;
+  box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  padding: 55px 24px 22px 24px;
   display: flex;
   flex-direction: column;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
 }
 
-.lation-rx-backdrop.active .lation-rx-card {
+.lation-rx-backdrop.active .physical-clipboard {
   transform: scale(1) translateY(0);
 }
 
-/* Card Header */
-.lation-rx-header {
-  padding: 18px 24px;
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, transparent 100%), var(--lation-panel);
-  border-bottom: 1px solid var(--lation-border);
+.physical-clipboard.view-pad {
+  max-width: 680px;
+  padding-top: 24px;
+}
+
+/* Metal Clip on Top */
+.clipboard-metal-clip {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 210px;
+  height: 38px;
+  background: linear-gradient(180deg, #94a3b8 0%, #64748b 50%, #475569 100%);
+  border-radius: 6px 6px 10px 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 16px;
+  z-index: 10;
 }
 
-.lation-rx-brand {
+.clip-fastener {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #cbd5e1 30%, #475569 100%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.clip-lever {
+  width: 90px;
+  height: 6px;
+  background: #334155;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Realistic Paper Sheet */
+.rx-paper-sheet {
+  position: relative;
+  background: #faf8f2;
+  background-image: 
+    radial-gradient(#e2ded4 0.75px, transparent 0.75px),
+    linear-gradient(180deg, #ffffff 0%, #faf7f0 100%);
+  background-size: 20px 20px, 100% 100%;
+  border-radius: 4px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.08);
   display: flex;
-  align-items: center;
-  gap: 14px;
+  overflow: hidden;
+  border: 1px solid #e5e0d3;
 }
 
-.lation-rx-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--lation-radius-md);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 182, 212, 0.15) 100%);
-  border: 1px solid var(--lation-border-accent);
+.rx-paper-sheet.patient-single-sheet {
+  display: block;
+}
+
+.rx-paper-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-size: 11rem;
+  font-weight: 900;
+  color: rgba(15, 23, 42, 0.025);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 12px;
+}
+
+/* Canhoto de Retenção da Farmácia */
+.rx-paper-stub {
+  width: 215px;
+  background: #f4efe4;
+  border-right: 1px solid #ded6c5;
+  padding: 20px 14px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--lation-emerald);
-  box-shadow: var(--lation-shadow-emerald);
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 
-.lation-rx-title-group h2 {
-  margin: 0;
-  font-size: 1.15rem;
+.stub-header {
+  border-bottom: 2px solid #1e3a8a;
+  padding-bottom: 8px;
+}
+
+.stub-kicker {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.stub-serial {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #dc2626;
+  margin-top: 2px;
+}
+
+.stub-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.stub-field label {
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--lation-text);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lation-rx-title-group p {
-  margin: 2px 0 0 0;
-  font-size: 0.78rem;
-  font-weight: 400;
-  color: var(--lation-text-muted);
-}
-
-.lation-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: var(--lation-radius-pill);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  color: #64748b;
+  display: block;
   letter-spacing: 0.04em;
 }
 
-.lation-badge-emerald {
-  background: rgba(16, 185, 129, 0.12);
-  color: var(--lation-emerald);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+.stub-field span, .stub-field div {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15rem;
+  color: #1e3a8a;
+  line-height: 1.2;
 }
 
-.lation-badge-cyan {
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--lation-cyan);
-  border: 1px solid rgba(6, 182, 212, 0.25);
+.stub-meds {
+  font-size: 0.95rem !important;
+  color: #0f172a !important;
+  font-family: inherit !important;
+  font-weight: 600;
 }
 
-.lation-badge-rose {
-  background: rgba(244, 63, 94, 0.12);
-  color: var(--lation-rose);
-  border: 1px solid rgba(244, 63, 94, 0.25);
+.stub-footer {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 10px;
+  text-align: center;
 }
 
-/* Card Body */
-.lation-rx-body {
-  padding: 22px 24px;
+.stub-stamp {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #b91c1c;
+  border: 1px solid #b91c1c;
+  padding: 3px 6px;
+  border-radius: 3px;
+  display: inline-block;
+  letter-spacing: 0.05em;
+  transform: rotate(-3deg);
+}
+
+.perforation-label {
+  font-size: 0.55rem;
+  color: #94a3b8;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* Picote Serrilhado */
+.rx-paper-perforation {
+  width: 14px;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 6px,
+    #94a3b8 6px,
+    #94a3b8 10px
+  );
+  position: relative;
+  flex-shrink: 0;
+  opacity: 0.45;
+}
+
+/* Corpo Principal do Receituário */
+.rx-paper-main {
+  flex: 1;
+  padding: 22px 28px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
+  background: #faf8f2;
 }
 
-.lation-rx-body::-webkit-scrollbar {
-  width: 5px;
-}
-.lation-rx-body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-}
-
-/* Form Grid */
-.lation-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.lation-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.lation-field.full {
-  grid-column: span 2;
-}
-
-.lation-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--lation-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+.rx-doc-header {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 14px;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 12px;
 }
 
-.lation-input, .lation-select, .lation-textarea {
-  width: 100%;
+.rx-hospital-emblem {
+  width: 44px;
+  height: 44px;
+  background: #1e3a8a;
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 3px 8px rgba(30, 58, 138, 0.35);
+}
+
+.rx-header-text h1 {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+}
+
+.rx-header-text p {
+  margin: 2px 0 0 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #475569;
+  letter-spacing: 0.06em;
+}
+
+.rx-header-sub {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #b91c1c;
+  letter-spacing: 0.08em;
+  display: inline-block;
+  margin-top: 3px;
+}
+
+.rx-serial-badge {
+  margin-left: auto;
+  text-align: right;
+  border-left: 2px solid #e2e8f0;
+  padding-left: 14px;
+}
+
+.rx-serial-badge span {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #64748b;
+  display: block;
+}
+
+.rx-serial-badge b {
+  font-family: monospace;
+  font-size: 1.05rem;
+  color: #dc2626;
+}
+
+/* Patient Box */
+.rx-patient-box {
+  background: rgba(241, 245, 249, 0.65);
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
   padding: 10px 14px;
-  background: var(--lation-panel-card);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-  color: var(--lation-text);
-  font-size: 0.88rem;
-  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rx-field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.rx-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rx-input-group.flex-1 { flex: 1; }
+.rx-input-group.flex-2 { flex: 2; }
+.rx-input-group.full { width: 100%; }
+
+.rx-input-group label {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.04em;
+}
+
+/* Caneta Esferográfica Realista nos Inputs */
+.rx-pen-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #94a3b8;
+  padding: 3px 4px;
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1e3a8a;
   outline: none;
-  transition: all 0.18s ease;
-  box-sizing: border-box;
+  transition: border-color 0.15s ease;
 }
 
-.lation-input:focus, .lation-select:focus, .lation-textarea:focus {
-  border-color: var(--lation-emerald);
-  box-shadow: 0 0 0 2px var(--lation-emerald-glow);
-  background: rgba(20, 29, 48, 0.85);
+.rx-pen-input:focus {
+  border-bottom-color: #1e3a8a;
+  background: rgba(255, 255, 255, 0.4);
 }
 
-.lation-input::placeholder, .lation-textarea::placeholder {
-  color: var(--lation-text-dim);
+.rx-pen-val {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  padding: 2px 0;
 }
 
-.lation-textarea {
-  resize: vertical;
-  min-height: 70px;
+.rx-pen-val.multiline {
+  font-size: 1.15rem;
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 
-/* Medication Section */
-.lation-med-section {
-  background: var(--lation-panel-card);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-lg);
-  padding: 14px;
+/* Prescrição Section */
+.rx-body-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.lation-med-header {
+.rx-section-title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 4px;
 }
 
-.lation-med-list {
+.rx-symbol {
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-family: Georgia, serif;
+  color: #1e3a8a;
+  line-height: 1;
+}
+
+.rx-section-title label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.05em;
+}
+
+/* Linhas de Medicamento no Papel */
+.rx-medication-rows {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -295,357 +478,378 @@
 .lation-med-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(11, 15, 25, 0.65);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-  padding: 8px 12px;
-  transition: border-color 0.15s ease;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.lation-med-row:hover {
-  border-color: var(--lation-border-light);
-}
-
-.lation-med-row select {
+.rx-select-med {
   flex: 1;
   background: transparent;
   border: none;
-  color: var(--lation-text);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #0f172a;
   outline: none;
   cursor: pointer;
 }
 
-.lation-med-row select option {
-  background: #0f172a;
-  color: #fff;
+.rx-select-med option {
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .lation-qty-control {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--lation-radius-sm);
-  border: 1px solid var(--lation-border);
-  overflow: hidden;
+  gap: 4px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 2px 6px;
 }
 
 .lation-qty-btn {
-  width: 26px;
-  height: 26px;
-  background: transparent;
+  background: none;
   border: none;
-  color: var(--lation-text-muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #1e3a8a;
+  font-size: 1.1rem;
   font-weight: 700;
-  transition: all 0.15s ease;
-}
-
-.lation-qty-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--lation-text);
+  cursor: pointer;
+  padding: 0 4px;
 }
 
 .lation-qty-val {
-  min-width: 24px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  min-width: 18px;
   text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--lation-emerald);
 }
 
 .lation-btn-icon-danger {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--lation-radius-sm);
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.2);
-  color: var(--lation-rose);
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #dc2626;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
 }
 
 .lation-btn-icon-danger:hover {
-  background: rgba(244, 63, 94, 0.25);
+  background: #dc2626;
   color: #fff;
 }
 
-.lation-add-med-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px dashed var(--lation-border-accent);
-  border-radius: var(--lation-radius-md);
-  color: var(--lation-emerald);
-  font-size: 0.78rem;
-  font-weight: 600;
+.rx-add-item-btn {
+  align-self: flex-start;
+  background: #f1f5f9;
+  border: 1px dashed #94a3b8;
+  color: #1e3a8a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 6px 12px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: all 0.15s ease;
 }
 
-.lation-add-med-btn:hover {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: var(--lation-emerald);
+.rx-add-item-btn:hover {
+  background: #e2e8f0;
+  border-color: #1e3a8a;
 }
 
-/* Signature & Seal Area */
-.lation-signature-box {
-  background: rgba(11, 15, 25, 0.5);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-  padding: 10px 14px;
-  position: relative;
+.rx-notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
 }
 
-.lation-signature-preview {
-  font-family: 'Caveat', cursive;
-  font-size: 1.8rem;
-  color: var(--lation-emerald);
-  line-height: 1.2;
-  min-height: 38px;
+.rx-notes-container label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.04em;
+}
+
+.rx-pen-textarea {
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 23px,
+    #cbd5e1 23px,
+    #cbd5e1 24px
+  );
+  border: none;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 2px 4px;
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 1.25rem;
+  line-height: 24px;
+  color: #1e3a8a;
+  resize: vertical;
+  min-height: 72px;
+  outline: none;
+}
+
+/* Visualização dos Itens na Via do Paciente */
+.rx-view-paper-meds {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rx-view-paper-item {
   display: flex;
   align-items: center;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-  padding-bottom: 4px;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #1e3a8a;
+  border-radius: 4px;
 }
 
-/* Card Footer */
-.lation-rx-footer {
-  padding: 16px 24px;
-  background: var(--lation-panel);
-  border-top: 1px solid var(--lation-border);
+.rx-paper-item-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #0f172a;
+}
+
+.rx-bullet {
+  color: #1e3a8a;
+  font-size: 1rem;
+}
+
+.rx-paper-item-status {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  border-radius: 3px;
+  padding: 2px 6px;
+  letter-spacing: 0.04em;
+}
+
+/* Rodapé do Receituário: Data, Código Térmico, Carimbo e Assinatura */
+.rx-doc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #cbd5e1;
+  padding-top: 12px;
+  margin-top: auto;
+}
+
+.rx-date-stamp-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rx-date-row label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #475569;
+}
+
+.rx-pen-date {
+  font-family: 'Caveat', cursive;
+  font-size: 1.25rem;
+  color: #1e3a8a;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+.rx-barcode-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rx-thermal-barcode {
+  font-family: monospace;
+  letter-spacing: 3px;
+  font-size: 0.95rem;
+  color: #334155;
+  font-weight: 900;
+}
+
+.rx-barcode-wrap span {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+
+/* Carimbo Físico de Borracha Rotacionado com Tinta Azul */
+.rx-stamp-signature-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 250px;
+}
+
+.rx-rubber-stamp {
+  position: absolute;
+  top: -28px;
+  right: 15px;
+  transform: rotate(-4deg);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.92;
+}
+
+.rx-rubber-stamp.verified {
+  transform: rotate(3deg);
+}
+
+.stamp-border {
+  border: 2.5px solid #1e3a8a;
+  border-radius: 4px;
+  padding: 4px 10px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 0 4px rgba(30, 58, 138, 0.2);
+}
+
+.stamp-hospital {
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  letter-spacing: 0.06em;
+}
+
+.stamp-doctor {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin: 1px 0;
+  letter-spacing: 0.03em;
+}
+
+.stamp-specialty {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  letter-spacing: 0.04em;
+}
+
+.stamp-crm {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #b91c1c;
+  margin-top: 1px;
+  letter-spacing: 0.08em;
+}
+
+.rx-handwritten-signature {
+  font-family: 'Caveat', cursive;
+  font-size: 2.2rem;
+  color: #1e3a8a;
+  line-height: 1;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.rx-signature-edit-input {
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #94a3b8;
+  font-size: 0.75rem;
+  color: #475569;
+  outline: none;
+  padding: 2px 4px;
+  margin-top: 4px;
+}
+
+.rx-signature-underline {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #64748b;
+  border-top: 1px solid #0f172a;
+  width: 100%;
+  text-align: center;
+  padding-top: 4px;
+  margin-top: 4px;
+  letter-spacing: 0.03em;
+}
+
+/* Botões da Prancheta */
+.clipboard-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
+  margin-top: 14px;
 }
 
-.lation-btn {
+.clipboard-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
-  border-radius: var(--lation-radius-md);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   border: 1px solid transparent;
   outline: none;
 }
 
-.lation-btn-ghost {
-  background: transparent;
-  color: var(--lation-text-muted);
-  border-color: var(--lation-border);
+.clipboard-btn.cancel {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
-.lation-btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--lation-text);
-  border-color: var(--lation-border-light);
+.clipboard-btn.cancel:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: #ef4444;
 }
 
-.lation-btn-primary {
-  background: linear-gradient(135deg, var(--lation-emerald) 0%, #0d9488 100%);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: var(--lation-shadow-emerald);
+.clipboard-btn.sign-detach {
+  background: linear-gradient(135deg, #0284c7 0%, #1e3a8a 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
 }
 
-.lation-btn-primary:hover {
-  filter: brightness(1.1);
+.clipboard-btn.sign-detach:hover {
+  background: linear-gradient(135deg, #0369a1 0%, #172554 100%);
   transform: translateY(-1px);
-  box-shadow: 0 10px 28px -6px rgba(16, 185, 129, 0.5);
 }
 
-/* =========================================================================
-   READ-ONLY PRESCRIPTION VIEWER (FOR PATIENT & PHARMACY VERIFICATION)
-   ========================================================================= */
-
-.lation-view-card {
-  position: relative;
-  background: var(--lation-bg);
-  border: 1px solid var(--lation-border-accent);
-  box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.9), 0 0 45px -10px rgba(16, 185, 129, 0.2);
+.clipboard-btn.close-view {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
 }
 
-.lation-watermark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-25deg);
-  font-size: 4.5rem;
-  font-weight: 900;
-  color: rgba(16, 185, 129, 0.035);
-  pointer-events: none;
-  white-space: nowrap;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+.clipboard-btn.close-view:hover {
+  background: #065f46;
 }
 
-.lation-view-badge-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.lation-view-meta {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  background: rgba(11, 15, 25, 0.6);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-  padding: 12px 16px;
-}
-
-.lation-meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.lation-meta-label {
-  font-size: 0.68rem;
-  color: var(--lation-text-dim);
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.lation-meta-val {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--lation-text);
-}
-
-.lation-view-meds {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.lation-view-med-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: var(--lation-panel-card);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-}
-
-.lation-view-med-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.lation-view-med-pill {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--lation-radius-pill);
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--lation-emerald);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.lation-view-med-info h4 {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--lation-text);
-}
-
-.lation-view-med-info p {
-  margin: 2px 0 0 0;
-  font-size: 0.75rem;
-  color: var(--lation-text-muted);
-}
-
-.lation-view-refills {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: var(--lation-radius-pill);
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--lation-cyan);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-}
-
-.lation-view-notes {
-  background: rgba(11, 15, 25, 0.5);
-  border: 1px solid var(--lation-border);
-  border-radius: var(--lation-radius-md);
-  padding: 12px 16px;
-}
-
-.lation-view-notes h5 {
-  margin: 0 0 6px 0;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--lation-text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.lation-view-notes p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--lation-text-muted);
-  line-height: 1.45;
-}
-
-.lation-security-seal {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 10px;
-  border-top: 1px dashed var(--lation-border);
-}
-
-.lation-barcode {
-  letter-spacing: 4px;
-  font-family: monospace;
-  font-size: 0.9rem;
-  color: var(--lation-text-dim);
-  opacity: 0.7;
-}
-
-.lation-doctor-sign {
-  text-align: right;
-}
-
-.lation-doctor-sign span {
-  display: block;
-  font-size: 0.7rem;
-  color: var(--lation-text-dim);
-  text-transform: uppercase;
-}
-
-.lation-doctor-sign h3 {
-  margin: 0;
-  font-family: 'Caveat', cursive;
-  font-size: 1.6rem;
-  color: var(--lation-emerald);
-}
 
 /* =========================================================================
    LATION UI - PLUTO MEDICAL MINIGAMES INTEGRATION STYLES
@@ -1533,5 +1737,171 @@
 
 .swipe-status.error {
   color: var(--lation-rose);
+}
+
+/* =========================================================================
+   PHYSICAL REHABILITATION PILL HUD (CRUTCH & WHEELCHAIR)
+   ========================================================================= */
+
+.timer-root {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 99999;
+  pointer-events: none;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.timer-right { right: 24px; }
+.timer-left  { left: 24px; }
+
+.timer-pill {
+  display: flex;
+  align-items: center;
+  padding: 8px 18px 8px 50px;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.90), rgba(11, 15, 25, 0.94));
+  border: 1px solid var(--lation-border-light);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08),
+              0 0 15px rgba(16, 185, 129, 0.15);
+  min-width: 210px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  animation: timer-pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.timer-pill::before {
+  content: '';
+  position: absolute;
+  left: 46px;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+@keyframes timer-pop {
+  from { opacity: 0; transform: translate(30px, 0) scale(0.9); }
+  to   { opacity: 1; transform: translate(0, 0) scale(1); }
+}
+
+.timer-pill > i {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--lation-emerald);
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.timer-ring {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.timer-ring circle {
+  fill: none;
+  stroke-width: 2.2;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.timer-ring-track {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.timer-ring-fill {
+  stroke: var(--lation-emerald);
+  stroke-linecap: round;
+  stroke-dasharray: 97.39;
+  stroke-dashoffset: 97.39;
+  transition: stroke-dashoffset 0.5s linear;
+  filter: drop-shadow(0 0 6px var(--lation-emerald-glow));
+}
+
+.timer-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  padding-left: 6px;
+}
+
+.timer-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--lation-text-dim);
+}
+
+.timer-value {
+  font-size: 19px;
+  font-weight: 800;
+  font-family: 'Inter', monospace;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Urgent state (< 30s) */
+.timer-pill.urgent {
+  border-color: rgba(244, 63, 94, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(244, 63, 94, 0.35);
+}
+
+.timer-pill.urgent > i,
+.timer-pill.urgent .timer-value {
+  color: var(--lation-rose);
+}
+
+.timer-pill.urgent .timer-ring-fill {
+  stroke: var(--lation-rose);
+  filter: drop-shadow(0 0 8px rgba(244, 63, 94, 0.8));
+}
+
+/* Paused state (standing out of wheelchair) */
+.timer-pill.paused {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.35);
+}
+
+.timer-pill.paused > i,
+.timer-pill.paused .timer-value {
+  color: var(--lation-amber);
+}
+
+.timer-pill.paused .timer-ring-fill {
+  stroke: var(--lation-amber);
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8));
+  animation: paused-glow 2s ease-in-out infinite;
+}
+
+.timer-pill.paused .timer-label::after {
+  content: ' • PAUSADO';
+  color: var(--lation-amber);
+  font-weight: 800;
+  margin-left: 4px;
+}
+
+@keyframes paused-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 

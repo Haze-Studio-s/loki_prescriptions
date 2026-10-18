@@ -817,25 +817,48 @@ Config.Bleeding = {
 ---@field prop table {model: string [crutch prop model], coords: vec3 [coords of prop], rot: vec3 [rotation of prop]}
 Config.Crutch = {
     enabled = true,
-    allowedJobs = {['ambulance'] = 0},
-    disabledControls = {22, 21, 24, 25},
+    allowedJobs = {['ambulance'] = 0, ['doctor'] = 0},
+    disabledControls = {21, 22, 24, 25, 37, 140, 141, 142}, -- sprint, jump, attack, aim, weapon wheel, light/heavy/alt melee
+    animSet = 'move_lester_CaneUp',
     prop = {
-        model = 'prop_mads_crutch01', -- Author of Prop [https://mads.tebex.io/]
-        coords = vec3(1.18, -0.36, -0.20), -- coords of prop
-        rot = vec3(-20.0, -87.0, -20.0), -- rotation of prop
+        model = 'prop_mads_crutch01',
+        bone = 70,
+        coords = vec3(1.18, -0.36, -0.20),
+        rot = vec3(-20.0, -87.0, -20.0),
     }
 }
 
----@class Config.Wheelchair
----@field enabled boolean [enable wheelchair feature?]
----@field allowedJobs table<string, number> [which jobs are allowed to force wheelchair on some player]
----@field model string [wheelchair model as vehicle]
----@field disableExitWhenForced boolean [disable exit when forced into wheelchair]
 Config.Wheelchair = {
     enabled = true,
-    allowedJobs = {['ambulance'] = 0},
+    allowedJobs = {['ambulance'] = 0, ['doctor'] = 0},
     model = 'iak_wheelchair',
-    disableExitWhenForced = true
+    fallbackProp = 'prop_wheelchair_01',
+    disableExitWhenForced = false, -- Permite levantar, mas aciona efeitos de náusea e pausa o timer
+    pauseTimerWhenStanding = true,
+    nauseaRampUp = 8,
+    nauseaRampDown = 6,
+    screenEffectMild = 'DrugsMichaelAliensFightIn',
+    screenEffectHeavy = 'DrugsMichaelAliensFight',
+    drunkClipset = 'move_m@drunk@verydrunk',
+    showReturnWarning = true,
+}
+
+Config.Rehab = {
+    enabled = true,
+    maxDistance = 6.0,
+    defaultDurations = { 300, 600, 900, 1800 }, -- 5m, 10m, 15m, 30m em segundos
+    progressiveStages = {
+        enabled = true,
+        wheelchairRatio = 0.6, -- 60% Cadeira de Rodas, 40% Muletas
+        minStageDuration = 15,
+    },
+    bandage = {
+        enabled = true,
+        secondsRemoved = 60,
+        cooldown = 30,
+        itemName = 'bandage',
+        consume = true,
+    }
 }
 
 ---@class Config.DeathScreen

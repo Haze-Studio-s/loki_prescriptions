@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSMC Clinical EHR - Electronic Health Record</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./tablet.css">
+</head>
+<body>
+  <div class="ehr-app">
+    <!-- Top Clinical System Bar -->
+    <header class="ehr-header">
+      <div class="ehr-brand">
+        <div class="ehr-logo">
+          <i class="fa-solid fa-hospital"></i>
+        </div>
+        <div class="ehr-title-group">
+          <div class="ehr-title">LOS SANTOS MEDICAL CENTER</div>
+          <div class="ehr-subtitle">CLINICAL EHR SUITE • v4.2 ENTERPRISE</div>
+        </div>
+      </div>
+
+      <div class="ehr-system-status">
+        <div class="status-pill status-online">
+          <span class="status-dot"></span>
+          <span>SISTEMA CENTRAL ONLINE</span>
+        </div>
+        <div class="status-pill status-station">
+          <i class="fa-solid fa-laptop-medical"></i>
+          <span id="ehr-station-label">ESTAÇÃO: TRAUMA / CTI #03</span>
+        </div>
+        <div class="status-pill status-shift">
+          <i class="fa-regular fa-clock"></i>
+          <span id="ehr-live-clock">18/10/2026 - 12:45:00</span>
+        </div>
+      </div>
+
+      <div class="ehr-user-profile">
+        <div class="user-avatar">
+          <i class="fa-solid fa-user-doctor"></i>
+        </div>
+        <div class="user-meta">
+          <span class="user-name" id="ehr-doctor-name">Dr. Ricardo Novaes</span>
+          <span class="user-role">Médico Cirurgião / CTI</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="ehr-body">
+      <!-- Clinical Sidebar Navigation -->
+      <nav class="ehr-nav">
+        <button class="nav-tab active" data-tab="chart">
+          <i class="fa-solid fa-notes-medical"></i>
+          <span>Prontuário</span>
+        </button>
+        <button class="nav-tab" data-tab="xray">
+          <i class="fa-solid fa-x-ray"></i>
+          <span>Radiologia (PACS)</span>
+        </button>
+        <button class="nav-tab" data-tab="rx">
+          <i class="fa-solid fa-file-prescription"></i>
+          <span>Prescrição Digital</span>
+        </button>
+        <button class="nav-tab" data-tab="pharmacy">
+          <i class="fa-solid fa-boxes-packing"></i>
+          <span>Fila da Farmácia</span>
+        </button>
+        <button class="nav-tab" data-tab="rehab">
+          <i class="fa-solid fa-wheelchair"></i>
+          <span>Reabilitação Física</span>
+        </button>
+      </nav>
+
+      <!-- Main Content Area -->
+      <main class="ehr-content">
+        <!-- 1. PRONTUÁRIO & TRIAGEM -->
+        <section id="tab-chart" class="tab-pane active">
+          <!-- Patient Summary Header -->
+          <div class="patient-banner">
+            <div class="patient-main-info">
+              <div class="patient-photo-box">
+                <i class="fa-solid fa-hospital-user"></i>
+              </div>
+              <div class="patient-details">
+                <div class="patient-name-row">
+                  <h2 id="patient-display-name">Vinicius Albuquerque</h2>
+                  <span class="badge-status-triage red" id="patient-triage-badge">EMERGÊNCIA (VERMELHO)</span>
+                </div>
+                <div class="patient-meta-grid">
+                  <div><strong>ID / CID:</strong> <span id="patient-cid">CIT-7532</span></div>
+                  <div><strong>IDADE:</strong> <span>32 anos</span></div>
+                  <div><strong>GÊNERO:</strong> <span>Masculino</span></div>
+                  <div><strong>TIPO SANGUÍNEO:</strong> <span class="blood-type-tag">O NEGATIVO</span></div>
+                  <div><strong>LEITO ATUAL:</strong> <span>CTI Trauma - Box 02</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="patient-actions">
+              <button class="btn btn-outline" id="btn-detect-nearby">
+                <i class="fa-solid fa-street-view"></i> Escanear Próximo
+              </button>
+              <button class="btn btn-primary" onclick="switchTab('rx')">
+                <i class="fa-solid fa-plus"></i> Nova Prescrição
+              </button>
+            </div>
+          </div>
+
+          <!-- Critical Allergies & Warnings Banner -->
+          <div class="allergy-alert-bar">
+            <div class="alert-icon">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="alert-content">
+              <strong>ALERGIAS E CONTRAINDICAÇÕES CRÍTICAS REGISTRADAS:</strong>
+              <div class="allergy-tags">
+                <span class="allergy-tag severe"><i class="fa-solid fa-ban"></i> PENICILINA & DERIVADOS (CHOQUE ANAFILÁTICO)</span>
+                <span class="allergy-tag warning"><i class="fa-solid fa-circle-exclamation"></i> MORFINA (HIPOTENSÃO SEVERA)</span>
+                <span class="allergy-tag info"><i class="fa-solid fa-info-circle"></i> HISTÓRICO DE ASMA BRÔNQUICA</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dual Column: Telemetry & Notes -->
+          <div class="clinical-grid">
+            <!-- Left: Real-time Telemetry & Vitals -->
+            <div class="clinical-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-heart-pulse"></i> SINAIS VITAIS EM TEMPO REAL
+                </div>
+                <span class="badge-pulse live">TELEMETRIA ATIVA</span>
+              </div>
+              <div class="card-body">
+                <div class="vitals-stats-grid">
+                  <div class="vital-metric">
+                    <span class="metric-label">FREQ. CARDÍACA</span>
+                    <div class="metric-value green"><span id="live-hr">78</span> <small>BPM</small></div>
+                    <span class="metric-status">Ritmo Sinusal Regular</span>
+                  </div>
+                  <div class="vital-metric">
+                    <span class="metric-label">PRESSÃO ARTERIAL</span>
+                    <div class="metric-value blue"><span id="live-bp">120/80</span> <small>mmHg</small></div>
+                    <span class="metric-status">Normotensão</span>
+                  </div>
+                  <div class="vital-metric">
+                    <span class="metric-label">SATURAÇÃO (SpO2)</span>
+                    <div class="metric-value teal"><span id="live-spo2">98</span> <small>%</small></div>
+                    <span class="metric-status">Adequada em Ar Ambiente</span>
+                  </div>
+                  <div class="vital-metric">
+                    <span class="metric-label">TEMPERATURA</span>
+                    <div class="metric-value amber"><span id="live-temp">36.6</span> <small>°C</small></div>
+                    <span class="metric-status">Afebril</span>
+                  </div>
+                </div>
+
+                <!-- Live ECG Canvas Wave -->
+                <div class="ecg-monitor-stream">
+                  <div class="ecg-stream-header">
+                    <span>DERIVAÇÃO DII • 25mm/s • 10mm/mV</span>
+                    <span class="lead-indicator">LEAD II OK</span>
+                  </div>
+                  <canvas id="ehr-ecg-canvas" width="600" height="90"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Clinical Diagnostic History & Observations -->
+            <div class="clinical-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-clipboard-list"></i> HISTÓRICO CLÍNICO & LAUDOS
+                </div>
+                <button class="btn btn-xs btn-outline" id="btn-add-note">
+                  <i class="fa-solid fa-pen-to-square"></i> Adicionar Evolução
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="timeline-records">
+                  <div class="timeline-entry">
+                    <div class="timeline-dot red"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-header">
+                        <strong>ADMISSÃO DE EMERGÊNCIA - TRAUMA</strong>
+                        <span>Hoje, 12:15</span>
+                      </div>
+                      <p>Paciente admitido com ferimento penetrante por arma de fogo em hemitórax direito. Hemodinamicamente estável após hemostasia e drenagem.</p>
+                      <div class="timeline-meta">Dr. Ricardo Novaes • Cirurgia Geral</div>
+                    </div>
+                  </div>
+                  <div class="timeline-entry">
+                    <div class="timeline-dot blue"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-header">
+                        <strong>LAUDO RADIOLÓGICO - RAIO-X</strong>
+                        <span>Hoje, 12:28</span>
+                      </div>
+                      <p>Identificado corpo estranho metálico (projétil) alojado em tecido subcutâneo intercostal. Ausência de pneumotórax hipertensivo imediato.</p>
+                      <div class="timeline-meta">Dra. Helena Vasquez • Radiologia</div>
+                    </div>
+                  </div>
+                  <div class="timeline-entry">
+                    <div class="timeline-dot green"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-header">
+                        <strong>CONDUTA TERAPÊUTICA & CURATIVO</strong>
+                        <span>Hoje, 12:40</span>
+                      </div>
+                      <p>Realizada assepsia cirúrgica e curativo compressivo com sulfadiazina e gaze estéril. Prescrito antibioticoterapia profilática.</p>
+                      <div class="timeline-meta">Enf. Chefe Marcos Toledo</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. RADIOLOGIA & PACS -->
+        <section id="tab-xray" class="tab-pane">
+          <div class="pacs-container">
+            <!-- PACS Controls Toolbar -->
+            <div class="pacs-toolbar">
+              <div class="pacs-selector-group">
+                <label><i class="fa-solid fa-layer-group"></i> EXAME ATIVO:</label>
+                <select id="pacs-study-select">
+                  <option value="chest">TORAX AP - SUSPEITA DE BALÍSTICA (EMERGÊNCIA)</option>
+                  <option value="arm">MEMBRO SUPERIOR ESQUERDO - FRATURA DE RÁDIO/ULNA</option>
+                  <option value="skull">CRÂNIO AP/PERFIL - TRAUMA CRANIOENCEFÁLICO</option>
+                </select>
+              </div>
+
+              <div class="pacs-tools">
+                <button class="btn btn-tool active" id="pacs-btn-normal"><i class="fa-solid fa-eye"></i> Padrão</button>
+                <button class="btn btn-tool" id="pacs-btn-invert"><i class="fa-solid fa-circle-half-stroke"></i> Inverter Negativo</button>
+                <button class="btn btn-tool" id="pacs-btn-contrast"><i class="fa-solid fa-sliders"></i> Alto Contraste</button>
+                <button class="btn btn-tool" id="pacs-btn-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom</button>
+              </div>
+
+              <div class="pacs-meta-badge">
+                <i class="fa-solid fa-shield-halved"></i> DICOM 3.0 VERIFICADO
+              </div>
+            </div>
+
+            <!-- PACS Radiology Viewer Area -->
+            <div class="pacs-viewport">
+              <div class="pacs-canvas-wrapper" id="pacs-wrapper">
+                <img id="pacs-image" src="../build/img/arm.png" alt="Exame Radiológico">
+                <div class="pacs-hud-top-left">
+                  <div>HOSPITAL: LSMC CENTRAL RADIOLOGY</div>
+                  <div>PACIENTE: CIT-7532 - V. ALBUQUERQUE</div>
+                  <div>DATA: 18/10/2026 12:28:14</div>
+                </div>
+                <div class="pacs-hud-top-right">
+                  <div>MODALIDADE: DIGITAL X-RAY (DR)</div>
+                  <div>KVp: 120 | mAs: 4.5</div>
+                  <div>PROJEÇÃO: AP / DECÚBITO</div>
+                </div>
+                <div class="pacs-hud-bottom-left">
+                  <div>ZOOM: <span id="pacs-zoom-val">100%</span></div>
+                  <div>FILTRO: <span id="pacs-filter-val">STANDARD</span></div>
+                </div>
+                <div class="pacs-hud-bottom-right">
+                  <div>ARQUIVO PACS: #RAD-88429-LS</div>
+                  <div>STATUS: LAUDADO / ANEXADO AO PRONTUÁRIO</div>
+                </div>
+              </div>
+
+              <!-- Radiology Report Side Panel -->
+              <div class="pacs-report-card">
+                <h3><i class="fa-solid fa-microscope"></i> LAUDO TÉCNICO RADIOLÓGICO</h3>
+                <div class="report-field">
+                  <label>INDICAÇÃO CLÍNICA:</label>
+                  <p>Trauma perfurocontundente por arma de fogo em hemitórax direito com dor pleurítica aguda.</p>
+                </div>
+                <div class="report-field">
+                  <label>ACHADOS RADIOLÓGICOS:</label>
+                  <p>Observa-se fragmento metálico com densidade radiopaca correspondente a projétil de arma de fogo situado entre o 5º e o 6º arco costal direito. Trama vascular pulmonar preservada bilateralmente.</p>
+                </div>
+                <div class="report-field">
+                  <label>CONCLUSÃO MÉDICA:</label>
+                  <p class="conclusion-highlight">Corpo estranho radiopaco em parede torácica. Indicação de exploração cirúrgica ou conduta conservadora sob observação clínica rigorosa.</p>
+                </div>
+                <div class="report-signature">
+                  <span>Dra. Helena Vasquez • CRM-LS 8841</span>
+                  <small>Especialista em Radiologia e Diagnóstico por Imagem</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. PRESCRIÇÃO DIGITAL & FARMACOLOGIA -->
+        <section id="tab-rx" class="tab-pane">
+          <div class="rx-creation-layout">
+            <!-- Formulary & Drug Selector -->
+            <div class="rx-form-card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-prescription"></i> EMISSÃO DE RECEITUÁRIO DIGITAL HOSPITALAR
+                </div>
+                <span class="badge-secure"><i class="fa-solid fa-lock"></i> CHAVE CRIPTOGRÁFICA PKI-LSMC</span>
+              </div>
+
+              <div class="card-body">
+                <div class="rx-patient-info-row">
+                  <div class="form-group">
+                    <label>PACIENTE BENEFICIÁRIO:</label>
+                    <input type="text" id="rx-input-patient" class="form-control" value="Vinicius Albuquerque" placeholder="Nome do paciente...">
+                  </div>
+                  <div class="form-group">
+                    <label>CITIZEN ID / PASSAPORTE:</label>
+                    <input type="text" id="rx-input-cid" class="form-control" value="CIT-7532" placeholder="ID...">
+                  </div>
+                  <div class="form-group">
+                    <label>DIAGNÓSTICO (CID-10):</label>
+                    <select id="rx-input-cid10" class="form-control">
+                      <option value="T14.1 - FERIMENTO TRAUMÁTICO">T14.1 - Ferimento Traumático Não Especificado</option>
+                      <option value="S52.5 - FRATURA DA ULNA/RÁDIO">S52.5 - Fratura da Extremidade Distal do Rádio</option>
+                      <option value="W34 - FERIMENTO POR ARMA DE FOGO">W34 - Ferimento por PAF / Projétil Balístico</option>
+                      <option value="J06.9 - INFECÇÃO RESPIRATÓRIA">J06.9 - Infecção Aguda das Vias Aéreas</option>
+                      <option value="R51 - CEFALEIA / ENXAQUECA">R51 - Cefaleia Intensa e Enxaqueca Refratária</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Add Medication Section -->
+                <div class="rx-med-adder-bar">
+                  <div class="form-group flex-2">
+                    <label>MEDICAMENTO HOSPITALAR:</label>
+                    <select id="rx-med-select" class="form-control">
+                      <option value="paracetamol" data-cost="15">Paracetamol 750mg ($15)</option>
+                      <option value="ibuprofen" data-cost="25">Ibuprofeno 600mg ($25)</option>
+                      <option value="amoxicillin" data-cost="45">Amoxicilina + Clavulanato 875mg ($45)</option>
+                      <option value="morphine" data-cost="120">Sulfato de Morfina 10mg/mL ($120)</option>
+                      <option value="codeine" data-cost="60">Fosfato de Codeína 30mg ($60)</option>
+                      <option value="bandage" data-cost="10">Atadura Elástica Estéril ($10)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>QUANTIDADE:</label>
+                    <input type="number" id="rx-med-amount" class="form-control" value="1" min="1" max="5">
+                  </div>
+                  <div class="form-group">
+                    <label>DOSAGEM / INTERVALO:</label>
+                    <input type="text" id="rx-med-dosage" class="form-control" value="1 comp de 8 em 8h por 5 dias" placeholder="Posologia...">
+                  </div>
+                  <div class="form-group flex-btn">
+                    <button class="btn btn-outline" id="btn-add-rx-item">
+                      <i class="fa-solid fa-cart-plus"></i> Inserir
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Selected Medications Table -->
+                <div class="rx-items-table-wrapper">
+                  <table class="ehr-table">
+                    <thead>
+                      <tr>
+                        <th>Medicamento</th>
+                        <th>Posologia / Instrução</th>
+                        <th>Qtd</th>
+                        <th>Custo</th>
+                        <th>Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="rx-items-body">
+                      <tr>
+                        <td><strong>Paracetamol 750mg</strong></td>
+                        <td>1 comp de 8 em 8h após refeição</td>
+                        <td>2 un</td>
+                        <td>$30</td>
+                        <td><button class="btn-icon red" onclick="removeRxRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Medical Leave & Clinical Notes -->
+                <div class="rx-leave-notes-row">
+                  <div class="form-group flex-1">
+                    <label>ATESTADO MÉDICO / DIAS DE REPOUSO:</label>
+                    <select id="rx-leave-days" class="form-control">
+                      <option value="0">Sem Atestado de Afastamento</option>
+                      <option value="1">1 Dia de Repouso Domiciliar</option>
+                      <option value="3" selected>3 Dias de Repouso Domiciliar</option>
+                      <option value="5">5 Dias de Repouso Domiciliar</option>
+                      <option value="7">7 Dias de Afastamento das Atividades</option>
+                    </select>
+                  </div>
+                  <div class="form-group flex-3">
+                    <label>ORIENTAÇÕES CLÍNICAS GERAIS:</label>
+                    <input type="text" id="rx-clinical-notes" class="form-control" value="Manter curativo limpo e seco. Em caso de febre ou dor intensa retornar ao CTI." placeholder="Recomendações ao paciente...">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer with Submit & Queue Dispatch Button -->
+              <div class="card-footer">
+                <div class="rx-summary-text">
+                  <span>Autoridade Prescritora: <strong>Dr. Ricardo Novaes (CRM-LS 9257)</strong></span>
+                  <small>Esta prescrição será criptografada e enviada para a Fila Central de Dispensação.</small>
+                </div>
+                <div class="rx-action-buttons">
+                  <button class="btn btn-secondary" onclick="resetRxForm()">
+                    <i class="fa-solid fa-rotate-left"></i> Limpar
+                  </button>
+                  <button class="btn btn-success" id="btn-submit-digital-rx">
+                    <i class="fa-solid fa-paper-plane"></i> Transmitir Prescrição à Farmácia
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. FILA DE DISPENSAÇÃO DA FARMÁCIA -->
+        <section id="tab-pharmacy" class="tab-pane">
+          <div class="pharmacy-layout">
+            <div class="pharmacy-header-bar">
+              <div class="pharmacy-title">
+                <h2><i class="fa-solid fa-boxes-stacked"></i> DISPENSAÇÃO DE MEDICAMENTOS HOSPITALARES</h2>
+                <p>Fila de receitas digitais aguardando separação e retirada na farmácia central.</p>
+              </div>
+              <div class="pharmacy-search-box">
+                <input type="text" id="pharmacy-search" class="form-control" placeholder="Buscar por Token (ex: RX-8842) ou Paciente...">
+                <button class="btn btn-outline" id="btn-refresh-queue"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+              </div>
+            </div>
+
+            <div class="pharmacy-queue-grid" id="pharmacy-queue-cards">
+              <!-- Pharmacy Item 1 -->
+              <div class="pharmacy-card">
+                <div class="pharm-card-header">
+                  <span class="token-badge">TOKEN #RX-8492</span>
+                  <span class="status-pill status-ready">PRONTO PARA RETIRADA</span>
+                </div>
+                <div class="pharm-card-body">
+                  <h4>Vinicius Albuquerque</h4>
+                  <div class="pharm-meta"><strong>Prescrito por:</strong> Dr. Ricardo Novaes</div>
+                  <div class="pharm-meta"><strong>Horário:</strong> 12:42 (há 5 min)</div>
+                  <div class="pharm-meds-list">
+                    <div class="pharm-med-item"><i class="fa-solid fa-pills"></i> Paracetamol 750mg (x2)</div>
+                    <div class="pharm-med-item"><i class="fa-solid fa-capsules"></i> Amoxicilina 875mg (x1)</div>
+                  </div>
+                </div>
+                <div class="pharm-card-footer">
+                  <span class="pharm-cost">Total: $75</span>
+                  <button class="btn btn-sm btn-primary" onclick="dispenseMedication('RX-8492')">
+                    <i class="fa-solid fa-hand-holding-medical"></i> Dispensar Medicamentos
+                  </button>
+                </div>
+              </div>
+
+              <!-- Pharmacy Item 2 -->
+              <div class="pharmacy-card">
+                <div class="pharm-card-header">
+                  <span class="token-badge">TOKEN #RX-8491</span>
+                  <span class="status-pill status-prep">EM SEPARAÇÃO</span>
+                </div>
+                <div class="pharm-card-body">
+                  <h4>Matheus Silva</h4>
+                  <div class="pharm-meta"><strong>Prescrito por:</strong> Dra. Helena Vasquez</div>
+                  <div class="pharm-meta"><strong>Horário:</strong> 12:30 (há 17 min)</div>
+                  <div class="pharm-meds-list">
+                    <div class="pharm-med-item"><i class="fa-solid fa-syringe"></i> Sulfato de Morfina 10mg/mL (x1)</div>
+                    <div class="pharm-med-item"><i class="fa-solid fa-bandage"></i> Atadura Elástica Estéril (x2)</div>
+                  </div>
+                </div>
+                <div class="pharm-card-footer">
+                  <span class="pharm-cost">Total: $140</span>
+                  <button class="btn btn-sm btn-primary" onclick="dispenseMedication('RX-8491')">
+                    <i class="fa-solid fa-hand-holding-medical"></i> Dispensar Medicamentos
+                  </button>
+                </div>
+              </div>
+
+              <!-- Pharmacy Item 3 -->
+              <div class="pharmacy-card dispensed">
+                <div class="pharm-card-header">
+                  <span class="token-badge">TOKEN #RX-8488</span>
+                  <span class="status-pill status-done">DISPENSADO</span>
+                </div>
+                <div class="pharm-card-body">
+                  <h4>Carlos Mendonça</h4>
+                  <div class="pharm-meta"><strong>Prescrito por:</strong> Dr. Ricardo Novaes</div>
+                  <div class="pharm-meta"><strong>Horário:</strong> 11:50 (há 57 min)</div>
+                  <div class="pharm-meds-list">
+                    <div class="pharm-med-item"><i class="fa-solid fa-pills"></i> Ibuprofeno 600mg (x1)</div>
+                  </div>
+                </div>
+                <div class="pharm-card-footer">
+                  <span class="pharm-cost">Total: $25</span>
+                  <span class="text-muted"><i class="fa-solid fa-check"></i> Entregue ao Paciente</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================= -->
+        <!-- 5th OFFICIAL MODULE: PHYSICAL REHABILITATION (LSMC)           -->
+        <!-- ============================================================= -->
+        <section id="tab-rehab" class="tab-pane">
+          <div class="rehab-layout">
+            <div class="rehab-header-bar">
+              <div>
+                <h2><i class="fa-solid fa-wheelchair"></i> Reabilitação Física & Fisioterapia Motora</h2>
+                <p>Prescrição clínica de locomoção assistida, cadeira de rodas e muletas com telemetria em tempo real.</p>
+              </div>
+              <div class="rehab-header-actions">
+                <button class="btn btn-secondary" onclick="window.refreshRehabPatients()">
+                  <i class="fa-solid fa-rotate"></i> Atualizar Pacientes
+                </button>
+              </div>
+            </div>
+
+            <div class="rehab-grid">
+              <!-- Left Column: Prescription Form -->
+              <div class="rehab-col-form">
+                <div class="ehr-card">
+                  <div class="ehr-card-header">
+                    <h3><i class="fa-solid fa-user-injured"></i> 1. Selecionar Paciente Próximo</h3>
+                    <span class="badge" id="rehab-nearby-count">0 encontrados</span>
+                  </div>
+                  <div class="rehab-patient-picker" id="rehab-patient-list">
+                    <div class="rehab-empty-state">
+                      <i class="fa-solid fa-radar fa-spin"></i>
+                      <span>Buscando pacientes no raio de 6 metros...</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ehr-card">
+                  <div class="ehr-card-header">
+                    <h3><i class="fa-solid fa-crutch"></i> 2. Equipamento Clínico & Regime</h3>
+                  </div>
+
+                  <!-- Equipment Option Cards -->
+                  <div class="rehab-equip-cards">
+                    <div class="equip-card active" data-equip="wheelchair" onclick="window.selectRehabEquip('wheelchair')">
+                      <div class="equip-icon"><i class="fa-solid fa-wheelchair"></i></div>
+                      <div class="equip-info">
+                        <h4>Cadeira de Rodas</h4>
+                        <p>Locomoção motorizada para lesões graves nos membros inferiores. Aplica náusea e pausa ao levantar.</p>
+                      </div>
+                    </div>
+
+                    <div class="equip-card" data-equip="crutch" onclick="window.selectRehabEquip('crutch')">
+                      <div class="equip-icon"><i class="fa-solid fa-crutch"></i></div>
+                      <div class="equip-info">
+                        <h4>Muletas Ortopédicas</h4>
+                        <p>Auxílio para marcha assistida com passo claudicante (limp walk). Bloqueia sprint, pulos e combate.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Duration Selector -->
+                  <div class="rehab-field-group">
+                    <label class="ehr-label"><i class="fa-solid fa-clock"></i> Tempo de Tratamento / Repouso</label>
+                    <div class="duration-pills">
+                      <button class="duration-pill" data-seconds="300" onclick="window.selectRehabDuration(300)">5 min</button>
+                      <button class="duration-pill active" data-seconds="600" onclick="window.selectRehabDuration(600)">10 min</button>
+                      <button class="duration-pill" data-seconds="900" onclick="window.selectRehabDuration(900)">15 min</button>
+                      <button class="duration-pill" data-seconds="1800" onclick="window.selectRehabDuration(1800)">30 min</button>
+                    </div>
+                  </div>
+
+                  <!-- Progressive Switch -->
+                  <div class="rehab-progressive-box">
+                    <div class="progressive-info">
+                      <div class="progressive-title">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Recuperação Progressiva em 2 Fases</span>
+                      </div>
+                      <p>60% do tempo em Cadeira de Rodas &rarr; transição automática para 40% em Muletas &rarr; Alta Definitiva.</p>
+                    </div>
+                    <label class="switch-toggle">
+                      <input type="checkbox" id="rehab-progressive-toggle" checked>
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+
+                  <!-- Form Action Buttons -->
+                  <div class="rehab-form-actions">
+                    <button class="btn btn-primary" id="rehab-apply-btn" onclick="window.submitRehabPrescription()">
+                      <i class="fa-solid fa-check"></i> Prescrever & Ativar Equipamento
+                    </button>
+                    <button class="btn btn-danger-outline" id="rehab-remove-btn" onclick="window.submitRehabDischarge()">
+                      <i class="fa-solid fa-person-walking"></i> Alta / Remover
+                    </button>
+                    <button class="btn btn-secondary" id="rehab-bandage-btn" onclick="window.submitRehabBandage()">
+                      <i class="fa-solid fa-bandage"></i> Bandagem (-60s)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Active Rehabilitation Patients & Clinical Notes -->
+              <div class="rehab-col-active">
+                <div class="ehr-card">
+                  <div class="ehr-card-header">
+                    <h3><i class="fa-solid fa-hospital-user"></i> Pacientes em Tratamento Ativo</h3>
+                    <span class="badge" id="rehab-active-count">0 ativos</span>
+                  </div>
+                  <div class="rehab-active-list" id="rehab-active-list">
+                    <div class="rehab-empty-state">
+                      <i class="fa-solid fa-heart-pulse"></i>
+                      <span>Nenhum paciente sob reabilitação física no momento.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ehr-card protocol-card">
+                  <div class="ehr-card-header">
+                    <h3><i class="fa-solid fa-book-medical"></i> Protocolo Clínico & Diretrizes de Reabilitação</h3>
+                  </div>
+                  <div class="protocol-body">
+                    <div class="protocol-item">
+                      <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                      <div>
+                        <strong>Penalidade por Abandono da Cadeira:</strong>
+                        <p>O paciente que se levantar da cadeira de rodas sofrerá náusea progressiva, tontura severa (Drunk Camera Shake) e perda gradual de estabilidade motora. O cronômetro de cura congela automaticamente enquanto o paciente estiver em pé.</p>
+                      </div>
+                    </div>
+                    <div class="protocol-item">
+                      <i class="fa-solid fa-bolt text-emerald"></i>
+                      <div>
+                        <strong>Aceleração Terapêutica por Curativo:</strong>
+                        <p>A aplicação de bandagens estéreis reduz o tempo residual de repouso em 60 segundos por aplicação (cooldown clínico de 30 segundos entre curativos).</p>
+                      </div>
+                    </div>
+                    <div class="protocol-item">
+                      <i class="fa-solid fa-shield-halved text-cyan"></i>
+                      <div>
+                        <strong>Persistência Hospitalar:</strong>
+                        <p>O ciclo de recuperação e o estágio fisioterapêutico são registrados permanentemente no banco de dados e restaurados automaticamente mesmo após desconexões.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="./tablet.js"></script>
+</body>
+</html>
