@@ -5,7 +5,7 @@ lua54 'yes'
 
 provide 'qbx_medical'
 
-author 'Loki Scripts & Vinicius'
+author 'Haze Studios'
 description 'Sistema Avançado de Medicina, Emergência, Prescrições e Farmacologia'
 version '2.5.0'
 
