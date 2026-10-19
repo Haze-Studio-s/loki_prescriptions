@@ -6,7 +6,7 @@
 VpNeedsBridge = {}
 
 function VpNeedsBridge.IsActive()
-    return GetResourceState('vp_needs') == 'started'
+    return GetResourceState('haze_needs') == 'started'
 end
 
 --- Aplica efeitos metabólicos e fisiológicos de medicamentos consumidos
@@ -20,10 +20,10 @@ function VpNeedsBridge.ApplyMedicineEffects(src, med)
     -- Alívio de Estresse
     if effects.stress and effects.stress ~= 0 then
         pcall(function()
-            if exports.vp_needs and exports.vp_needs.RelieveStress then
-                exports.vp_needs:RelieveStress(src, math.abs(effects.stress))
-            elseif exports.vp_needs and exports.vp_needs.AdjustNeed then
-                exports.vp_needs:AdjustNeed(src, 'stress', effects.stress)
+            if exports.haze_needs and exports.haze_needs.RelieveStress then
+                exports.haze_needs:RelieveStress(src, math.abs(effects.stress))
+            elseif exports.haze_needs and exports.haze_needs.AdjustNeed then
+                exports.haze_needs:AdjustNeed(src, 'stress', effects.stress)
             end
         end)
     end
@@ -31,8 +31,8 @@ function VpNeedsBridge.ApplyMedicineEffects(src, med)
     -- Tratamento de Doença / Enfermidade
     if effects.cure_sickness then
         pcall(function()
-            if exports.vp_needs and exports.vp_needs.AdjustNeed then
-                exports.vp_needs:AdjustNeed(src, 'sickness', -(effects.cure_sickness or 20))
+            if exports.haze_needs and exports.haze_needs.AdjustNeed then
+                exports.haze_needs:AdjustNeed(src, 'sickness', -(effects.cure_sickness or 20))
             end
         end)
     end
@@ -40,8 +40,8 @@ function VpNeedsBridge.ApplyMedicineEffects(src, med)
     -- Tratamento de Dependência Química (Addiction)
     if effects.treat_addiction and effects.treat_addiction > 0 then
         pcall(function()
-            if exports.vp_needs and exports.vp_needs.TreatAddiction then
-                exports.vp_needs:TreatAddiction(src, effects.treat_addiction)
+            if exports.haze_needs and exports.haze_needs.TreatAddiction then
+                exports.haze_needs:TreatAddiction(src, effects.treat_addiction)
             end
         end)
     end
@@ -66,9 +66,9 @@ end
 function VpNeedsBridge.ApplyBloodTransfusion(target)
     if not VpNeedsBridge.IsActive() then return end
     pcall(function()
-        if exports.vp_needs and exports.vp_needs.AdjustNeed then
+        if exports.haze_needs and exports.haze_needs.AdjustNeed then
             -- Recupera volemia e hidratação crítica
-            exports.vp_needs:AdjustNeed(target, 'thirst', 25)
+            exports.haze_needs:AdjustNeed(target, 'thirst', 25)
         end
     end)
 end
@@ -81,15 +81,15 @@ end
 function VpNeedsBridge.ApplySalineTick(target, thirst, hunger, stress)
     if not VpNeedsBridge.IsActive() then return end
     pcall(function()
-        if exports.vp_needs and exports.vp_needs.AdjustNeed then
+        if exports.haze_needs and exports.haze_needs.AdjustNeed then
             if thirst and thirst > 0 then
-                exports.vp_needs:AdjustNeed(target, 'thirst', thirst)
+                exports.haze_needs:AdjustNeed(target, 'thirst', thirst)
             end
             if hunger and hunger > 0 then
-                exports.vp_needs:AdjustNeed(target, 'hunger', hunger)
+                exports.haze_needs:AdjustNeed(target, 'hunger', hunger)
             end
             if stress and stress > 0 then
-                exports.vp_needs:AdjustNeed(target, 'stress', -stress)
+                exports.haze_needs:AdjustNeed(target, 'stress', -stress)
             end
         end
     end)
@@ -101,10 +101,10 @@ end
 function VpNeedsBridge.ApplySedation(target)
     if not VpNeedsBridge.IsActive() then return end
     pcall(function()
-        if exports.vp_needs and exports.vp_needs.RelieveStress then
-            exports.vp_needs:RelieveStress(target, 70)
-        elseif exports.vp_needs and exports.vp_needs.AdjustNeed then
-            exports.vp_needs:AdjustNeed(target, 'stress', -70)
+        if exports.haze_needs and exports.haze_needs.RelieveStress then
+            exports.haze_needs:RelieveStress(target, 70)
+        elseif exports.haze_needs and exports.haze_needs.AdjustNeed then
+            exports.haze_needs:AdjustNeed(target, 'stress', -70)
         end
     end)
 end
@@ -127,8 +127,8 @@ function VpNeedsBridge.GetToxicology(targetId)
 
     local addictionLvl = 0
     pcall(function()
-        if exports.vp_needs and exports.vp_needs.GetAddiction then
-            local addData = exports.vp_needs:GetAddiction(targetId)
+        if exports.haze_needs and exports.haze_needs.GetAddiction then
+            local addData = exports.haze_needs:GetAddiction(targetId)
             if type(addData) == 'table' then
                 for _, rec in pairs(addData) do
                     if type(rec) == 'table' then
@@ -165,10 +165,10 @@ function VpNeedsBridge.GrantMedicineXP(src, amount, reason)
 
     if VpNeedsBridge.IsActive() then
         pcall(function()
-            if exports.vp_needs and exports.vp_needs.AddSkillXP then
-                exports.vp_needs:AddSkillXP(src, "medicine", amount)
-            elseif exports.vp_needs and exports.vp_needs.AddXP then
-                exports.vp_needs:AddXP(src, "medicine", amount)
+            if exports.haze_needs and exports.haze_needs.AddSkillXP then
+                exports.haze_needs:AddSkillXP(src, "medicine", amount)
+            elseif exports.haze_needs and exports.haze_needs.AddXP then
+                exports.haze_needs:AddXP(src, "medicine", amount)
             end
         end)
     end

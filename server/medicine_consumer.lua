@@ -27,10 +27,10 @@ end
 
 local function handleDstCure(src, med)
     if not med or not med.cure_dst then return end
-    if GetResourceState('aurp_put') ~= 'started' then return end
+    if GetResourceState('haze_put') ~= 'started' then return end
     pcall(function()
-        if exports['aurp_put'] and exports['aurp_put'].CurePlayer then
-            exports['aurp_put']:CurePlayer(src, med.cure_dst)
+        if exports['haze_put'] and exports['haze_put'].CurePlayer then
+            exports['haze_put']:CurePlayer(src, med.cure_dst)
         end
     end)
 end
@@ -57,8 +57,8 @@ CreateThread(function()
                         VpNeedsBridge.ApplyMedicineEffects(src, med)
                     elseif Config.EnableVpNeedsIntegration and med.vp_effects and med.vp_effects.stress and med.vp_effects.stress < 0 then
                         pcall(function()
-                            if exports.vp_needs and exports.vp_needs.RelieveStress then
-                                exports.vp_needs:RelieveStress(src, math.abs(med.vp_effects.stress))
+                            if exports.haze_needs and exports.haze_needs.RelieveStress then
+                                exports.haze_needs:RelieveStress(src, math.abs(med.vp_effects.stress))
                             end
                         end)
                     end
@@ -88,8 +88,8 @@ CreateThread(function()
                         VpNeedsBridge.ApplyMedicineEffects(src, med)
                     elseif Config.EnableVpNeedsIntegration and med.vp_effects and med.vp_effects.stress and med.vp_effects.stress < 0 then
                         pcall(function()
-                            if exports.vp_needs and exports.vp_needs.RelieveStress then
-                                exports.vp_needs:RelieveStress(src, math.abs(med.vp_effects.stress))
+                            if exports.haze_needs and exports.haze_needs.RelieveStress then
+                                exports.haze_needs:RelieveStress(src, math.abs(med.vp_effects.stress))
                             end
                         end)
                     end

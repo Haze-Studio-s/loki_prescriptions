@@ -66,8 +66,8 @@ local function resetHungerAndThirst(player)
     end
 
     TriggerClientEvent('hud:client:UpdateNeeds', targetSrc, 100, 100)
-    if GetResourceState('vp_needs') == 'started' and exports.vp_needs and exports.vp_needs.ResetNeeds then
-        pcall(function() exports.vp_needs:ResetNeeds(targetSrc) end)
+    if GetResourceState('haze_needs') == 'started' and exports.haze_needs and exports.haze_needs.ResetNeeds then
+        pcall(function() exports.haze_needs:ResetNeeds(targetSrc) end)
     end
 end
 

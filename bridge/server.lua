@@ -200,9 +200,9 @@ function Bridge.Society.addMoney(source, societyAccount, amount, reason)
         return PrescriptionsBanking.DepositSociety(societyAccount, cleanAmount, reason)
     end
 
-    if GetResourceState('aust_banking') == 'started' then
+    if GetResourceState('haze_banking') == 'started' then
         local pcallOk, res = pcall(function()
-            return exports['aust_banking']:addAccountMoney(societyAccount, cleanAmount)
+            return exports['haze_banking']:addAccountMoney(societyAccount, cleanAmount)
         end)
         return pcallOk and (res == nil or res == true or (type(res) == 'table' and (res.ok == true or res.success == true)))
     elseif GetResourceState('Renewed-Banking') == 'started' then

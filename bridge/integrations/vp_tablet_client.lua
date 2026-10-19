@@ -5,10 +5,10 @@
 ]]
 
 local function registerTabletApp()
-    if GetResourceState('vp_tablet') ~= 'started' then return end
+    if GetResourceState('haze_tablet') ~= 'started' then return end
 
     pcall(function()
-        exports['vp_tablet']:RegisterApp({
+        exports['haze_tablet']:RegisterApp({
             identifier  = 'loki_medical',
             name        = 'LSMC EHR Clinical',
             description = 'Prontuário eletrônico hospitalar, telemetria CTI, radiologia PACS e prescrição digital.',
@@ -128,8 +128,8 @@ RegisterCommand('lsmc_ehr', function()
         end
     end
 
-    if GetResourceState('vp_tablet') == 'started' then
-        exports['vp_tablet']:OpenApp('loki_medical')
+    if GetResourceState('haze_tablet') == 'started' then
+        exports['haze_tablet']:OpenApp('loki_medical')
     else
         lib.notify({ title = 'LSMC EHR', description = 'Abra o tablet institucional para acessar o portal clínico.', type = 'info' })
     end

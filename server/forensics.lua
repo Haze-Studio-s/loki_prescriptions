@@ -177,8 +177,8 @@ lib.callback.register('loki_prescriptions:server:performAutopsy', function(sourc
 
     -- Integração com vp_needs
     pcall(function()
-        if exports.vp_needs then
-            local playerNeeds = exports.vp_needs:GetPlayerNeeds(target)
+        if exports.haze_needs then
+            local playerNeeds = exports.haze_needs:GetPlayerNeeds(target)
             if playerNeeds and playerNeeds.alcohol and playerNeeds.alcohol > 20 then
                 table.insert(toxicDetails, ('⚠️ Dosagem de Alcoolemia Positiva no Sangue (Nível: %d%%).'):format(math.floor(playerNeeds.alcohol)))
             end
@@ -187,11 +187,11 @@ lib.callback.register('loki_prescriptions:server:performAutopsy', function(sourc
 
     -- Integração com aurp_put (Triagem Sorológica de DSTs)
     pcall(function()
-        if GetResourceState('aurp_put') == 'started' and exports['aurp_put'] and exports['aurp_put'].GetPlayerDisease then
+        if GetResourceState('haze_put') == 'started' and exports['haze_put'] and exports['haze_put'].GetPlayerDisease then
             local identifier = GetPlayerIdentifierByType(target, 'license')
             if identifier then
                 identifier = identifier:gsub('license:', '')
-                local diseaseData = exports['aurp_put']:GetPlayerDisease(identifier)
+                local diseaseData = exports['haze_put']:GetPlayerDisease(identifier)
                 if diseaseData and diseaseData.disease then
                     table.insert(toxicDetails, ('⚠️ Triagem Infecciosa Sorológica: Positivo para Patógeno Sexualmente Transmissível (%s).'):format(diseaseData.disease:upper()))
                 end

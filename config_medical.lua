@@ -498,9 +498,9 @@ Config.Death = {
             enableFadeOut = true, -- enable screen fade out when player is revived?
             onInit = function()
                 -- this will execute when player revives
-                if (GetResourceState('vp_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
+                if (GetResourceState('haze_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
                     if not LocalPlayer.state.isCuffed then
-                        (GetResourceState('vp_phone') == 'started' and exports['vp_phone'] or exports['lb-phone']):ToggleDisabled(false)
+                        (GetResourceState('haze_phone') == 'started' and exports['haze_phone'] or exports['lb-phone']):ToggleDisabled(false)
                     end
                 end
 
@@ -596,8 +596,8 @@ Config.Death = {
             end,
             onInit = function()
                 -- this will execute when player enters death state
-                if (GetResourceState('vp_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
-                    (GetResourceState('vp_phone') == 'started' and exports['vp_phone'] or exports['lb-phone']):ToggleDisabled(true)
+                if (GetResourceState('haze_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
+                    (GetResourceState('haze_phone') == 'started' and exports['haze_phone'] or exports['lb-phone']):ToggleDisabled(true)
                 end
                 if GetResourceState('qs-smartphone-pro') == 'started' then
                     exports['qs-smartphone-pro']:SetCanOpenPhone(false)
@@ -635,8 +635,8 @@ Config.Death = {
             end,
             onInit = function()
                 -- this will execute when player enters bleeding state
-                if (GetResourceState('vp_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
-                    (GetResourceState('vp_phone') == 'started' and exports['vp_phone'] or exports['lb-phone']):ToggleDisabled(true)
+                if (GetResourceState('haze_phone') == 'started' and 'started' or GetResourceState('lb-phone')) == 'started' then
+                    (GetResourceState('haze_phone') == 'started' and exports['haze_phone'] or exports['lb-phone']):ToggleDisabled(true)
                 end
                 if GetResourceState('qs-smartphone-pro') == 'started' then
                     exports['qs-smartphone-pro']:SetCanOpenPhone(false)

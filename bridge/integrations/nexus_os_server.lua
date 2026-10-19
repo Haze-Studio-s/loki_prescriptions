@@ -6,7 +6,7 @@
 NexusBridge = {}
 
 function NexusBridge.IsActive()
-    return GetResourceState('nexus_os') == 'started'
+    return GetResourceState('haze_os') == 'started'
 end
 
 --- Envia notificação push para o smartphone do jogador via NexusOS ou fallback ox_lib
@@ -20,8 +20,8 @@ function NexusBridge.SendNotification(source, title, message, appType, metadata)
 
     if NexusBridge.IsActive() then
         local success = pcall(function()
-            if exports['nexus_os'] and exports['nexus_os'].SendPhoneNotification then
-                exports['nexus_os']:SendPhoneNotification(source, title, message, appType or 'docs', metadata or {})
+            if exports['haze_os'] and exports['haze_os'].SendPhoneNotification then
+                exports['haze_os']:SendPhoneNotification(source, title, message, appType or 'docs', metadata or {})
             else
                 TriggerClientEvent('loki_prescriptions:oxNotify', source, title, message, 'inform')
             end

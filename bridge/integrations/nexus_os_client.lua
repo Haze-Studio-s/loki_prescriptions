@@ -4,10 +4,10 @@
 ]]
 
 local function registerNexusApp()
-    if GetResourceState('nexus_os') ~= 'started' then return end
+    if GetResourceState('haze_os') ~= 'started' then return end
 
     pcall(function()
-        exports['nexus_os']:RegisterApp({
+        exports['haze_os']:RegisterApp({
             id          = 'loki_medical',
             title       = 'LSMC — Portal Clínico',
             icon        = 'fas fa-heartbeat',

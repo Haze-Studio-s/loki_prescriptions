@@ -6,7 +6,7 @@
 VpTabletBridge = {}
 
 function VpTabletBridge.IsActive()
-    return GetResourceState('vp_tablet') == 'started'
+    return GetResourceState('haze_tablet') == 'started'
 end
 
 --- Envia notificação no aplicativo do tablet dos socorristas ou do paciente
@@ -19,8 +19,8 @@ function VpTabletBridge.SendNotification(targetSource, title, message, appName)
     if not VpTabletBridge.IsActive() then return false end
 
     local ok, res = pcall(function()
-        if exports['vp_tablet'] and exports['vp_tablet'].SendNotification then
-            exports['vp_tablet']:SendNotification({
+        if exports['haze_tablet'] and exports['haze_tablet'].SendNotification then
+            exports['haze_tablet']:SendNotification({
                 source = targetSource,
                 app = appName or 'ambulance',
                 title = title or 'LSMC Portal Clínico',
@@ -48,8 +48,8 @@ function VpTabletBridge.CreateDispatch(title, description, coords, code)
     local callDesc = description or 'Cidadão inconsciente com sinais vitais instáveis.'
 
     local ok, res = pcall(function()
-        if exports['vp_tablet'] and exports['vp_tablet'].CreateDispatch then
-            exports['vp_tablet']:CreateDispatch({
+        if exports['haze_tablet'] and exports['haze_tablet'].CreateDispatch then
+            exports['haze_tablet']:CreateDispatch({
                 code = callCode,
                 title = callTitle,
                 description = callDesc,

@@ -9,7 +9,7 @@ VpAiCallsBridge = {
 }
 
 function VpAiCallsBridge.IsActive()
-    return GetResourceState('vp_aicalls') == 'started'
+    return GetResourceState('haze_aicalls') == 'started'
 end
 
 --- Registra o relatório de atendimento de um chamado EMS do vp_aicalls.

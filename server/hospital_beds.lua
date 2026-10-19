@@ -92,9 +92,9 @@ lib.callback.register("loki_prescriptions:server:requestBed", function(source, b
         local charged = false
 
         -- Tenta débito via aust_banking
-        if GetResourceState("aust_banking") == "started" then
+        if GetResourceState('haze_banking') == "started" then
             local ok = pcall(function()
-                exports.aust_banking:removeBankMoney(src, price, "Internação hospitalar")
+                exports.haze_banking:removeBankMoney(src, price, "Internação hospitalar")
                 charged = true
             end)
             if not ok then charged = false end
@@ -167,9 +167,9 @@ AddEventHandler("loki_prescriptions:server:hospitalBedTick", function(bedIndex)
     -- Integração vp_needs: recuperação de estresse e hidratação gradual
     if VpNeedsBridge and VpNeedsBridge.IsActive then
         pcall(function()
-            if VpNeedsBridge.IsActive() and exports.vp_needs and exports.vp_needs.AdjustNeed then
-                exports.vp_needs:AdjustNeed(src, "thirst", 3)
-                exports.vp_needs:AdjustNeed(src, "stress", -5)
+            if VpNeedsBridge.IsActive() and exports.haze_needs and exports.haze_needs.AdjustNeed then
+                exports.haze_needs:AdjustNeed(src, "thirst", 3)
+                exports.haze_needs:AdjustNeed(src, "stress", -5)
             end
         end)
     end
@@ -185,8 +185,8 @@ AddEventHandler("loki_prescriptions:server:exitHospitalBed", function(bedIndex)
 
     -- Internação hospitalar cura infecções bacterianas / DSTs
     pcall(function()
-        if GetResourceState('aurp_put') == 'started' and exports['aurp_put'] and exports['aurp_put'].CurePlayer then
-            exports['aurp_put']:CurePlayer(src)
+        if GetResourceState('haze_put') == 'started' and exports['haze_put'] and exports['haze_put'].CurePlayer then
+            exports['haze_put']:CurePlayer(src)
         end
     end)
 end)

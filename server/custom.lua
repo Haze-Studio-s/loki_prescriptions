@@ -126,9 +126,9 @@ function DepositHospitalMoney(amount)
     if not Config.EnableHospitalProfit or not amount or amount <= 0 then return end
     local account = Config.HospitalAccount or 'ambulance'
 
-    if GetResourceState('aust_banking') == 'started' then
+    if GetResourceState('haze_banking') == 'started' then
         pcall(function()
-            exports['aust_banking']:addAccountMoney(account, amount)
+            exports['haze_banking']:addAccountMoney(account, amount)
         end)
     elseif GetResourceState('Renewed-Banking') == 'started' then
         pcall(function()

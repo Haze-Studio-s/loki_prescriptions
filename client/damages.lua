@@ -92,7 +92,7 @@ function Damages.initEffects(self)
 
       -- 2. Staggering: Tropeço e queda involuntária ao correr com perna fraturada sem muleta
       if leftLegDmg > 40 or rightLegDmg > 40 then
-        local isUsingCrutch = exports['loki_prescriptions']:isCrutchEnabled()
+        local isUsingCrutch = exports['haze_prescriptions']:isCrutchEnabled()
         if not isUsingCrutch and IsPedSprinting(cache.ped) then
           if not self.lastStagger or (GetGameTimer() - self.lastStagger) > 12000 then
             self.lastStagger = GetGameTimer()
@@ -622,19 +622,19 @@ RegisterNUICallback("damages/healBone", function(data, cb)
     local isBulletWound = damages and damages[data.bone] and damages[data.bone].bullet
 
     if isBulletWound and Config.InteractiveMinigames.bullet then
-      exports.loki_prescriptions:StartBulletMinigame(Damages.targetId, data.bone)
+      exports.haze_prescriptions:StartBulletMinigame(Damages.targetId, data.bone)
       cb(true)
       return
     elseif (itemStr:find("suture") or itemStr:find("surgical")) and Config.InteractiveMinigames.suture then
-      exports.loki_prescriptions:StartSutureMinigame(Damages.targetId, data.bone)
+      exports.haze_prescriptions:StartSutureMinigame(Damages.targetId, data.bone)
       cb(true)
       return
     elseif (itemStr:find("clamp") or itemStr:find("artery")) and Config.InteractiveMinigames.clamp then
-      exports.loki_prescriptions:StartClampMinigame(Damages.targetId, data.bone)
+      exports.haze_prescriptions:StartClampMinigame(Damages.targetId, data.bone)
       cb(true)
       return
     elseif (itemStr:find("bandage") or itemStr:find("dressing") or itemStr:find("gauze")) and Config.InteractiveMinigames.bandage then
-      exports.loki_prescriptions:StartBandageMinigame(Damages.targetId, data.bone)
+      exports.haze_prescriptions:StartBandageMinigame(Damages.targetId, data.bone)
       cb(true)
       return
     end
@@ -687,7 +687,7 @@ RegisterNUICallback("damages/checkPulse", function(_, _)
   Damages.antiSpam = GetGameTimer() + 4000
 
   if Config.InteractiveMinigames and Config.InteractiveMinigames.enabled and Config.InteractiveMinigames.bp then
-    exports.loki_prescriptions:StartBPMinigame(Damages.targetId, "rightArm")
+    exports.haze_prescriptions:StartBPMinigame(Damages.targetId, "rightArm")
     Damages.pulseChecked = true
     return
   end

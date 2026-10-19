@@ -7,7 +7,7 @@
 VpPhoneBridge = {}
 
 function VpPhoneBridge.IsActive()
-    return GetResourceState('vp_phone') == 'started'
+    return GetResourceState('haze_phone') == 'started'
 end
 
 --- Envia uma notificação formatada para o smartphone do cidadão
@@ -21,8 +21,8 @@ function VpPhoneBridge.SendNotification(targetSource, title, message, appName)
     if not VpPhoneBridge.IsActive() then return false end
 
     local ok, res = pcall(function()
-        if exports['vp_phone'] and exports['vp_phone'].SendNotification then
-            exports['vp_phone']:SendNotification(targetSource, {
+        if exports['haze_phone'] and exports['haze_phone'].SendNotification then
+            exports['haze_phone']:SendNotification(targetSource, {
                 app = appName or 'Health',
                 title = title or 'LSMC Saúde',
                 content = message or 'Notificação clínica recebida.'
@@ -44,10 +44,10 @@ function VpPhoneBridge.SendEmergency(targetSource, title, message)
     if not VpPhoneBridge.IsActive() then return end
 
     pcall(function()
-        if exports['vp_phone'] and exports['vp_phone'].EmergencyNotification then
-            exports['vp_phone']:EmergencyNotification(targetSource, title or 'ALERTA MÉDICO', message or 'Condição crítica detectada.')
-        elseif exports['vp_phone'] and exports['vp_phone'].SendAmberAlert then
-            exports['vp_phone']:SendAmberAlert(title or 'ALERTA MÉDICO', message or 'Condição crítica detectada.')
+        if exports['haze_phone'] and exports['haze_phone'].EmergencyNotification then
+            exports['haze_phone']:EmergencyNotification(targetSource, title or 'ALERTA MÉDICO', message or 'Condição crítica detectada.')
+        elseif exports['haze_phone'] and exports['haze_phone'].SendAmberAlert then
+            exports['haze_phone']:SendAmberAlert(title or 'ALERTA MÉDICO', message or 'Condição crítica detectada.')
         end
     end)
 end

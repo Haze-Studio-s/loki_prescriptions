@@ -69,9 +69,9 @@ function PrescriptionsBanking.GetBalance(src, account)
     local cid = getCitizenId(src)
     if not cid then return 0 end
 
-    if GetResourceState and GetResourceState('aust_banking') == 'started' then
+    if GetResourceState and GetResourceState('haze_banking') == 'started' then
         local ok, balance = pcall(function()
-            return exports.aust_banking:GetBankBalance(cid)
+            return exports.haze_banking:GetBankBalance(cid)
         end)
         if ok and balance ~= nil then
             return PrescriptionsBanking.NormalizeAmount(balance)
@@ -118,7 +118,7 @@ function PrescriptionsBanking.Debit(src, amount, reason, account, opId)
     local cid = getCitizenId(src)
     if not cid then return false, 'invalid_citizenid' end
 
-    if GetResourceState and GetResourceState('aust_banking') == 'started' then
+    if GetResourceState and GetResourceState('haze_banking') == 'started' then
         local payload = {
             citizenid = cid,
             amount = cleanAmount,
@@ -127,7 +127,7 @@ function PrescriptionsBanking.Debit(src, amount, reason, account, opId)
             source = 'loki_prescriptions'
         }
         local ok, res = pcall(function()
-            return exports.aust_banking:Debit(payload)
+            return exports.haze_banking:Debit(payload)
         end)
         if ok and (res == true or (type(res) == 'table' and (res.ok == true or res.success == true))) then
             return true
@@ -177,7 +177,7 @@ function PrescriptionsBanking.Credit(src, amount, reason, account, opId)
     local cid = getCitizenId(src)
     if not cid then return false, 'invalid_citizenid' end
 
-    if GetResourceState and GetResourceState('aust_banking') == 'started' then
+    if GetResourceState and GetResourceState('haze_banking') == 'started' then
         local payload = {
             citizenid = cid,
             amount = cleanAmount,
@@ -186,7 +186,7 @@ function PrescriptionsBanking.Credit(src, amount, reason, account, opId)
             source = 'loki_prescriptions'
         }
         local ok, res = pcall(function()
-            return exports.aust_banking:Credit(payload)
+            return exports.haze_banking:Credit(payload)
         end)
         if ok and (res == true or (type(res) == 'table' and (res.ok == true or res.success == true))) then
             return true
@@ -247,13 +247,13 @@ function PrescriptionsBanking.DepositSociety(societyAccount, amount, reason, opI
     reason = reason or 'Faturamento Hospitalar'
     local operationId = opId or PrescriptionsBanking.MakeOpId('society', societyAccount, 'deposit')
 
-    if GetResourceState and GetResourceState('aust_banking') == 'started' then
+    if GetResourceState and GetResourceState('haze_banking') == 'started' then
         local okAdd = pcall(function()
-            exports.aust_banking:addAccountMoney(societyAccount, cleanAmount)
+            exports.haze_banking:addAccountMoney(societyAccount, cleanAmount)
         end)
-        if exports.aust_banking.handleTransaction then
+        if exports.haze_banking.handleTransaction then
             pcall(function()
-                exports.aust_banking:handleTransaction(
+                exports.haze_banking:handleTransaction(
                     societyAccount,
                     'Depósito Hospitalar',
                     cleanAmount,
