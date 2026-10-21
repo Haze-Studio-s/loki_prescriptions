@@ -16,23 +16,27 @@ local DEFAULT_MIN_STAGE_SECONDS = 15
 ---------------------------------------------------------------------
 
 local function getIdentifier(src)
-    if not src or src <= 0 then return nil end
-    return Bridge.Framework.getUniqueId(src)
+    local s = tonumber(src)
+    if not s or s <= 0 then return nil end
+    return Bridge.Framework.getUniqueId(s)
 end
 
 local function getPlayerName(src)
-    if not src or src <= 0 then return "Desconhecido" end
-    return Bridge.Framework.getPlayerName(src) or GetPlayerName(src) or ("ID " .. src)
+    local s = tonumber(src)
+    if not s or s <= 0 then return "Desconhecido" end
+    return Bridge.Framework.getPlayerName(s) or GetPlayerName(s) or ("ID " .. tostring(s))
 end
 
 local function isAllowedMedic(src)
-    if not src or src <= 0 then return false end
-    local job = Bridge.Framework.getPlayerJob(src)
+    local s = tonumber(src)
+    if not s or s <= 0 then return false end
+    local job = Bridge.Framework.getPlayerJob(s)
     if not job then return false end
 
     local cfgJobs = Config.Crutch.allowedJobs or { ['ambulance'] = 0, ['doctor'] = 0 }
-    local minGrade = cfgJobs[job.name]
-    if minGrade ~= nil and job.grade >= minGrade then
+    local minGrade = tonumber(cfgJobs[job.name])
+    local playerGrade = tonumber(job.grade) or 0
+    if minGrade ~= nil and playerGrade >= minGrade then
         return true
     end
 
