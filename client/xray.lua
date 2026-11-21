@@ -182,3 +182,11 @@ CreateThread(function()
         end
     end
 end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName ~= GetCurrentResourceName() then return end
+    if isXrayOpen then
+        SetNuiFocus(false, false)
+        isXrayOpen = false
+    end
+end)

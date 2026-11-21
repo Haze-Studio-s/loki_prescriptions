@@ -5,6 +5,10 @@
 
 'use strict';
 
+const RESOURCE_NAME = (typeof GetParentResourceName === 'function')
+    ? GetParentResourceName()
+    : (window.GetParentResourceName ? window.GetParentResourceName() : 'haze_prescriptions');
+
 const IS_DUI     = window.location.search.includes('dui=true');
 const IS_MONITOR = window.location.search.includes('monitor=true');
 
@@ -78,7 +82,7 @@ document.getElementById('scan-btn').addEventListener('click', () => {
 if (printBtn) {
     printBtn.addEventListener('click', () => {
         if (!lastResults || !currentPatientData) return;
-        fetch('https://loki_prescriptions/printXrayReport', {
+        fetch(`https://${RESOURCE_NAME}/printXrayReport`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -91,7 +95,7 @@ if (printBtn) {
 
 // Fechamento de janela
 function closeWindow() {
-    fetch('https://loki_prescriptions/closeUI', {
+    fetch(`https://${RESOURCE_NAME}/closeUI`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({}),
@@ -110,7 +114,7 @@ window.addEventListener('keydown', e => {
 
 function triggerScan() {
     startScanning();
-    fetch('https://loki_prescriptions/syncInteraction', {
+    fetch(`https://${RESOURCE_NAME}/syncInteraction`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ type: 'startScan' }),
